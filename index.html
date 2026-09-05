@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sama CST — Technologies Services | Plateforme de Maintenance & Atelier</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css?v=2.7">
+  
+  <!-- Flatpickr Date & DateTime Picker CSS (Local with CDN fallback) -->
+  <link rel="stylesheet" href="vendor/flatpickr/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  
+  <!-- Chart.js for High Performance Vector Graphics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="app-layout">
+  <!-- ======================================================================
+       1. SIDEBAR NAVIGATION (Technologies Services Dark Blue Theme)
+       ====================================================================== -->
+  <aside class="sidebar" id="app-sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+        </svg>
+      </div>
+      <div class="brand-info">
+        <div class="brand-title">
+          Sama CST <span class="badge-ts">TS PRO</span>
+        </div>
+        <div class="brand-subtitle">Technologies Services • GMAO</div>
+      </div>
+      <!-- Bouton Réduire / Agrandir la Sidebar -->
+      <button class="sidebar-toggle-btn" id="btn-sidebar-toggle" title="Réduire le menu latéral">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="sidebar-content">
+      <!-- Section: Tableau de bord -->
+      <div>
+        <div class="nav-group-title">Tableau de Bord</div>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link active" data-target="dashboard" data-tooltip="Tableaux de Bord (4 vues)">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              </span>
+              <span>Tableaux de Bord (4)</span>
+              <span class="nav-badge">4 vues</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Section: Atelier & GMAO -->
+      <div>
+        <div class="nav-group-title">Gestion Atelier</div>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link" data-target="atelier-equipements" data-tooltip="Équipements Atelier (23 colonnes)">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+              </span>
+              <span>Équipements Atelier</span>
+              <span class="nav-badge danger">5 dépendants</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-target="equipements-ts" data-tooltip="Équipements TS (5 colonnes)">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              </span>
+              <span>Équipements TS</span>
+              <span class="nav-badge" style="background: var(--ts-blue-light); color: var(--ts-blue); border: 1px solid var(--ts-blue-border);">Catalogue</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-target="base-ts" data-tooltip="Base de données TS (Sites & Clients)">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </span>
+              <span>Base de données TS</span>
+              <span class="nav-badge">7 sites</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-target="clients" data-tooltip="Référentiel Clients (9 colonnes)">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </span>
+              <span>Clients</span>
+              <span class="nav-badge" style="background: var(--ts-green-light); color: var(--ts-green-dark); border: 1px solid var(--ts-green-border);">14 comptes</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-target="personnel-cst" data-tooltip="Personnel CST (Agent, Email, Pole)">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </span>
+              <span>Personnel CST</span>
+              <span class="nav-badge" style="background: rgba(46,80,144,0.12); color: var(--ts-blue); border: 1px solid var(--ts-blue-border);">12 agents</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Section: Présentation & Showcase -->
+      <div>
+        <div class="nav-group-title">Vitrine & Showcase</div>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link" data-target="showcase" data-tooltip="Showcase TS • Sama CST">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </span>
+              <span>Showcase TS • Sama CST</span>
+              <span class="nav-badge" style="background: var(--ts-green); color: #0E182A;">Démo</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Sidebar User Footer -->
+    <div class="sidebar-footer">
+      <div class="user-avatar" title="Ousmane Fall - Superviseur TS">OF</div>
+      <div class="user-details">
+        <div class="user-name">Ousmane Fall</div>
+        <div class="user-role">Superviseur Technologies Services</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ======================================================================
+       2. MAIN CONTENT WRAPPER & TOPBAR
+       ====================================================================== -->
+  <div class="main-wrapper">
+    <!-- Top Header Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <!-- Bouton Hamburger Mobile -->
+        <button class="mobile-menu-btn" id="btn-mobile-menu" aria-label="Ouvrir le menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <!-- Bouton Collapse Desktop dans Topbar -->
+        <button class="desktop-sidebar-btn" id="btn-desktop-sidebar-toggle" title="Réduire / Agrandir le menu latéral">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="9" y1="3" x2="9" y2="21"></line>
+          </svg>
+        </button>
+
+        <div class="page-title-group">
+          <h1 id="current-page-title">Tableau de Bord Sama CST</h1>
+          <div class="page-breadcrumb">
+            <span>Technologies Services</span>
+            <span class="sep">/</span>
+            <span id="breadcrumb-sub" style="color: var(--ts-blue); font-weight: 600;">Supervision & KPIs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <!-- Recherche globale -->
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="global-search-input" placeholder="Rechercher équipement, client...">
+          <span class="search-shortcut">⌘K</span>
+        </div>
+
+        <!-- Filtre Entité Global -->
+        <select class="global-filter-select" id="global-entity-filter">
+          <option value="all">🏢 Toutes les Entités</option>
+          <option value="BIOMED">BIOMED</option>
+          <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+        </select>
+
+        <!-- Notification Bell -->
+        <button class="icon-btn" title="Alertes actives" onclick="APP.switchDashboardTab('risques-dependances')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span class="badge-dot"></span>
+        </button>
+
+        <!-- Bouton Action Primaire -->
+        <button class="btn-primary" id="btn-add-equipment">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>Nouvel Équipement</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <main class="content-area">
+
+      <!-- ================================================================
+           MODULE 1 : TABLEAU DE BORD (4 PAGES NOMMÉES)
+           ================================================================ -->
+      <section id="module-dashboard" class="module-container">
+        
+        <!-- Navigation entre les 4 pages du Tableau de Bord -->
+        <div class="dashboard-subnav">
+          <ul class="tab-nav-list">
+            <li class="tab-nav-item active" data-tab="synthese-direction">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              <span>1. Synthèse Direction</span>
+              <span class="tab-pill">KPIs & MTTR</span>
+            </li>
+            <li class="tab-nav-item" data-tab="performance-technique">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              <span>2. Performance Technique</span>
+              <span class="tab-pill">4 Axes & Techs</span>
+            </li>
+            <li class="tab-nav-item" data-tab="risques-dependances">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>3. Risques & Dépendances</span>
+              <span class="tab-pill" style="background: #fee2e2; color: #dc2626;">Fond Rouge</span>
+            </li>
+            <li class="tab-nav-item" data-tab="disponibilite-parc">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>4. Disponibilité Parc</span>
+              <span class="tab-pill">Entités</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- --------------------------------------------------------------
+             PAGE 1 : SYNTHÈSE DIRECTION
+             KPI cards + jauge dispo + histogramme MTTR + Top 5 durées + répartition marques
+             -------------------------------------------------------------- -->
+        <div id="view-synthese-direction" class="dash-view-section active">
+          <!-- KPI Cards Grid -->
+          <div class="kpi-grid">
+            <div class="kpi-card cyan">
+              <div class="kpi-header">
+                <span class="kpi-label">Disponibilité Globale</span>
+                <div class="kpi-icon-wrap cyan">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">96.4%</span>
+                <span class="kpi-trend positive">↑ +1.2%</span>
+              </div>
+              <span class="kpi-subtitle">Cible contractuelle : ≥ 95.0%</span>
+            </div>
+
+            <div class="kpi-card blue">
+              <div class="kpi-header">
+                <span class="kpi-label">MTTR Moyen Global</span>
+                <div class="kpi-icon-wrap blue">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">3.8</span>
+                <span class="kpi-unit">heures</span>
+                <span class="kpi-trend positive">↓ -0.3h</span>
+              </div>
+              <span class="kpi-subtitle">Temps moyen de réparation</span>
+            </div>
+
+            <div class="kpi-card emerald">
+              <div class="kpi-header">
+                <span class="kpi-label">Conformité Préventive</span>
+                <div class="kpi-icon-wrap emerald">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">94.8%</span>
+                <span class="kpi-trend positive">↑ +3.5%</span>
+              </div>
+              <span class="kpi-subtitle">156 gammes PM exécutées</span>
+            </div>
+
+            <div class="kpi-card amber">
+              <div class="kpi-header">
+                <span class="kpi-label">Parc Actif / En Atelier</span>
+                <div class="kpi-icon-wrap amber">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                </div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">247</span>
+                <span class="kpi-unit" style="color: #ef4444; font-weight: 700;">/ 10 atelier</span>
+              </div>
+              <span class="kpi-subtitle">96% du parc en production</span>
+            </div>
+          </div>
+
+          <!-- Section Graphiques Principaux (Jauge Dispo + Histogramme MTTR) -->
+          <div class="grid-3col">
+            <!-- Histogramme MTTR -->
+            <div class="card-box">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Histogramme MTTR & Tendance Mensuelle</h3>
+                  <p>Évolution du temps moyen de rétablissement vs seuil contractuel (4.0 hrs)</p>
+                </div>
+                <span class="badge-tag blue">6 derniers mois</span>
+              </div>
+              <div style="height: 260px; position: relative;">
+                <canvas id="chart-mttr"></canvas>
+              </div>
+            </div>
+
+            <!-- Jauge de Disponibilité Dynamique -->
+            <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Jauge Disponibilité</h3>
+                  <p>Indicateur synthétique de santé du parc</p>
+                </div>
+              </div>
+              <div id="gauge-dispo-container"></div>
+              <div style="font-size: 11.5px; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border-light); padding-top: 10px;">
+                Mise à jour en temps réel depuis les ateliers Sama CST
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Top 5 Durées d'Immobilisation + Répartition par Marques -->
+          <div class="grid-2col">
+            <!-- Top 5 Durées -->
+            <div class="card-box">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Top 5 des Durées d'Immobilisation en Atelier</h3>
+                  <p>Équipements avec le plus grand nombre de jours d'arrêt cumulés</p>
+                </div>
+                <span class="badge-tag red">Attention requise</span>
+              </div>
+              <div class="top5-list" id="top5-downtime-container"></div>
+            </div>
+
+            <!-- Répartition par Marques / Fournisseurs -->
+            <div class="card-box">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Répartition du Parc par Marques</h3>
+                  <p>Part relative des équipements suivis par constructeur</p>
+                </div>
+                <span class="badge-tag slate">Toutes entités</span>
+              </div>
+              <div style="height: 260px; position: relative;">
+                <canvas id="chart-brands"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- --------------------------------------------------------------
+             PAGE 2 : PERFORMANCE TECHNIQUE
+             KPI cards + MTTR technicien + taux clôture + tableau blocages 4 axes
+             -------------------------------------------------------------- -->
+        <div id="view-performance-technique" class="dash-view-section" style="display: none;">
+          <!-- KPI Cards Performance Tech -->
+          <div class="kpi-grid">
+            <div class="kpi-card blue">
+              <div class="kpi-header">
+                <span class="kpi-label">MTTR Moyen Technicien</span>
+                <div class="kpi-icon-wrap blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">3.6</span>
+                <span class="kpi-unit">hrs / intervention</span>
+              </div>
+              <span class="kpi-subtitle">Performance globale équipe atelier</span>
+            </div>
+
+            <div class="kpi-card emerald">
+              <div class="kpi-header">
+                <span class="kpi-label">Taux Clôture 1er Passage</span>
+                <div class="kpi-icon-wrap emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">88.5%</span>
+                <span class="kpi-trend positive">↑ +2.1%</span>
+              </div>
+              <span class="kpi-subtitle">First-Time Fix Rate</span>
+            </div>
+
+            <div class="kpi-card cyan">
+              <div class="kpi-header">
+                <span class="kpi-label">Temps Moyen Diagnostic</span>
+                <div class="kpi-icon-wrap cyan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">1h 24m</span>
+              </div>
+              <span class="kpi-subtitle">Délai avant émission FRB</span>
+            </div>
+
+            <div class="kpi-card amber">
+              <div class="kpi-header">
+                <span class="kpi-label">Backlog d'Interventions</span>
+                <div class="kpi-icon-wrap amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">11</span>
+                <span class="kpi-unit">ordres en cours</span>
+              </div>
+              <span class="kpi-subtitle">Charge de travail nominale</span>
+            </div>
+          </div>
+
+          <!-- Leaderboard Techniciens & Évolution Taux de Clôture -->
+          <div class="card-box" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Performances par Technicien Spécialisé</h3>
+                <p>MTTR individuel, volume d'ordres clôturés et indice d'efficacité technique</p>
+              </div>
+              <span class="badge-tag blue">Équipe CST Dakar & Régions</span>
+            </div>
+            <div class="technician-grid" id="technicians-cards-container"></div>
+          </div>
+
+          <!-- Évolution Taux de Clôture dans les Délais -->
+          <div class="card-box" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Évolution du Taux de Clôture des Interventions dans les Délais</h3>
+                <p>Conformité aux engagements de restitution contractuels (SLA)</p>
+              </div>
+              <span class="badge-tag green">94.2% ce mois</span>
+            </div>
+            <div style="height: 240px; position: relative;">
+              <canvas id="chart-tech-closure"></canvas>
+            </div>
+          </div>
+
+          <!-- TABLEAU DES BLOCAGES EN 4 AXES -->
+          <div class="card-box">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Matrice d'Analyse des Blocages en 4 Axes Stratégiques</h3>
+                <p>Identification des causes profondes de rétention en atelier et plans d'action associés</p>
+              </div>
+              <span class="badge-tag red">4 Axes Clés</span>
+            </div>
+            <div class="matrix-table-wrap">
+              <table class="matrix-table">
+                <thead>
+                  <tr>
+                    <th>Axe Stratégique</th>
+                    <th>Description de la Contrainte</th>
+                    <th style="text-align: center;">Équipements Impactés</th>
+                    <th>Délai Moyen d'Attente</th>
+                    <th>Sévérité</th>
+                    <th>Valeur Financière Bloquée</th>
+                    <th>Plan d'Action Correctif Immédiat</th>
+                  </tr>
+                </thead>
+                <tbody id="table-blocages-4axes-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- --------------------------------------------------------------
+             PAGE 3 : RISQUES & DÉPENDANCES
+             KPI cards + tableau criticité + alertes blocage avec fond rouge + donut couverture
+             -------------------------------------------------------------- -->
+        <div id="view-risques-dependances" class="dash-view-section" style="display: none;">
+          <!-- KPI Cards Risques -->
+          <div class="kpi-grid">
+            <div class="kpi-card danger">
+              <div class="kpi-header">
+                <span class="kpi-label">Équipements Critiques à Risque</span>
+                <div class="kpi-icon-wrap danger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">3</span>
+                <span class="kpi-unit">Classe A SPoF</span>
+              </div>
+              <span class="kpi-subtitle">Point unique de défaillance</span>
+            </div>
+
+            <div class="kpi-card danger">
+              <div class="kpi-header">
+                <span class="kpi-label">Alertes Blocage Actives</span>
+                <div class="kpi-icon-wrap danger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">3</span>
+                <span class="kpi-unit">Alerte Fond Rouge</span>
+              </div>
+              <span class="kpi-subtitle">Escalade Direction requise</span>
+            </div>
+
+            <div class="kpi-card amber">
+              <div class="kpi-header">
+                <span class="kpi-label">Délais FRB Dépassés</span>
+                <div class="kpi-icon-wrap amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">2</span>
+                <span class="kpi-unit">> 48 heures</span>
+              </div>
+              <span class="kpi-subtitle">En attente accord devis client</span>
+            </div>
+
+            <div class="kpi-card blue">
+              <div class="kpi-header">
+                <span class="kpi-label">Valeur Matérielle Bloquée</span>
+                <div class="kpi-icon-wrap blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">68.5M</span>
+                <span class="kpi-unit">FCFA</span>
+              </div>
+              <span class="kpi-subtitle">Actifs immobilisés en atelier</span>
+            </div>
+          </div>
+
+          <!-- FLUX D'ALERTES BLOCAGES AVEC FOND ROUGE -->
+          <div class="card-box" style="margin-bottom: 24px; border-color: #fca5a5;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3 style="color: #991b1b; display: flex; align-items: center; gap: 8px;">
+                  <span style="display: inline-block; width: 10px; height: 10px; background: #ef4444; border-radius: 50%;"></span>
+                  Alertes de Blocage Critiques (Fond Rouge - Haute Urgence)
+                </h3>
+                <p>Équipements bloqués nécessitant une levée d'obstacle immédiate (Pièces, Douane, Approbation)</p>
+              </div>
+              <span class="badge-tag red">Action Prioritaire</span>
+            </div>
+            
+            <div class="red-alert-container" id="red-alerts-stream"></div>
+          </div>
+
+          <!-- Section Tableau de Criticité + Donut Couverture -->
+          <div class="grid-3col">
+            <!-- Tableau de Criticité -->
+            <div class="card-box">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Tableau de Criticité des Équipements & Impact Opérationnel</h3>
+                  <p>Classification ABC, points de défaillance unique (SPoF) et statuts</p>
+                </div>
+              </div>
+              <div class="matrix-table-wrap">
+                <table class="matrix-table">
+                  <thead>
+                    <tr>
+                      <th>Code</th>
+                      <th>Équipement</th>
+                      <th>Criticité</th>
+                      <th>Impact Opérationnel</th>
+                      <th>SPoF</th>
+                      <th>Jours Arrêt</th>
+                      <th>Délai FRB</th>
+                      <th>Statut Alerte</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-criticite-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Donut Couverture des Contrats -->
+            <div class="card-box">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Donut Couverture Contrats</h3>
+                  <p>Type de garantie et contrats de maintenance</p>
+                </div>
+              </div>
+              <div style="height: 240px; position: relative;">
+                <canvas id="chart-contracts-coverage"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- --------------------------------------------------------------
+             PAGE 4 : DISPONIBILITÉ PARC
+             KPI cards + donut état parc + disponibilité par entité
+             -------------------------------------------------------------- -->
+        <div id="view-disponibilite-parc" class="dash-view-section" style="display: none;">
+          <!-- KPI Cards Disponibilité -->
+          <div class="kpi-grid">
+            <div class="kpi-card cyan">
+              <div class="kpi-header">
+                <span class="kpi-label">Parc Total Supervisé</span>
+                <div class="kpi-icon-wrap cyan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">384</span>
+                <span class="kpi-unit">machines</span>
+              </div>
+              <span class="kpi-subtitle">Sur l'ensemble des sites clients</span>
+            </div>
+
+            <div class="kpi-card emerald">
+              <div class="kpi-header">
+                <span class="kpi-label">Opérationnels en Service</span>
+                <div class="kpi-icon-wrap emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">342</span>
+                <span class="kpi-unit">actifs</span>
+                <span class="kpi-trend positive">89.1%</span>
+              </div>
+              <span class="kpi-subtitle">Production sans interruption</span>
+            </div>
+
+            <div class="kpi-card amber">
+              <div class="kpi-header">
+                <span class="kpi-label">En Maintenance Préventive</span>
+                <div class="kpi-icon-wrap amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">32</span>
+                <span class="kpi-unit">programmés</span>
+              </div>
+              <span class="kpi-subtitle">Révisions de routine planifiées</span>
+            </div>
+
+            <div class="kpi-card danger">
+              <div class="kpi-header">
+                <span class="kpi-label">Immobilisés en Atelier</span>
+                <div class="kpi-icon-wrap danger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value">10</span>
+                <span class="kpi-unit">pannes lourdes</span>
+              </div>
+              <span class="kpi-subtitle">En cours de traitement atelier</span>
+            </div>
+          </div>
+
+          <!-- Section Donut État Parc + Disponibilité par Entité -->
+          <div class="grid-2col">
+            <!-- Donut État du Parc -->
+            <div class="card-box">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Donut État Global du Parc Supervisé</h3>
+                  <p>Répartition entre équipements opérationnels, préventif et atelier</p>
+                </div>
+                <span class="badge-tag green">384 Total</span>
+              </div>
+              <div style="height: 280px; position: relative;">
+                <canvas id="chart-fleet-status"></canvas>
+              </div>
+            </div>
+
+            <!-- Disponibilité par Entité -->
+            <div class="card-box">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Taux de Disponibilité par Entité / Secteur</h3>
+                  <p>Comparaison de la performance par rapport aux objectifs contractuels</p>
+                </div>
+                <span class="badge-tag blue">4 Pôles Stratégiques</span>
+              </div>
+              <div class="entity-dispo-list" id="entity-availability-list"></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================================================================
+           MODULE 2 : ATELIER - ÉQUIPEMENT ATELIER (23 COLONNES)
+           ================================================================ -->
+      <section id="module-atelier-equipements" class="module-container" style="display: none;">
+        
+        <!-- Table Toolbar -->
+        <div class="table-toolbar">
+          <div class="filter-pills-group">
+            <!-- Filtre Entité -->
+            <select class="filter-select" id="filter-entite">
+              <option value="all">🏢 Toutes les Entités</option>
+              <option value="BIOMED">BIOMED</option>
+              <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+            </select>
+
+            <!-- Filtre Statut -->
+            <select class="filter-select" id="filter-statut">
+              <option value="all">⚡ Tous les Statuts</option>
+              <option value="DEPENDANT">DEPENDANT</option>
+              <option value="CLÔTURE">CLÔTURE</option>
+            </select>
+
+            <!-- Filtre Situation -->
+            <select class="filter-select" id="filter-situation">
+              <option value="all">🔧 Toutes les Situations</option>
+              <option value="Clôturé">Clôturé</option>
+              <option value="En attente pièces">En attente pièces</option>
+              <option value="Back Up">Back Up</option>
+              <option value="Inventaire atelier">Inventaire atelier</option>
+              <option value="Devis à envoyer">Devis à envoyer</option>
+              <option value="A retourner">A retourner</option>
+              <option value="Devis envoyé">Devis envoyé</option>
+              <option value="En traitement">En traitement</option>
+            </select>
+
+            <!-- Filtre État de Sortie -->
+            <select class="filter-select" id="filter-etat-sortie">
+              <option value="all">📦 Tous les États de Sortie</option>
+              <option value="Fonctionnel">Fonctionnel</option>
+              <option value="Fonctionnel / Dégradé">Fonctionnel / Dégradé</option>
+              <option value="Non fonctionnel">Non fonctionnel</option>
+            </select>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span id="table-records-count" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">10 équipement(s)</span>
+            <button class="btn-secondary" id="btn-export-csv">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Exporter CSV</span>
+            </button>
+            <button class="btn-primary" onclick="APP.openNewEquipmentModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Ajouter un équipement</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Container Card (Scrollable with Sticky Code & Action) -->
+        <div class="table-container-card">
+          <div class="table-scroll-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th class="col-sticky-code">Code Équipement</th>
+                  <th>Fiche de Vie</th>
+                  <th>Description</th>
+                  <th>N° de Série</th>
+                  <th>Client</th>
+                  <th>Date Entrée</th>
+                  <th>Date Sortie</th>
+                  <th>Responsable Réception</th>
+                  <th>Responsable Technique</th>
+                  <th>Zone Actuelle</th>
+                  <th>Motif</th>
+                  <th>Situation</th>
+                  <th>Statut</th>
+                  <th>État Sortie</th>
+                  <th>Nombre Jours Atelier</th>
+                  <th>Durée Atelier</th>
+                  <th>Entité</th>
+                  <th>Fournisseur</th>
+                  <th>Modèle</th>
+                  <th>Date Prise en Charge</th>
+                  <th>Délais Prise en Charge</th>
+                  <th>Date FRB</th>
+                  <th>Délais FRB</th>
+                </tr>
+              </thead>
+              <tbody id="table-equipements-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Table Footer -->
+          <div class="table-footer">
+            <span>Affichage de 1 à 10 sur 10 équipements atelier</span>
+            <div class="pagination-controls">
+              <button class="page-btn" disabled>«</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn" disabled>»</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================================================================
+           MODULE 2.5 : ÉQUIPEMENTS TS (5 COLONNES OFFICIELLES)
+           ================================================================ -->
+      <section id="module-equipements-ts" class="module-container" style="display: none;">
+        
+        <!-- Header KPIs Équipements TS -->
+        <div class="card-box" style="margin-bottom: 20px; background: linear-gradient(135deg, #16243D 0%, #2E5090 100%); color: #ffffff; padding: 20px 24px; border-radius: var(--radius-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(114, 193, 0, 0.2); border: 1px solid rgba(114, 193, 0, 0.5); padding: 3px 12px; border-radius: 999px; font-size: 11px; color: #CEF092; font-weight: 700; margin-bottom: 8px;">
+                <span style="width: 6px; height: 6px; background: var(--ts-green); border-radius: 50%;"></span>
+                CATALOGUE CENTRAL TECHNOLOGIES SERVICES
+              </div>
+              <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Référentiel des Équipements TS</h2>
+              <p style="font-size: 13px; color: #CBD5E1; margin: 0;">Catalogue officiel des équipements, modèles, catégories et entités Technologies Services.</p>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #94A3B8; text-transform: uppercase; font-weight: 700;">Total Modèles</div>
+                <div style="font-size: 22px; font-weight: 900; color: #ffffff;" id="ts-kpi-total">30</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #93C5FD; text-transform: uppercase; font-weight: 700;">BIOMED</div>
+                <div style="font-size: 22px; font-weight: 900; color: #60A5FA;" id="ts-kpi-biomed">16</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #CEF092; text-transform: uppercase; font-weight: 700;">IMAG-CHIRG</div>
+                <div style="font-size: 22px; font-weight: 900; color: #72C100;" id="ts-kpi-imag">14</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #FCD34D; text-transform: uppercase; font-weight: 700;">Fournisseurs</div>
+                <div style="font-size: 22px; font-weight: 900; color: #FBBF24;" id="ts-kpi-fournisseurs">18</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Toolbar -->
+        <div class="table-toolbar">
+          <div class="filter-pills-group">
+            <!-- Recherche rapide -->
+            <div class="search-box" style="width: 260px;">
+              <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="search-equipements-ts" class="search-input" placeholder="Rechercher fournisseur, modèle...">
+            </div>
+
+            <!-- Filtre Entité -->
+            <select class="filter-select" id="filter-ts-entite">
+              <option value="all">🏢 Toutes les Entités</option>
+              <option value="BIOMED">BIOMED</option>
+              <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+            </select>
+
+            <!-- Filtre Fournisseur -->
+            <select class="filter-select" id="filter-ts-fournisseur">
+              <option value="all">🏭 Tous les Fournisseurs</option>
+            </select>
+
+            <!-- Filtre Catégorie -->
+            <select class="filter-select" id="filter-ts-categorie">
+              <option value="all">📂 Toutes les Catégories</option>
+            </select>
+
+            <!-- Filtre Items Par Page -->
+            <select class="filter-select" id="filter-ts-perpage" onchange="APP.changeTSPerPage(this.value)">
+              <option value="10">10 / page</option>
+              <option value="25">25 / page</option>
+              <option value="50">50 / page</option>
+              <option value="all">Tout afficher</option>
+            </select>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span id="ts-records-count" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">30 équipement(s)</span>
+            <button class="btn-primary" id="btn-add-equipement-ts" onclick="APP.openNewEquipementTSModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Ajouter Équipement TS</span>
+            </button>
+            <button class="btn-secondary" id="btn-export-ts-csv" onclick="APP.exportEquipementsTSToCSV()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Exporter CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card (5 Colonnes Officielles TS + Actions) -->
+        <div class="card-box table-card-container">
+          <div class="table-scroll-wrap">
+            <table class="data-table" id="table-equipements-ts">
+              <thead>
+                <tr>
+                  <th onclick="APP.sortEquipementsTS('fournisseur')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>FOURNISSEURS</span>
+                      <span id="sort-ts-fournisseur" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortEquipementsTS('designation')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>DESIGNATION</span>
+                      <span id="sort-ts-designation" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortEquipementsTS('modele')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>MODELE</span>
+                      <span id="sort-ts-modele" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortEquipementsTS('categorie')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>CATEGORIE</span>
+                      <span id="sort-ts-categorie" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortEquipementsTS('entite')" class="sortable" style="text-align: center; cursor: pointer;">
+                    <div class="th-content" style="justify-content: center;">
+                      <span>ENTITE</span>
+                      <span id="sort-ts-entite" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th style="text-align: center; width: 140px;">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="table-equipements-ts-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Table Footer -->
+          <div class="table-footer">
+            <span id="ts-footer-count">Affichage des équipements catalogue TS</span>
+            <div class="pagination-controls" id="ts-pagination-controls">
+              <button class="page-btn" disabled>«</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn" disabled>»</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================================================================
+           MODULE 3 : BASE DE DONNÉES TS (SITES & PARC ÉQUIPEMENTS)
+           ================================================================ -->
+      <section id="module-base-ts" class="module-container" style="display: none;">
+        
+        <!-- Header Banner avec Switcher de Vue (Clients / Équipements) -->
+        <div class="card-box" style="margin-bottom: 20px; background: linear-gradient(135deg, #16243D 0%, #2E5090 100%); color: #ffffff; padding: 22px 24px; border-radius: var(--radius-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(114, 193, 0, 0.2); border: 1px solid rgba(114, 193, 0, 0.5); padding: 3px 12px; border-radius: 999px; font-size: 11px; color: #CEF092; font-weight: 700; margin-bottom: 8px;">
+                <span style="width: 6px; height: 6px; background: var(--ts-green); border-radius: 50%;"></span>
+                BASE DE DONNÉES CENTRALE TECHNOLOGIES SERVICES
+              </div>
+              <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Base de Données TS — Supervision Sites & Parc Équipements</h2>
+              <p style="font-size: 13px; color: #CBD5E1; margin: 0;">Supervision des contrats de maintenance, suivi du parc machine déployé et traçabilité opérationnelle.</p>
+            </div>
+            
+            <!-- Sélecteur d'onglets de vue -->
+            <div class="base-view-switcher">
+              <button type="button" class="base-view-btn active" id="btn-base-view-clients" onclick="APP.switchBaseTSView('clients')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Vue par Client / Site (7)</span>
+              </button>
+              <button type="button" class="base-view-btn" id="btn-base-view-equipements" onclick="APP.switchBaseTSView('equipements')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                <span>Vue par Équipement (<span id="base-eq-badge-count">24</span>)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. SOUS-VUE PAR CLIENT / SITE -->
+        <div id="base-ts-view-clients">
+          <div class="sites-grid" id="sites-ts-grid"></div>
+        </div>
+
+        <!-- 2. SOUS-VUE PAR ÉQUIPEMENT -->
+        <div id="base-ts-view-equipements" style="display: none;">
+          
+          <!-- Bandeau KPIs Parc Équipements -->
+          <div class="kpi-grid" style="margin-bottom: 20px;">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap" style="background: #EFF6FF; color: #2E5090;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+              <div class="kpi-content">
+                <div class="kpi-lbl">Total Équipements Parc</div>
+                <div class="kpi-val" id="kpi-base-eq-total">24</div>
+                <div class="kpi-sub">Parc machines sous contrat TS</div>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap" style="background: #F0FDF4; color: #16A34A;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+              <div class="kpi-content">
+                <div class="kpi-lbl">En Service (Opérationnels)</div>
+                <div class="kpi-val" style="color: #16A34A;" id="kpi-base-eq-service">14</div>
+                <div class="kpi-sub">Déployés et fonctionnels sur site</div>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap" style="background: #FEF2F2; color: #DC2626;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              </div>
+              <div class="kpi-content">
+                <div class="kpi-lbl">En Atelier CST (Maintenance)</div>
+                <div class="kpi-val" style="color: #DC2626;" id="kpi-base-eq-atelier">9</div>
+                <div class="kpi-sub">Pris en charge ou en révision</div>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap" style="background: #F2FBE5; color: #4A8000;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </div>
+              <div class="kpi-content">
+                <div class="kpi-lbl">Disponibilité Moyenne Parc</div>
+                <div class="kpi-val" style="color: #4A8000;" id="kpi-base-eq-dispo">96.4%</div>
+                <div class="kpi-sub">Taux moyen opérationnel TS</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table Toolbar avec Recherche, Filtres & Mode d'Affichage -->
+          <div class="table-toolbar">
+            <div class="filter-pills-group">
+              <!-- Recherche rapide -->
+              <div class="search-box" style="width: 280px;">
+                <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="search-base-equipements" class="search-input" placeholder="Rechercher équipement, code, client, marque..." oninput="APP.handleBaseEqSearch(this.value)">
+              </div>
+
+              <!-- Filtre par Client -->
+              <select id="filter-base-eq-client" class="form-select" style="font-size: 12px; padding: 6px 10px; width: 200px;" onchange="APP.handleBaseEqClientFilter(this.value)">
+                <option value="all">🏢 Tous les Clients</option>
+              </select>
+
+              <!-- Filtre par Entité -->
+              <select id="filter-base-eq-entite" class="form-select" style="font-size: 12px; padding: 6px 10px; width: 140px;" onchange="APP.handleBaseEqEntiteFilter(this.value)">
+                <option value="all">⚙️ Toutes Entités</option>
+                <option value="BIOMED">BIOMED</option>
+                <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+              </select>
+
+              <!-- Filtre par État Opérationnel -->
+              <select id="filter-base-eq-etat" class="form-select" style="font-size: 12px; padding: 6px 10px; width: 180px;" onchange="APP.handleBaseEqEtatFilter(this.value)">
+                <option value="all">🚥 Tous les Statuts</option>
+                <option value="En Service">🟢 En Service</option>
+                <option value="En Atelier">🔴 En Atelier CST</option>
+                <option value="En Révision">🟠 En Révision Préventive</option>
+              </select>
+            </div>
+
+            <div class="table-actions-group">
+              <!-- Bascule Mode Cartes / Mode Tableau -->
+              <div class="view-mode-toggle">
+                <button type="button" class="view-mode-btn active" id="btn-base-eq-mode-cards" title="Affichage en Cartes" onclick="APP.setBaseEqDisplayMode('cards')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </button>
+                <button type="button" class="view-mode-btn" id="btn-base-eq-mode-table" title="Affichage en Tableau" onclick="APP.setBaseEqDisplayMode('table')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                </button>
+              </div>
+
+              <!-- Export CSV -->
+              <button class="btn-secondary" onclick="APP.exportBaseEquipementsCSV()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Exporter CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Conteneur 1 : Grille de Cartes Équipements -->
+          <div class="equipements-parc-grid" id="base-equipements-grid"></div>
+
+          <!-- Conteneur 2 : Tableau Détaillé Alternatif -->
+          <div class="table-container-card" id="base-equipements-table-wrap" style="display: none; margin-top: 16px;">
+            <div class="table-scroll-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th class="col-sticky-code">Code Équipement</th>
+                    <th>Désignation & Modèle</th>
+                    <th>Fournisseur</th>
+                    <th>N° Série</th>
+                    <th>Client & Localisation</th>
+                    <th>Entité</th>
+                    <th>État Opérationnel</th>
+                    <th>Technicien Référent</th>
+                    <th>Disponibilité</th>
+                    <th>Dernière Révision</th>
+                    <th>Prochaine Maintenance</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="base-equipements-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ================================================================
+           MODULE 3.5 : RÉFÉRENTIEL CLIENTS (9 COLONNES OFFICIELLES)
+           ================================================================ -->
+      <section id="module-clients" class="module-container" style="display: none;">
+        
+        <!-- Header KPIs Clients -->
+        <div class="card-box" style="margin-bottom: 20px; background: linear-gradient(135deg, #16243D 0%, #2E5090 100%); color: #ffffff; padding: 20px 24px; border-radius: var(--radius-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(114, 193, 0, 0.2); border: 1px solid rgba(114, 193, 0, 0.5); padding: 3px 12px; border-radius: 999px; font-size: 11px; color: #CEF092; font-weight: 700; margin-bottom: 8px;">
+                <span style="width: 6px; height: 6px; background: var(--ts-green); border-radius: 50%;"></span>
+                RÉFÉRENTIEL DES COMPTES & CLIENTS TS
+              </div>
+              <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Répertoire des Clients Technologies Services</h2>
+              <p style="font-size: 13px; color: #CBD5E1; margin: 0;">Gestion centralisée des coordonnées, localisations, contacts et identifiants fiscaux (RC & NINEA).</p>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #94A3B8; text-transform: uppercase; font-weight: 700;">Total Clients</div>
+                <div style="font-size: 22px; font-weight: 900; color: #ffffff;" id="clients-kpi-total">14</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #93C5FD; text-transform: uppercase; font-weight: 700;">Villes Couvertes</div>
+                <div style="font-size: 22px; font-weight: 900; color: #60A5FA;" id="clients-kpi-villes">7</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #CEF092; text-transform: uppercase; font-weight: 700;">Santé & Hôpitaux</div>
+                <div style="font-size: 22px; font-weight: 900; color: #72C100;" id="clients-kpi-sante">6</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #FCD34D; text-transform: uppercase; font-weight: 700;">Industrie & Mines</div>
+                <div style="font-size: 22px; font-weight: 900; color: #FBBF24;" id="clients-kpi-industrie">8</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Toolbar -->
+        <div class="table-toolbar">
+          <div class="filter-pills-group">
+            <!-- Recherche rapide -->
+            <div class="search-box" style="width: 280px;">
+              <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="search-clients" class="search-input" placeholder="Rechercher client, ville, téléphone, NINEA...">
+            </div>
+
+            <!-- Filtre Ville -->
+            <select class="filter-select" id="filter-client-ville">
+              <option value="all">📍 Toutes les Villes</option>
+            </select>
+
+            <!-- Filtre Pays -->
+            <select class="filter-select" id="filter-client-pays">
+              <option value="all">🌍 Tous les Pays</option>
+            </select>
+
+            <!-- Filtre Items Par Page -->
+            <select class="filter-select" id="filter-client-perpage" onchange="APP.changeClientPerPage(this.value)">
+              <option value="10">10 / page</option>
+              <option value="25">25 / page</option>
+              <option value="50">50 / page</option>
+              <option value="all">Tout afficher</option>
+            </select>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span id="clients-records-count" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">14 client(s) répertorié(s)</span>
+            <button class="btn-primary" id="btn-add-client" onclick="APP.openNewClientModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Ajouter un Client</span>
+            </button>
+            <button class="btn-secondary" id="btn-export-clients-csv" onclick="APP.exportClientsToCSV()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Exporter CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card (9 Colonnes Officielles + Actions) -->
+        <div class="card-box table-card-container">
+          <div class="table-scroll-wrap">
+            <table class="data-table" id="table-clients">
+              <thead>
+                <tr>
+                  <th onclick="APP.sortClients('client')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>CLIENT</span>
+                      <span id="sort-client-client" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortClients('nomClient')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>NOM CLIENT</span>
+                      <span id="sort-client-nomClient" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortClients('adresseClient')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>ADRESSE CLIENT</span>
+                      <span id="sort-client-adresseClient" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortClients('villeClient')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>VILLE DU CLIENT</span>
+                      <span id="sort-client-villeClient" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortClients('paysClient')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>PAYS DU CLIENT</span>
+                      <span id="sort-client-paysClient" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortClients('codePostal')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>CODE POSTAL</span>
+                      <span id="sort-client-codePostal" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortClients('telephoneClient')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>TELEPHONE CLIENT</span>
+                      <span id="sort-client-telephoneClient" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortClients('mailClient')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>MAIL DU CLIENT</span>
+                      <span id="sort-client-mailClient" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortClients('rcNinea')" class="sortable" style="cursor: pointer;">
+                    <div class="th-content">
+                      <span>RC / NINEA</span>
+                      <span id="sort-client-rcNinea" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th style="text-align: center; width: 140px;">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="table-clients-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Table Footer -->
+          <div class="table-footer">
+            <span id="clients-footer-count">Affichage des clients Technologies Services</span>
+            <div class="pagination-controls" id="clients-pagination-controls">
+              <button class="page-btn" disabled>«</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn" disabled>»</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================================================================
+           MODULE 3.6 : PERSONNEL CST (3 COLONNES : AGENT, EMAIL, POLE)
+           ================================================================ -->
+      <section id="module-personnel-cst" class="module-container" style="display: none;">
+        
+        <!-- Header KPIs Personnel -->
+        <div class="card-box" style="margin-bottom: 20px; background: linear-gradient(135deg, #16243D 0%, #2E5090 100%); color: #ffffff; padding: 20px 24px; border-radius: var(--radius-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(114, 193, 0, 0.2); border: 1px solid rgba(114, 193, 0, 0.5); padding: 3px 12px; border-radius: 999px; font-size: 11px; color: #CEF092; font-weight: 700; margin-bottom: 8px;">
+                <span style="width: 6px; height: 6px; background: var(--ts-green); border-radius: 50%;"></span>
+                ORGANIGRAMME TECHNIQUE & AFFECTATIONS CST
+              </div>
+              <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Personnel CST Technologies Services</h2>
+              <p style="font-size: 13px; color: #CBD5E1; margin: 0;">Gestion des agents, ingénieurs et techniciens affectés aux différents pôles opérationnels de Sama CST.</p>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #94A3B8; text-transform: uppercase; font-weight: 700;">Total Agents</div>
+                <div style="font-size: 22px; font-weight: 900; color: #ffffff;" id="personnel-kpi-total">12</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #93C5FD; text-transform: uppercase; font-weight: 700;">Pôle BIOMED</div>
+                <div style="font-size: 22px; font-weight: 900; color: #60A5FA;" id="personnel-kpi-biomed">4</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #CEF092; text-transform: uppercase; font-weight: 700;">Pôle IMAG-CHIRG</div>
+                <div style="font-size: 22px; font-weight: 900; color: #72C100;" id="personnel-kpi-imag">4</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 8px; text-align: center; min-width: 105px;">
+                <div style="font-size: 10.5px; color: #FCD34D; text-transform: uppercase; font-weight: 700;">Atelier & Pôles Tech</div>
+                <div style="font-size: 22px; font-weight: 900; color: #FBBF24;" id="personnel-kpi-atelier">4</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Toolbar -->
+        <div class="table-toolbar">
+          <div class="filter-pills-group">
+            <!-- Recherche rapide -->
+            <div class="search-box" style="width: 280px;">
+              <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="search-personnel" class="search-input" placeholder="Rechercher agent, email, pôle...">
+            </div>
+
+            <!-- Filtre Pôle -->
+            <select class="filter-select" id="filter-personnel-pole">
+              <option value="all">🎯 Tous les Pôles</option>
+            </select>
+
+            <!-- Filtre Items Par Page -->
+            <select class="filter-select" id="filter-personnel-perpage" onchange="APP.changePersonnelPerPage(this.value)">
+              <option value="10">10 / page</option>
+              <option value="25">25 / page</option>
+              <option value="50">50 / page</option>
+              <option value="all">Tout afficher</option>
+            </select>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span id="personnel-records-count" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">12 agent(s) répertorié(s)</span>
+            <button class="btn-primary" id="btn-add-personnel" onclick="APP.openNewPersonnelModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Ajouter un Agent</span>
+            </button>
+            <button class="btn-secondary" id="btn-export-personnel-csv" onclick="APP.exportPersonnelToCSV()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Exporter CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card (3 Colonnes Officielles : Agent, Email, Pole + Actions) -->
+        <div class="card-box table-card-container">
+          <div class="table-scroll-wrap">
+            <table class="data-table" id="table-personnel-cst">
+              <thead>
+                <tr>
+                  <th onclick="APP.sortPersonnel('agent')" class="sortable" style="cursor: pointer; width: 30%;">
+                    <div class="th-content">
+                      <span>AGENT</span>
+                      <span id="sort-personnel-agent" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortPersonnel('email')" class="sortable" style="cursor: pointer; width: 35%;">
+                    <div class="th-content">
+                      <span>EMAIL</span>
+                      <span id="sort-personnel-email" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th onclick="APP.sortPersonnel('pole')" class="sortable" style="cursor: pointer; width: 20%;">
+                    <div class="th-content">
+                      <span>POLE</span>
+                      <span id="sort-personnel-pole" class="sort-icon-indicator">↕</span>
+                    </div>
+                  </th>
+                  <th style="text-align: center; width: 15%;">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="table-personnel-cst-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Table Footer -->
+          <div class="table-footer">
+            <span id="personnel-footer-count">Affichage du personnel Technologies Services</span>
+            <div class="pagination-controls" id="personnel-pagination-controls">
+              <button class="page-btn" disabled>«</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn" disabled>»</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================================================================
+           MODULE 4 : SHOWCASE MODE (Style TCMMS Dribbble Hero)
+           ================================================================ -->
+      <section id="module-showcase" class="module-container" style="display: none;">
+        <div class="showcase-hero-container">
+          <div class="showcase-hero-grid">
+            <div>
+              <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(114, 193, 0, 0.15); border: 1px solid rgba(114, 193, 0, 0.4); padding: 4px 14px; border-radius: 999px; font-size: 12px; color: #CEF092; font-weight: 700; margin-bottom: 20px;">
+                <span style="width: 8px; height: 8px; background: var(--ts-green); border-radius: 50%;"></span>
+                TECHNOLOGIES SERVICES • SAMA CST 2.4 PRO
+              </div>
+              <h1 class="showcase-headline">
+                Smart Maintenance,<br>
+                Stronger Performance,<br>
+                <span class="highlight">Smarter Future.</span>
+              </h1>
+              <p class="showcase-lead">
+                <strong>Sama CST par Technologies Services</strong> est la solution de GMAO et de gestion d'atelier de référence conçue pour optimiser la disponibilité du parc industriel, fluidifier le suivi des ordres de travail et éliminer les blocages opérationnels.
+              </p>
+
+              <div class="showcase-features-list">
+                <div class="showcase-feat-item">
+                  <div class="showcase-feat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg></div>
+                  <span><strong>Data-Driven Insights :</strong> Tableaux de bord de direction avec jauge dispo et histogramme MTTR en temps réel.</span>
+                </div>
+                <div class="showcase-feat-item">
+                  <div class="showcase-feat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+                  <span><strong>Efficient Workflows :</strong> Fiche de vie 360°, gestion des 23 colonnes atelier et suivi du statut FRB.</span>
+                </div>
+                <div class="showcase-feat-item">
+                  <div class="showcase-feat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg></div>
+                  <span><strong>Instant Alerts :</strong> Bandeaux d'alerte fond rouge et matrice de blocage en 4 axes pour intervention immédiate.</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 14px;">
+                <button class="btn-accent-green" onclick="APP.switchModule('dashboard')">
+                  <span>Ouvrir l'application live</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+                <button class="btn-secondary" style="background: rgba(255,255,255,0.1); color: #FFFFFF; border-color: rgba(255,255,255,0.25);" onclick="APP.switchModule('atelier-equipements')">
+                  <span>Explorer les 23 colonnes</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Mockup Preview Card -->
+            <div>
+              <div class="mockup-preview-card">
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; margin-bottom: 16px;">
+                  <div style="display: flex; gap: 6px;">
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #EF4444;"></span>
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #F59E0B;"></span>
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #72C100;"></span>
+                  </div>
+                  <span style="font-size: 11px; font-weight: 800; color: #2E5090;">TECHNOLOGIES SERVICES • SAMA CST</span>
+                  <span class="badge-tag green">96.4% Dispo</span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                  <div style="background: #F8FAFC; padding: 12px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                    <div style="font-size: 11px; color: #64748B; text-transform: uppercase; font-weight: 700;">Total Actifs</div>
+                    <div style="font-size: 22px; font-weight: 900; color: #16243D;">247 <span style="font-size: 11px; color: #72C100; font-weight: 800;">↑ +5.4%</span></div>
+                  </div>
+                  <div style="background: #F8FAFC; padding: 12px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                    <div style="font-size: 11px; color: #64748B; text-transform: uppercase; font-weight: 700;">MTTR Global</div>
+                    <div style="font-size: 22px; font-weight: 900; color: #2E5090;">3.8 hrs</div>
+                  </div>
+                </div>
+
+                <div style="background: #FFF5F5; border: 1px solid #FECACA; border-left: 4px solid #EF4444; padding: 10px 12px; border-radius: 6px; font-size: 11.5px; color: #991B1B; margin-bottom: 12px;">
+                  <strong>Alerte Rouge :</strong> Moteur Stator 250 kW bloqué depuis 18j (Fil cuivre en douane).
+                </div>
+
+                <div style="font-size: 11px; color: #64748B; text-align: center; font-weight: 600;">
+                  Charte officielle Technologies Services (Pantone 368 C & 7684 C)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ======================================================================
+     DRAWER / MODAL LATÉRAL : FICHE DE VIE 360° (INTERACTIVE)
+     ====================================================================== -->
+<div id="modal-overlay" class="modal-overlay" onclick="APP.closeFicheDeVie(); APP.closeNewEquipmentModal(); APP.closeNewEquipementTSModal(); APP.closeNewClientModal(); APP.closeNewPersonnelModal(); APP.closeEditPersonnelModal();"></div>
+
+<aside id="drawer-fiche-vie" class="drawer-right">
+  <div class="drawer-header">
+    <div class="drawer-title-group">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <h2 id="fv-code" style="font-size: 18px; margin: 0;">EQ-CAT-320D-01</h2>
+        <span id="fv-statut-pill" class="status-pill cloture">CLÔTURE</span>
+      </div>
+      <p id="fv-title" style="margin: 0; font-size: 12.5px; opacity: 0.9;">Excavatrice Hydraulique sur Chenilles</p>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <!-- Toggle Mode Consultation / Édition -->
+      <div class="drawer-mode-switch">
+        <button type="button" id="btn-fv-mode-view" class="drawer-mode-btn active" onclick="APP.setFicheDeVieMode('view')" title="Afficher la fiche 360°">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <span>Consulter</span>
+        </button>
+        <button type="button" id="btn-fv-mode-edit" class="drawer-mode-btn" onclick="APP.setFicheDeVieMode('edit')" title="Modifier les données de la fiche">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          <span>Modifier</span>
+        </button>
+      </div>
+      <button class="icon-btn" style="background: transparent; color: #ffffff; border-color: rgba(255,255,255,0.2);" onclick="APP.closeFicheDeVie()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="drawer-body">
+    
+    <!-- ==================================================================
+         MODE 1 : CONSULTATION VUE 360°
+         ================================================================== -->
+    <div id="fv-view-container">
+      
+      <!-- Fiche d'identité technique -->
+      <div class="card-box" style="padding: 18px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <div style="font-size: 13px; font-weight: 800; color: var(--ts-blue); text-transform: uppercase; letter-spacing: 0.5px;">
+            1. Fiche d'Identité Matérielle & Suivi Atelier
+          </div>
+          <button class="btn-secondary" style="padding: 4px 10px; font-size: 11.5px;" onclick="APP.setFicheDeVieMode('edit')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            <span>Modifier cette section</span>
+          </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12.5px;">
+          <div><span style="color: var(--text-muted);">Client / Site :</span> <strong id="fv-client">Ciments du Sahel</strong></div>
+          <div><span style="color: var(--text-muted);">N° de Série :</span> <span id="fv-serial" style="font-family: monospace; font-weight: 700; color: #1E293B;">CAT-320D-SN84920</span></div>
+          <div><span style="color: var(--text-muted);">Modèle / Marque :</span> <strong id="fv-model">Caterpillar 320D L</strong></div>
+          <div><span style="color: var(--text-muted);">Entité Responsable :</span> <span id="fv-entite" class="badge-tag blue" style="font-weight: 800;">BIOMED</span></div>
+          <div><span style="color: var(--text-muted);">Situation Actuelle :</span> <span id="fv-situation" class="badge-tag green">Clôturé</span></div>
+          <div><span style="color: var(--text-muted);">État de Sortie :</span> <span id="fv-etat-sortie" class="badge-tag green">Fonctionnel</span></div>
+          <div><span style="color: var(--text-muted);">Zone Actuelle :</span> <span id="fv-zone" class="badge-tag slate">Atelier Mécanique Lourde</span></div>
+          <div><span style="color: var(--text-muted);">Responsable Tech :</span> <strong id="fv-tech">Ousmane Fall</strong></div>
+          <div><span style="color: var(--text-muted);">Responsable Réception :</span> <strong id="fv-reception">Modou Faye</strong></div>
+          <div><span style="color: var(--text-muted);">Date d'Entrée :</span> <span id="fv-date-entree" style="font-weight: 600;">2026-08-20</span></div>
+          <div><span style="color: var(--text-muted);">Date de Sortie :</span> <span id="fv-date-sortie" style="font-weight: 600;">-</span></div>
+          <div><span style="color: var(--text-muted);">Durée / Nb Jours :</span> <span id="fv-days" class="days-badge red">13 jours</span></div>
+          <div><span style="color: var(--text-muted);">Prise en charge :</span> <span id="fv-pec" style="font-size: 12px; color: #16243D;">2026-08-20 (2h 30m)</span></div>
+          <div><span style="color: var(--text-muted);">Émission FRB :</span> <span id="fv-frb" style="font-size: 12px; color: #16243D;">2026-08-22 (42h 45m)</span></div>
+          <div><span style="color: var(--text-muted);">Coût Estimé Intervention :</span> <strong id="fv-cout" style="color: #2563EB;">8 450 000 FCFA</strong></div>
+          <div style="grid-column: span 2;">
+            <span style="color: var(--text-muted);">Motif de panne / Diagnostic :</span>
+            <div id="fv-motif" style="margin-top: 4px; padding: 10px 12px; background: #F8FAFC; border: 1px solid var(--border-light); border-radius: 6px; font-size: 12px; color: #1E293B; line-height: 1.5;">
+              Fuite vérin de flèche
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chronologie / Timeline Cycle de Vie -->
+      <div class="card-box" style="padding: 18px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <div style="font-size: 13px; font-weight: 800; color: var(--ts-blue); text-transform: uppercase; letter-spacing: 0.5px;">
+            2. Chronologie & Cycle de Vie en Atelier
+          </div>
+          <button class="btn-secondary" style="padding: 4px 10px; font-size: 11.5px;" onclick="APP.setFicheDeVieMode('edit')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Ajouter une étape</span>
+          </button>
+        </div>
+        <div class="timeline-stepper" id="fv-timeline-steps"></div>
+      </div>
+
+      <!-- Pièces de rechange consommées -->
+      <div class="card-box" style="padding: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <div style="font-size: 13px; font-weight: 800; color: var(--ts-blue); text-transform: uppercase; letter-spacing: 0.5px;">
+            3. Pièces de Rechange & Composants
+          </div>
+          <button class="btn-secondary" style="padding: 4px 10px; font-size: 11.5px;" onclick="APP.setFicheDeVieMode('edit')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Ajouter une pièce</span>
+          </button>
+        </div>
+        <table class="data-table" style="font-size: 12px;">
+          <thead>
+            <tr>
+              <th>Référence</th>
+              <th>Désignation</th>
+              <th style="text-align: center;">Qté</th>
+              <th>Montant</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody id="fv-pieces-body"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ==================================================================
+         MODE 2 : MODIFICATION INTERACTIVE COMPLÈTE DE LA FICHE DE VIE
+         ================================================================== -->
+    <div id="fv-edit-container" style="display: none;">
+      <form id="form-edit-fiche-vie" onsubmit="APP.saveFicheDeVie(event)">
+        
+        <!-- Section A : Informations Matérielles & Client -->
+        <div class="fv-edit-card-section">
+          <div class="fv-edit-section-header">
+            <h4>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              <span>1. Informations Matérielles & Client</span>
+            </h4>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label>Code Équipement</label>
+              <input type="text" id="edit-fv-code" class="form-input" readonly style="background: #F1F5F9; font-family: monospace; font-weight: 700; color: #2E5090;">
+            </div>
+            <div class="form-group">
+              <label>Description / Désignation *</label>
+              <input type="text" id="edit-fv-desc" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label>N° de Série</label>
+              <input type="text" id="edit-fv-serial" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Client / Site *</label>
+              <select id="edit-fv-client" class="form-select" required></select>
+            </div>
+            <div class="form-group">
+              <label>Fournisseur / Marque</label>
+              <input type="text" id="edit-fv-fournisseur" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Modèle</label>
+              <input type="text" id="edit-fv-modele" class="form-input">
+            </div>
+            <div class="form-group col-span-2">
+              <label>Entité Responsable *</label>
+              <select id="edit-fv-entite" class="form-select" required>
+                <option value="BIOMED">BIOMED</option>
+                <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section B : Données d'Atelier, Dates & Statut Automatique -->
+        <div class="fv-edit-card-section">
+          <div class="fv-edit-section-header">
+            <h4>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>2. Suivi Atelier, Dates & Statuts</span>
+            </h4>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label>Date d'Entrée Atelier *</label>
+              <div class="input-date-wrapper">
+                <input type="text" id="edit-fv-date-entree" class="form-input date-picker-input" placeholder="AAAA-MM-JJ" required onchange="APP.handleFvDateChange()">
+                <span class="input-date-icon" title="Ouvrir le calendrier">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Date de Sortie Atelier</label>
+              <div class="input-date-wrapper">
+                <input type="text" id="edit-fv-date-sortie" class="form-input date-picker-input" placeholder="AAAA-MM-JJ" onchange="APP.handleFvDateChange()">
+                <span class="input-date-icon" title="Ouvrir le calendrier">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </span>
+              </div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">💡 Si renseignée, bascule automatiquement le statut en <strong>CLÔTURE</strong></div>
+            </div>
+            <div class="form-group">
+              <label>Statut Atelier</label>
+              <select id="edit-fv-statut" class="form-select">
+                <option value="DEPENDANT">DEPENDANT</option>
+                <option value="CLÔTURE">CLÔTURE</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Situation Opérationnelle</label>
+              <select id="edit-fv-situation" class="form-select">
+                <option value="En traitement">En traitement</option>
+                <option value="En attente pièces">En attente pièces</option>
+                <option value="Devis à envoyer">Devis à envoyer</option>
+                <option value="Devis envoyé">Devis envoyé</option>
+                <option value="Back Up">Back Up</option>
+                <option value="Inventaire atelier">Inventaire atelier</option>
+                <option value="A retourner">A retourner</option>
+                <option value="Clôturé">Clôturé</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>État de Sortie</label>
+              <select id="edit-fv-etat-sortie" class="form-select">
+                <option value="Non fonctionnel">Non fonctionnel</option>
+                <option value="Fonctionnel / Dégradé">Fonctionnel / Dégradé</option>
+                <option value="Fonctionnel">Fonctionnel</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Zone Actuelle Atelier</label>
+              <select id="edit-fv-zone" class="form-select">
+                <option value="Atelier Mécanique Lourde">Atelier Mécanique Lourde</option>
+                <option value="Banc d'Essai & Contrôle">Banc d'Essai & Contrôle</option>
+                <option value="Atelier Bobinage & Électrique">Atelier Bobinage & Électrique</option>
+                <option value="Atelier Chaudronnerie & Godet">Atelier Chaudronnerie & Godet</option>
+                <option value="Zone Peinture & Finition">Zone Peinture & Finition</option>
+                <option value="Atelier Diagnostic Électronique">Atelier Diagnostic Électronique</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Responsable Technique</label>
+              <select id="edit-fv-tech" class="form-select">
+                <option value="Ousmane Fall">Ousmane Fall (Mécanique/Hydraulique)</option>
+                <option value="Ibrahima Gueye">Ibrahima Gueye (Usinage/Mines)</option>
+                <option value="Abdoulaye Sow">Abdoulaye Sow (Électricité/Automatisme)</option>
+                <option value="Moussa Diakhaté">Moussa Diakhaté (Électronique)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Responsable Réception</label>
+              <input type="text" id="edit-fv-reception" class="form-input">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section C : Délais, Coûts & Diagnostic -->
+        <div class="fv-edit-card-section">
+          <div class="fv-edit-section-header">
+            <h4>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span>3. Délais, Coûts & Diagnostic Technique</span>
+            </h4>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label>Date & Heure Prise en Charge</label>
+              <div class="input-date-wrapper">
+                <input type="text" id="edit-fv-date-pec" class="form-input datetime-picker-input" placeholder="AAAA-MM-JJ HH:MM">
+                <span class="input-date-icon" title="Ouvrir le sélecteur date et heure">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Délais Prise en Charge</label>
+              <input type="text" id="edit-fv-delais-pec" class="form-input" placeholder="ex: 2h 30m">
+            </div>
+            <div class="form-group">
+              <label>Date & Heure Émission FRB</label>
+              <div class="input-date-wrapper">
+                <input type="text" id="edit-fv-date-frb" class="form-input datetime-picker-input" placeholder="AAAA-MM-JJ HH:MM">
+                <span class="input-date-icon" title="Ouvrir le sélecteur date et heure">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Délais FRB</label>
+              <input type="text" id="edit-fv-delais-frb" class="form-input" placeholder="ex: 42h 45m">
+            </div>
+            <div class="form-group col-span-2">
+              <label>Coût Estimé Intervention (FCFA)</label>
+              <input type="text" id="edit-fv-cout" class="form-input" placeholder="ex: 8 450 000 FCFA">
+            </div>
+            <div class="form-group col-span-2">
+              <label>Motif de Panne & Symptômes Constatés</label>
+              <textarea id="edit-fv-motif" class="form-textarea" rows="3" placeholder="Description technique du problème..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section D : Gestion de la Chronologie & Timeline -->
+        <div class="fv-edit-card-section">
+          <div class="fv-edit-section-header">
+            <h4>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              <span>4. Chronologie des Interventions (Timeline)</span>
+            </h4>
+          </div>
+          
+          <!-- Liste des étapes existantes -->
+          <div id="edit-fv-timeline-list" style="margin-bottom: 12px;"></div>
+
+          <!-- Formulaire inline pour ajouter une étape -->
+          <div class="fv-editor-inline-box">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+              <div style="font-weight: 700; font-size: 12.5px; color: var(--ts-blue); display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Ajouter une nouvelle étape dans le cycle de vie :</span>
+              </div>
+            </div>
+
+            <div class="fv-step-form-grid">
+              <!-- Ligne 1 : Date & Heure, Responsable (liste déroulante), Statut -->
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Date & Heure</label>
+                <div class="input-date-wrapper">
+                  <input type="text" id="add-step-date" class="form-input datetime-picker-input" placeholder="AAAA-MM-JJ HH:MM" style="font-size: 12px; padding: 7px 30px 7px 10px;">
+                  <span class="input-date-icon" style="right: 8px;" title="Ouvrir le sélecteur date et heure">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Responsable / Intervenant *</label>
+                <select id="add-step-agent" class="form-select" style="font-size: 12px; padding: 7px 10px;">
+                  <option value="Ousmane Fall">Ousmane Fall</option>
+                  <option value="Ibrahima Gueye">Ibrahima Gueye</option>
+                  <option value="Abdoulaye Sow">Abdoulaye Sow</option>
+                  <option value="Moussa Diakhaté">Moussa Diakhaté</option>
+                  <option value="Modou Faye">Modou Faye</option>
+                  <option value="Alioune Badara">Alioune Badara</option>
+                  <option value="Fatou Kiné Ndiaye">Fatou Kiné Ndiaye</option>
+                  <option value="Cheikh Amadou Tidiane">Cheikh Amadou Tidiane</option>
+                  <option value="Babacar Diop">Babacar Diop</option>
+                  <option value="Awa Sarr">Awa Sarr</option>
+                  <option value="Mamadou Lamine Cissé">Mamadou Lamine Cissé</option>
+                  <option value="Samba Diallo">Samba Diallo</option>
+                  <option value="Atelier Usinage">Atelier Usinage</option>
+                  <option value="Atelier Mécanique Lourde">Atelier Mécanique Lourde</option>
+                  <option value="Banc d'Essai & Contrôle">Banc d'Essai & Contrôle</option>
+                  <option value="Contrôle Qualité & Métrologie">Contrôle Qualité & Métrologie</option>
+                  <option value="Magasin Central">Magasin Central</option>
+                  <option value="Service Achats">Service Achats</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Statut de l'étape</label>
+                <select id="add-step-status" class="form-select" style="font-size: 12px; padding: 7px 10px;">
+                  <option value="done">Effectué</option>
+                  <option value="in-progress">En cours</option>
+                  <option value="pending">En attente / Planifié</option>
+                </select>
+              </div>
+
+              <!-- Ligne 2 : Description de l'action, Résultat obtenu, Bouton Ajouter -->
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Description de l'action / intervention *</label>
+                <input type="text" id="add-step-event" class="form-input" placeholder="ex: Démontage, usinage chemise, remplacement..." style="font-size: 12px; padding: 7px 10px;">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Résultat obtenu / Observation</label>
+                <input type="text" id="add-step-resultat" class="form-input" placeholder="ex: Conforme, Test 180 bars validé, Sans fuite..." style="font-size: 12px; padding: 7px 10px;">
+              </div>
+
+              <div style="display: flex; align-items: flex-end;">
+                <button type="button" class="btn-primary" style="width: 100%; height: 35px; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;" onclick="APP.addTimelineStepToFv()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>Ajouter l'étape</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section E : Gestion des Pièces de Rechange -->
+        <div class="fv-edit-card-section">
+          <div class="fv-edit-section-header">
+            <h4>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+              <span>5. Pièces de Rechange Consommées</span>
+            </h4>
+          </div>
+
+          <!-- Liste des pièces existantes -->
+          <div id="edit-fv-pieces-list" style="margin-bottom: 12px;"></div>
+
+          <!-- Formulaire inline pour ajouter une pièce -->
+          <div class="fv-editor-inline-box">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+              <div style="font-weight: 700; font-size: 12.5px; color: var(--ts-blue); display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Ajouter une pièce de rechange consommée :</span>
+              </div>
+            </div>
+
+            <div class="fv-step-form-grid">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Référence Pièce</label>
+                <input type="text" id="add-piece-ref" class="form-input" placeholder="ex: CAT-9W-8472" style="font-size: 12px; padding: 7px 10px;">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Désignation / Nom *</label>
+                <input type="text" id="add-piece-nom" class="form-input" placeholder="ex: Kit joints vérin flèche" style="font-size: 12px; padding: 7px 10px;">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Quantité</label>
+                <input type="number" id="add-piece-qte" class="form-input" placeholder="Qté" value="1" min="1" style="font-size: 12px; padding: 7px 10px;">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Montant (FCFA)</label>
+                <input type="text" id="add-piece-cout" class="form-input" placeholder="ex: 650 000 FCFA" style="font-size: 12px; padding: 7px 10px;">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px;">Statut Pièce</label>
+                <select id="add-piece-statut" class="form-select" style="font-size: 12px; padding: 7px 10px;">
+                  <option value="Installé">Installé</option>
+                  <option value="En stock">En stock</option>
+                  <option value="En commande">En commande</option>
+                </select>
+              </div>
+
+              <div style="display: flex; align-items: flex-end;">
+                <button type="button" class="btn-primary" style="width: 100%; height: 35px; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;" onclick="APP.addPieceToFv()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>Ajouter la pièce</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Pied de page avec actions contextuelles selon le mode -->
+  <div class="drawer-footer">
+    <!-- Footer Mode Consultation -->
+    <div id="fv-footer-view" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <button class="btn-secondary" onclick="APP.printFicheDeVie()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        <span>Imprimer / Exporter (PDF)</span>
+      </button>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-secondary" onclick="APP.closeFicheDeVie()">Fermer</button>
+        <button class="btn-primary" onclick="APP.setFicheDeVieMode('edit')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          <span>Modifier cette Fiche</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer Mode Modification -->
+    <div id="fv-footer-edit" style="display: none; justify-content: space-between; align-items: center; width: 100%;">
+      <button type="button" class="btn-secondary" onclick="APP.setFicheDeVieMode('view')">
+        <span>Annuler les modifications</span>
+      </button>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn-secondary" onclick="APP.closeFicheDeVie()">Fermer</button>
+        <button type="button" class="btn-primary" onclick="document.getElementById('form-edit-fiche-vie').requestSubmit ? document.getElementById('form-edit-fiche-vie').requestSubmit() : APP.saveFicheDeVie()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span>Enregistrer les Modifications</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ======================================================================
+     MODAL NOUVEL ÉQUIPEMENT (AJOUT 23 COLONNES)
+     ====================================================================== -->
+<div id="modal-new-equipment" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 680px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
+  <div class="card-header">
+    <div class="card-title-group">
+      <h3>Ajouter un Équipement en Atelier</h3>
+      <p>Renseignez les données d'entrée et d'affectation technique</p>
+    </div>
+    <button class="icon-btn" onclick="APP.closeNewEquipmentModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+
+  <form onsubmit="APP.saveNewEquipment(event)" class="form-grid-2col">
+    <div class="form-group">
+      <label>Code Équipement *</label>
+      <input type="text" id="form-code" class="form-input" placeholder="ex: EQ-CAT-777-11" required>
+    </div>
+    <div class="form-group">
+      <label>Description / Nom *</label>
+      <input type="text" id="form-desc" class="form-input" placeholder="ex: Tombereau Rigide 100T" required>
+    </div>
+    <div class="form-group">
+      <label>N° de Série</label>
+      <input type="text" id="form-serial" class="form-input" placeholder="ex: CAT-777D-9981">
+    </div>
+    <div class="form-group">
+      <label>Client *</label>
+      <select id="form-client" class="form-select" required>
+        <option value="Ciments du Sahel">Ciments du Sahel</option>
+        <option value="Eiffage Sénégal">Eiffage Sénégal</option>
+        <option value="Dangote Cement Senegal">Dangote Cement Senegal</option>
+        <option value="ICS - Industries Chimiques">ICS - Industries Chimiques</option>
+        <option value="Port Autonome de Dakar">Port Autonome de Dakar</option>
+        <option value="Senelec">Senelec</option>
+        <option value="Grande Côte Opérations">Grande Côte Opérations</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Date d'Entrée Atelier *</label>
+      <div class="input-date-wrapper">
+        <input type="text" id="form-date-entree" class="form-input date-picker-input" placeholder="AAAA-MM-JJ" required onchange="APP.handleModalDateChange()">
+        <span class="input-date-icon" title="Ouvrir le calendrier">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Date de Sortie Atelier</label>
+      <div class="input-date-wrapper">
+        <input type="text" id="form-date-sortie" class="form-input date-picker-input" placeholder="AAAA-MM-JJ" onchange="APP.handleModalDateChange()">
+        <span class="input-date-icon" title="Ouvrir le calendrier">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </span>
+      </div>
+      <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">💡 Si renseignée, bascule automatiquement le statut en <strong>CLÔTURE</strong></div>
+    </div>
+    <div class="form-group">
+      <label>Entité Responsable</label>
+      <select id="form-entite" class="form-select">
+        <option value="BIOMED">BIOMED</option>
+        <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Statut</label>
+      <select id="form-statut" class="form-select">
+        <option value="DEPENDANT">DEPENDANT</option>
+        <option value="CLÔTURE">CLÔTURE</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Situation</label>
+      <select id="form-situation" class="form-select">
+        <option value="En traitement">En traitement</option>
+        <option value="En attente pièces">En attente pièces</option>
+        <option value="Devis à envoyer">Devis à envoyer</option>
+        <option value="Devis envoyé">Devis envoyé</option>
+        <option value="Back Up">Back Up</option>
+        <option value="Inventaire atelier">Inventaire atelier</option>
+        <option value="A retourner">A retourner</option>
+        <option value="Clôturé">Clôturé</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>État de Sortie</label>
+      <select id="form-etat-sortie" class="form-select">
+        <option value="Non fonctionnel">Non fonctionnel</option>
+        <option value="Fonctionnel / Dégradé">Fonctionnel / Dégradé</option>
+        <option value="Fonctionnel">Fonctionnel</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Responsable Technique</label>
+      <select id="form-tech" class="form-select">
+        <option value="Ousmane Fall">Ousmane Fall (Mécanique/Hydraulique)</option>
+        <option value="Ibrahima Gueye">Ibrahima Gueye (Usinage/Mines)</option>
+        <option value="Abdoulaye Sow">Abdoulaye Sow (Électricité/Automatisme)</option>
+        <option value="Moussa Diakhaté">Moussa Diakhaté (Électronique)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Fournisseur / Marque</label>
+      <input type="text" id="form-fournisseur" class="form-input" placeholder="ex: Caterpillar">
+    </div>
+    <div class="form-group">
+      <label>Modèle</label>
+      <input type="text" id="form-modele" class="form-input" placeholder="ex: 777D Off-Highway">
+    </div>
+    <div class="form-group">
+      <label>Zone Actuelle Atelier</label>
+      <select id="form-zone" class="form-select">
+        <option value="Atelier Mécanique Lourde">Atelier Mécanique Lourde</option>
+        <option value="Banc d'Essai & Contrôle">Banc d'Essai & Contrôle</option>
+        <option value="Atelier Bobinage & Électrique">Atelier Bobinage & Électrique</option>
+        <option value="Atelier Chaudronnerie & Godet">Atelier Chaudronnerie & Godet</option>
+        <option value="Zone Peinture & Finition">Zone Peinture & Finition</option>
+        <option value="Atelier Diagnostic Électronique">Atelier Diagnostic Électronique</option>
+      </select>
+    </div>
+    <div class="form-group col-span-2">
+      <label>Motif d'entrée / Symptômes de panne</label>
+      <textarea id="form-motif" class="form-textarea" placeholder="Description détaillée du dysfonctionnement constaté..."></textarea>
+    </div>
+
+    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+      <button type="button" class="btn-secondary" onclick="APP.closeNewEquipmentModal()">Annuler</button>
+      <button type="submit" class="btn-primary">Enregistrer l'équipement</button>
+    </div>
+  </form>
+</div>
+
+<!-- ======================================================================
+     MODAL NOUVEL ÉQUIPEMENT TS (CATALOGUE 5 COLONNES)
+     ====================================================================== -->
+<div id="modal-new-equipement-ts" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 620px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
+  <div class="card-header">
+    <div class="card-title-group">
+      <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-green); border-radius: 50%;"></span>
+        <span style="font-size: 11px; font-weight: 800; color: var(--ts-green-dark); text-transform: uppercase;">Catalogue TS</span>
+      </div>
+      <h3>Ajouter un Équipement TS au Catalogue</h3>
+      <p>Enregistrement d'un modèle et d'un fournisseur dans le référentiel TS (5 colonnes)</p>
+    </div>
+    <button class="icon-btn" onclick="APP.closeNewEquipementTSModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <form id="form-new-equipement-ts" onsubmit="APP.saveNewEquipementTS(event)" class="form-grid-2col">
+    <div class="form-group">
+      <label>Fournisseur / Marque *</label>
+      <input type="text" id="form-ts-fournisseur" class="form-input" placeholder="ex: GE Healthcare, Siemens, Caterpillar..." required>
+    </div>
+    <div class="form-group">
+      <label>Désignation de l'Équipement *</label>
+      <input type="text" id="form-ts-designation" class="form-input" placeholder="ex: Échographe Doppler Couleur..." required>
+    </div>
+    <div class="form-group">
+      <label>Modèle *</label>
+      <input type="text" id="form-ts-modele" class="form-input" placeholder="ex: Voluson E10, SOMATOM..." required>
+    </div>
+    <div class="form-group">
+      <label>Catégorie Équipement *</label>
+      <input type="text" id="form-ts-categorie" class="form-input" placeholder="ex: Imagerie Médicale, Bloc Opératoire..." required>
+    </div>
+    <div class="form-group col-span-2">
+      <label>Entité Responsable *</label>
+      <select id="form-ts-entite" class="form-select" required>
+        <option value="BIOMED">BIOMED</option>
+        <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+      </select>
+    </div>
+    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+      <button type="button" class="btn-secondary" onclick="APP.closeNewEquipementTSModal()">Annuler</button>
+      <button type="submit" class="btn-primary">Ajouter au Catalogue TS</button>
+    </div>
+  </form>
+</div>
+
+<!-- ======================================================================
+     MODAL NOUVEAU CLIENT (9 COLONNES OFFICIELLES)
+     ====================================================================== -->
+<div id="modal-new-client" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 700px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
+  <div class="card-header">
+    <div class="card-title-group">
+      <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-green); border-radius: 50%;"></span>
+        <span style="font-size: 11px; font-weight: 800; color: var(--ts-green-dark); text-transform: uppercase;">Répertoire Clients TS</span>
+      </div>
+      <h3>Ajouter un Nouveau Client</h3>
+      <p>Création d'une fiche client avec coordonnées, localisation et identifiants fiscaux (9 colonnes)</p>
+    </div>
+    <button class="icon-btn" onclick="APP.closeNewClientModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <form id="form-new-client" onsubmit="APP.saveNewClient(event)" class="form-grid-2col">
+    <div class="form-group">
+      <label>Code Client (CLIENT) *</label>
+      <input type="text" id="form-clt-code" class="form-input" placeholder="ex: CLT-015" required>
+    </div>
+    <div class="form-group">
+      <label>Nom du Client (NOM CLIENT) *</label>
+      <input type="text" id="form-clt-nom" class="form-input" placeholder="ex: Clinique du Cap Dakar" required>
+    </div>
+    <div class="form-group col-span-2">
+      <label>Adresse Complète (ADRESSE CLIENT) *</label>
+      <input type="text" id="form-clt-adresse" class="form-input" placeholder="ex: Avenue Pasteur, Plateau, Immeuble Horizon" required>
+    </div>
+    <div class="form-group">
+      <label>Ville du Client (VILLE DU CLIENT) *</label>
+      <input type="text" id="form-clt-ville" class="form-input" placeholder="ex: Dakar, Thiès, Saint-Louis..." required>
+    </div>
+    <div class="form-group">
+      <label>Pays du Client (PAYS DU CLIENT) *</label>
+      <input type="text" id="form-clt-pays" class="form-input" value="Sénégal" required>
+    </div>
+    <div class="form-group">
+      <label>Code Postal (CODE POSTAL)</label>
+      <input type="text" id="form-clt-codepostal" class="form-input" placeholder="ex: 10000">
+    </div>
+    <div class="form-group">
+      <label>Téléphone du Client (TELEPHONE CLIENT) *</label>
+      <input type="tel" id="form-clt-telephone" class="form-input" placeholder="ex: +221 33 800 00 00" required>
+    </div>
+    <div class="form-group">
+      <label>Email du Client (MAIL DU CLIENT) *</label>
+      <input type="email" id="form-clt-mail" class="form-input" placeholder="ex: contact@client.sn" required>
+    </div>
+    <div class="form-group">
+      <label>RC / NINEA *</label>
+      <input type="text" id="form-clt-rcninea" class="form-input" placeholder="ex: SN-DKR-2024-B-8901 / 009845123" required>
+    </div>
+    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+      <button type="button" class="btn-secondary" onclick="APP.closeNewClientModal()">Annuler</button>
+      <button type="submit" class="btn-primary">Enregistrer le Client</button>
+    </div>
+  </form>
+</div>
+
+<!-- ======================================================================
+     MODAL NOUVEL AGENT PERSONNEL CST
+     ====================================================================== -->
+<div id="modal-new-personnel" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
+  <div class="card-header">
+    <div class="card-title-group">
+      <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-green); border-radius: 50%;"></span>
+        <span style="font-size: 11px; font-weight: 800; color: var(--ts-green-dark); text-transform: uppercase;">Personnel CST</span>
+      </div>
+      <h3>Ajouter un Agent / Technicien CST</h3>
+      <p>Renseignez l'identité de l'agent, son adresse email professionnelle et son pôle d'affectation.</p>
+    </div>
+    <button class="icon-btn" onclick="APP.closeNewPersonnelModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <form id="form-new-personnel" onsubmit="APP.saveNewPersonnel(event)" class="form-grid-2col">
+    <div class="form-group col-span-2">
+      <label>Nom & Prénom de l'Agent (AGENT) *</label>
+      <input type="text" id="form-prs-agent" class="form-input" placeholder="ex: Ousmane Fall, Fatou Kiné Ndiaye..." required>
+    </div>
+    <div class="form-group col-span-2">
+      <label>Adresse Email Professionnelle (EMAIL) *</label>
+      <input type="email" id="form-prs-email" class="form-input" placeholder="ex: prenom.nom@technologies-services.sn" required>
+    </div>
+    <div class="form-group col-span-2">
+      <label>Pôle d'Affectation (POLE) *</label>
+      <select id="form-prs-pole" class="form-select" required>
+        <option value="BIOMED">BIOMED</option>
+        <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+        <option value="RÉCEPTION & ATELIER">RÉCEPTION & ATELIER</option>
+        <option value="BANC D'ESSAI & CONTRÔLE">BANC D'ESSAI & CONTRÔLE</option>
+        <option value="QUALITÉ & MÉTROLOGIE">QUALITÉ & MÉTROLOGIE</option>
+        <option value="SUPPORT & SAV">SUPPORT & SAV</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Spécialité / Expertise</label>
+      <input type="text" id="form-prs-specialite" class="form-input" placeholder="ex: Échographie & IRM, Électricité...">
+    </div>
+    <div class="form-group">
+      <label>Téléphone Professionnel</label>
+      <input type="tel" id="form-prs-telephone" class="form-input" placeholder="ex: +221 77 000 00 00">
+    </div>
+    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+      <button type="button" class="btn-secondary" onclick="APP.closeNewPersonnelModal()">Annuler</button>
+      <button type="submit" class="btn-primary">Enregistrer l'Agent</button>
+    </div>
+  </form>
+</div>
+
+<!-- ======================================================================
+     MODAL MODIFICATION AGENT PERSONNEL CST
+     ====================================================================== -->
+<div id="modal-edit-personnel" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
+  <div class="card-header">
+    <div class="card-title-group">
+      <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-blue); border-radius: 50%;"></span>
+        <span style="font-size: 11px; font-weight: 800; color: var(--ts-blue); text-transform: uppercase;">Édition Agent</span>
+      </div>
+      <h3>Modifier la Fiche Agent</h3>
+      <p>Mettre à jour les coordonnées et le pôle d'affectation de l'agent.</p>
+    </div>
+    <button class="icon-btn" onclick="APP.closeEditPersonnelModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <form id="form-edit-personnel" onsubmit="APP.saveEditPersonnel(event)" class="form-grid-2col">
+    <div class="form-group col-span-2">
+      <label>Nom & Prénom de l'Agent (AGENT) *</label>
+      <input type="text" id="edit-prs-agent" class="form-input" required>
+    </div>
+    <div class="form-group col-span-2">
+      <label>Adresse Email Professionnelle (EMAIL) *</label>
+      <input type="email" id="edit-prs-email" class="form-input" required>
+    </div>
+    <div class="form-group col-span-2">
+      <label>Pôle d'Affectation (POLE) *</label>
+      <select id="edit-prs-pole" class="form-select" required>
+        <option value="BIOMED">BIOMED</option>
+        <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+        <option value="RÉCEPTION & ATELIER">RÉCEPTION & ATELIER</option>
+        <option value="BANC D'ESSAI & CONTRÔLE">BANC D'ESSAI & CONTRÔLE</option>
+        <option value="QUALITÉ & MÉTROLOGIE">QUALITÉ & MÉTROLOGIE</option>
+        <option value="SUPPORT & SAV">SUPPORT & SAV</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Spécialité / Expertise</label>
+      <input type="text" id="edit-prs-specialite" class="form-input">
+    </div>
+    <div class="form-group">
+      <label>Téléphone Professionnel</label>
+      <input type="tel" id="edit-prs-telephone" class="form-input">
+    </div>
+    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+      <button type="button" class="btn-secondary" onclick="APP.closeEditPersonnelModal()">Annuler</button>
+      <button type="submit" class="btn-primary">Enregistrer les Modifications</button>
+    </div>
+  </form>
+</div>
+
+<!-- Flatpickr Date/Time Picker Scripts (Local with CDN fallback) -->
+<script src="vendor/flatpickr/flatpickr.min.js"></script>
+<script src="vendor/flatpickr/fr.js"></script>
+<script>
+  if (typeof flatpickr === 'undefined') {
+    document.write('<script src="https://cdn.jsdelivr.net/npm/flatpickr"><\/script>');
+    document.write('<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"><\/script>');
+  }
+</script>
+
+<!-- Application Scripts -->
+<script src="js/data.js?v=2.8"></script>
+<script src="js/charts.js?v=2.8"></script>
+<script src="js/app.js?v=2.8"></script>
+</body>
+</html>
