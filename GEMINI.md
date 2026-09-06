@@ -11,7 +11,7 @@ Elle assure la traçabilité intégrale, le suivi technique et financier, ainsi 
 L'application **Sama CST** centralise l'ensemble des processus techniques et administratifs de Technologies Services :
 1. **Traçabilité des Réceptions & Sorties d'Atelier** : Enregistrement rigoureux de chaque entrée d'équipement avec génération automatique d'un code unique (`EQ-AT-XXXX`), assignation technique, motif de panne et suivi des délais d'immobilisation.
 2. **Fiche de Vie 360° de l'Équipement** : Historique chronologique complet (diagnostic, devis, attente pièces, commande, usinage, banc d'essai, contrôle qualité, livraison).
-3. **Pilotage de la Performance & des Délais** : Analyse en direct des 4 axes de blocage opérationnels (Attente Pièces, Devis / FRB, Validation Client, Contrôle Banc d'Essai), calcul du MTTR (*Mean Time To Repair*) et calcul de la disponibilité globale du parc (**96.4%**).
+3. **Pilotage de la Performance & des Délais** : Analyse en direct des 4 axes de blocage opérationnels (Attente Pièces, Devis / FRB, Validation Client, Contrôle Banc d'Essai), calcul du MTTR (*Mean Time To Repair*) et calcul de la disponibilité globale du parc.
 4. **Gestion Centralisée des Référentiels Métier** :
    - Répertoire complet des clients (avec identifiants fiscaux NINEA & RC).
    - Répertoire du personnel technique et ingénieurs CST avec affectation par pôle.
@@ -52,106 +52,68 @@ L'application **Sama CST** centralise l'ensemble des processus techniques et adm
 - **Mode Édition Interactive & Modification d'Interventions Passées** :
   - Possibilité de modifier ou supprimer n'importe quelle étape passée via un bouton d'action dédié (`✏️ Modifier`).
   - **Sélecteur de responsable sous forme de liste déroulante** alimentée dynamiquement par le personnel CST et les ateliers internes.
-  - **Champ dédié « Résultat obtenu / Observation »** permettant d'enregistrer le résultat technique validé.
+  - **Champ dédié « Résultat obtenu / Observation »** permettant d'enregistrer le résultat technique validé (ex : *« Test 180 bars conforme »*, *« Étalonnage réussi à 99.8% »*).
   - Gestion des pièces de rechange consommées (référence, désignation, quantité, montant unitaire et statut de commande).
 
 ### D. Datepickers Dynamiques
-- Tous les champs de date et date/heure sont équipés de sélecteurs Flatpickr dynamiques en français avec raccourcis rapides (*« Aujourd'hui »*, *« Maintenant »*, *« Effacer »*).
+- Tous les champs de date et date/heure (`Date Entrée`, `Date Sortie`, `Date Émission FRB`, `Date Accord Client`, `Date Étape Intervention`, etc.) sont équipés de **sélecteurs dynamiques et ergonomiques** avec raccourcis rapides (*« Aujourd'hui »*, *« Maintenant »*, *« Effacer »*).
 
 ### E. Base de Données TS — Double Vue Interactive
-- **Vue Sites Clients (7 sites)** : Cartes interactives détaillant le client, le contrat (24/7, Platinum, Gold), SLA, technicien référent.
-- **Vue Parc Équipements TS (24 machines)** : Bascule Grille responsive / Tableau synthétique avec jauges de disponibilité et accès direct à la fiche atelier.
+- **Sélecteur de Vue Intégré** :
+  - **Vue Sites Clients (7 sites)** : Cartes interactives détaillant le client, le type de contrat (24/7, Platinum, Gold), le SLA contractuel, le technicien référent et les actions rapides.
+  - **Vue Parc Équipements TS (24 machines)** : Vue par équipement avec bascule **Mode Cartes (Grille responsive)** ou **Mode Tableau synthétique**, jauges de taux de disponibilité (`98.5%`, `94.2%`), et bouton direct de transfert/consultation en atelier.
 
 ### F. Répertoire des Clients Technologies Services
 - **9 Colonnes Officielles & Fiscales** : `Code Client`, `Raison Sociale / Nom`, `Secteur d'Activité`, `Ville`, `Téléphone`, `Email`, `Contact Principal`, `N° Registre du Commerce (RC)`, `N° NINEA`.
-- Filtres, recherche instantanée, ajout/modification et export CSV.
+- **KPIs en En-tête** : Total Clients (14), Villes Couvertes (7), Santé & Hôpitaux (6), Industrie & Mines (8).
+- **Gestion complète** : Recherche multi-critères, ajout de nouveaux comptes, modification des coordonnées et export CSV.
 
 ### G. Référentiel du Personnel CST
-- 12 agents et ingénieurs CST avec affectation par pôle, spécialité, contact et statut de disponibilité.
+- **Gestion des Agents & Techniciens** : `Code Agent`, `Nom & Prénom`, `Fonction / Poste`, `Pôle Opérationnel` (`BIOMED`, `IMAG-CHIRG`, `RÉCEPTION & ATELIER`, `BANC D'ESSAI & CONTRÔLE`, `QUALITÉ & MÉTROLOGIE`, `SUPPORT & SAV`), `Téléphone`, `Email professionnel`, `Spécialité technique`, `Statut de disponibilité`.
+- **Filtres par Pôle, recherche instantanée, modales d'ajout/modification et export CSV**.
 
 ### H. Catalogue Référentiel des Équipements TS
-- Référentiel complet des équipements commercialisés et maintenus par Technologies Services.
+- **5 colonnes** : `Code TS`, `Désignation`, `Catégorie`, `Fournisseur / Marque`, `Statut Référentiel`.
 
 ---
 
 ## 3. 📂 Structure des Fichiers
 
+L'application est 100% autonome et fluide, structurée sans complexité inutile :
+
 ```text
 Sama CST/
-├── app/
-│   ├── (auth)/
-│   │   └── login/page.tsx              # Page de connexion Supabase & Accès Démo
-│   ├── (dashboard)/
-│   │   ├── layout.tsx                  # Layout Global (Sidebar, Topbar, Modales)
-│   │   ├── page.tsx                    # Supervision & KPIs directeurs
-│   │   ├── atelier/page.tsx            # Atelier GMAO (23 colonnes & Fiche de Vie 360°)
-│   │   ├── base-ts/page.tsx            # Base TS (Sites Clients & Parc Équipements 24 machines)
-│   │   ├── catalogue/page.tsx          # Catalogue Référentiel Équipements
-│   │   ├── clients/page.tsx            # Répertoire Clients & Contrats (9 colonnes, NINEA/RC)
-│   │   └── personnel/page.tsx          # Référentiel Personnel CST (12 agents)
-│   ├── api/auth/callback/route.ts      # Route de callback OAuth/Auth Supabase
-│   ├── globals.css                     # Directives Tailwind & styles globaux
-│   └── layout.tsx                      # Root Layout avec polices Inter
-│
-├── components/
-│   ├── layout/                         # Sidebar, Topbar, HeaderBanner
-│   ├── ui/                             # Badge, Button, Modal, Drawer, DatePicker
-│   ├── dashboard/                      # KpiGrid, SupervisionCharts, RecentActivityList
-│   ├── atelier/                        # AtelierTable, FicheDeVieDrawer, NewEquipmentModal
-│   ├── base-ts/                        # SitesGrid, ParcEquipementsGrid, ParcEquipementsTable
-│   ├── clients/                        # ClientsTable, NewClientModal
-│   ├── personnel/                      # PersonnelTable, NewPersonnelModal
-│   └── catalogue/                      # CatalogueTable
-│
-├── lib/
-│   ├── supabase/                       # client.ts, server.ts, middleware.ts
-│   ├── data/                           # supabaseService.ts, mockData.ts
-│   └── utils/                          # csvExport.ts, formatters.ts
-│
-├── supabase/
-│   ├── schema.sql                      # DDL PostgreSQL, RLS, Indexes, Realtime
-│   └── seed.sql                        # Données de référence
-│
-├── types/
-│   └── database.types.ts               # Types TypeScript
-│
 ├── css/
-│   └── style.css                       # Feuille de style complète de la version standalone
-│
+│   └── style.css                       # Feuille de style complète (Charte graphique Technologies Services)
 ├── js/
-│   ├── app.js                          # Moteur applicatif standalone
-│   ├── charts.js                       # Graphiques Chart.js & jauges
-│   └── data.js                         # Données initiales standalone
-│
+│   ├── app.js                          # Moteur applicatif (Navigation, Modales, CRUD, Tiroir Fiche de Vie)
+│   ├── charts.js                       # Graphiques Chart.js (Rotation, MTTR, Disponibilité, Pôles)
+│   └── data.js                         # Données initiales et référentiels métiers TS
 ├── vendor/
-│   └── flatpickr/                      # Librairie sélecteur de dates en français
-│
-├── index.html                          # Application Web Standalone de secours
-├── package.json                        # Configuration et scripts Next.js
-├── tailwind.config.ts                  # Design System Tailwind TS
-├── tsconfig.json                       # Typages et alias de chemins (@/*)
-└── README.md                           # Guide d'utilisation et documentation
+│   └── flatpickr/                      # Librairie locale de sélection de date/heure en français
+├── .gitignore                          # Fichiers ignorés par Git
+├── index.html                          # Application Web Standalone complète
+├── package.json                        # Scripts de lancement local
+└── README.md                           # Documentation utilisateur et technique
 ```
 
 ---
 
 ## 4. 💻 Technologies Utilisées
 
-| Domaine | Technologie | Rôle |
+| Domaine | Technologie | Version / Rôle |
 | :--- | :--- | :--- |
-| **Framework Web** | Next.js 14.2.24 (App Router) | Architecture Server & Client Components |
-| **Langage** | TypeScript 5.7 | Typage strict et fiabilité |
-| **Base de Données & Auth** | Supabase (PostgreSQL 15) | Tables relationnelles, RLS, Auth Sessions, Realtime |
-| **Styles & Design** | Tailwind CSS 3.4 | Charte graphique TS (Variables CSS, Glassmorphism, Responsive) |
-| **Icônes** | Lucide React | Jeu d'icônes vectorielles professionnelles |
-| **Graphiques & DataViz** | Chart.js 4.4 / react-chartjs-2 | Camemberts, MTTR, Pôles opérationnels, jauges |
-| **Sélecteurs de Dates** | Flatpickr 4.6.13 | Sélecteurs Date & Heure dynamiques en français |
+| **Structure & Vues** | HTML5 Sémantique | Architecture multi-vues avec navigation fluide |
+| **Design & Styles** | Vanilla CSS 3 | Charte graphique TS (Vert `#72C100`, Bleu `#2E5090`, Navy `#16243D`) |
+| **Logique & Données** | JavaScript ES6+ | Moteur réactif, gestion du state local, filtrage instantané |
+| **Graphiques & DataViz**| [Chart.js](https://www.chartjs.org/) | Camemberts, jauges, barres, MTTR sur 6 mois |
+| **Sélecteurs de Dates** | [Flatpickr](https://flatpickr.js.org/) | Sélecteurs Date & Heure dynamiques en français |
 
 ---
 
-## 5. 🎨 Charte Graphique Officielle TS
+## 5. 🎨 Charte Graphique & Ergonomie
 
-- 🟢 **Vert Vif TS (Pantone 368 C)** : `#72C100` (Validation, disponibilité élevée, statuts fonctionnels)
-- 🔵 **Bleu Foncé TS (Pantone 7684 C)** : `#2E5090` (Boutons d'action, sélections actives)
-- 🌑 **Bleu Navy TS** : `#16243D` & `#111D31` (Fond sidebar, bannières d'en-tête de prestige)
-- ⚪ **Fonds & Neutres** : Fond `#F8FAFC`, cartes `#FFFFFF`, bordures `#E2E8F0`
+- 🟢 **Vert Vif TS (Pantone 368 C)** : `#72C100` (Hover: `#61A500`, Light: `#F2FBE5`, Border: `#CEF092`)
+- 🔵 **Bleu Foncé TS (Pantone 7684 C)** : `#2E5090` (Hover: `#223D70`, Light: `#EEF3FA`, Border: `#C2D5EE`)
+- 🌑 **Bleu Navy Sombre TS** : `#16243D` & `#111D31`
+- ⚪ **Fonds & Neutres** : Fond `#F8FAFC`, Cartes `#FFFFFF`, Bordures `#E2E8F0`
