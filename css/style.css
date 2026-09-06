@@ -620,6 +620,28 @@ body {
   margin-left: auto;
 }
 
+/* Supabase Status Pill */
+.supabase-status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  user-select: none;
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+.supabase-status-pill:hover {
+  background: #FFFFFF;
+  border-color: var(--ts-blue);
+  box-shadow: 0 1px 4px rgba(46, 80, 144, 0.1);
+  transform: translateY(-1px);
+}
+
 /* Global Search Input */
 .search-box {
   position: relative;

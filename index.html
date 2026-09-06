@@ -178,6 +178,12 @@
       </div>
 
       <div class="topbar-right">
+        <!-- Supabase Status Badge / Connexion -->
+        <div id="supabase-status-badge" class="supabase-status-pill" onclick="supabaseSync.openConfigModal()" title="Statut de connexion Supabase (Cliquer pour configurer)">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#94A3B8; margin-right:6px;"></span>
+          <span style="color:#64748B; font-weight:600; font-size:12px;">Mode Local</span>
+        </div>
+
         <!-- Recherche globale -->
         <div class="search-box">
           <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -2295,8 +2301,13 @@
   }
 </script>
 
-<!-- Application Scripts -->
+<!-- Supabase JS Client (Official CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Application & Sync Scripts -->
 <script src="js/data.js?v=2.8"></script>
+<script src="js/supabase-config.js?v=2.8"></script>
+<script src="js/supabase-sync.js?v=2.8"></script>
 <script src="js/charts.js?v=2.8"></script>
 <script src="js/app.js?v=2.8"></script>
 </body>

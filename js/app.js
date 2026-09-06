@@ -86,6 +86,29 @@ const APP = {
 
     // Initialisation des sélecteurs de Date et Date & Heure dynamiques
     this.initDatePickers();
+
+    // Initialisation Supabase asynchrone (mode hybride)
+    if (window.supabaseSync && typeof window.supabaseSync.init === 'function') {
+      window.supabaseSync.init();
+    }
+  },
+
+  renderCurrentView() {
+    this.renderEquipementTable();
+    this.renderEquipementsTS();
+    this.renderClients();
+    this.renderPersonnel();
+    this.renderSitesTS();
+    this.renderParcEquipementsTS();
+    this.renderTechnicians();
+    this.renderBlocages4Axes();
+    this.renderCriticiteTable();
+    this.renderRedAlerts();
+    this.renderEntityAvailability();
+    this.renderTop5List();
+    if (window.SAMA_CHARTS && typeof window.SAMA_CHARTS.initAllDashboardCharts === 'function') {
+      window.SAMA_CHARTS.initAllDashboardCharts();
+    }
   },
 
   // ------------------------------------------------------------------------
@@ -1459,6 +1482,12 @@ const APP = {
     this.renderRedAlerts();
     this.renderEntityAvailability();
 
+    // Synchronisation Supabase en arrière-plan
+    if (window.supabaseSync && typeof window.supabaseSync.syncSaveEquipementAtelier === 'function') {
+      window.supabaseSync.syncSaveEquipementAtelier(eq);
+      window.supabaseSync.syncReplaceAllTimelineSteps(eq.codeEquipement, eq.timeline);
+    }
+
     // Rebasculer en mode consultation
     this.setFicheDeVieMode('view');
     this.showToast(`Fiche de vie "${eq.codeEquipement}" (${eq.description}) enregistrée avec succès !`, "success");
@@ -2261,6 +2290,11 @@ const APP = {
 
     SAMA_DATA.equipementsTS.unshift(newEquip);
 
+    // Synchronisation Supabase
+    if (window.supabaseSync && typeof window.supabaseSync.syncSaveEquipementTS === 'function') {
+      window.supabaseSync.syncSaveEquipementTS(newEquip);
+    }
+
     this.tsCurrentPage = 1;
     this.renderEquipementsTS();
     this.closeNewEquipementTSModal();
@@ -2296,6 +2330,9 @@ const APP = {
     if (index < 0 || index >= SAMA_DATA.equipementsTS.length) return;
     const item = SAMA_DATA.equipementsTS[index];
     if (confirm(`Confirmez-vous la suppression de l'équipement "${item.modele} (${item.fournisseur})" du catalogue TS ?`)) {
+      if (window.supabaseSync && typeof window.supabaseSync.syncDeleteEquipementTS === 'function') {
+        window.supabaseSync.syncDeleteEquipementTS(item.codeTS || item.modele);
+      }
       SAMA_DATA.equipementsTS.splice(index, 1);
       this.renderEquipementsTS();
       this.showToast(`Équipement ${item.modele} supprimé du catalogue TS.`, "info");
@@ -2631,6 +2668,11 @@ const APP = {
 
     SAMA_DATA.clients.unshift(newClient);
 
+    // Synchronisation Supabase
+    if (window.supabaseSync && typeof window.supabaseSync.syncSaveClient === 'function') {
+      window.supabaseSync.syncSaveClient(newClient);
+    }
+
     this.clientCurrentPage = 1;
     this.renderClients();
     this.closeNewClientModal();
@@ -2642,6 +2684,9 @@ const APP = {
     if (index < 0 || index >= SAMA_DATA.clients.length) return;
     const item = SAMA_DATA.clients[index];
     if (confirm(`Confirmez-vous la suppression du client "${item.nomClient} (${item.client})" ?`)) {
+      if (window.supabaseSync && typeof window.supabaseSync.syncDeleteClient === 'function') {
+        window.supabaseSync.syncDeleteClient(item.client || item.codeClient);
+      }
       SAMA_DATA.clients.splice(index, 1);
       this.renderClients();
       this.showToast(`Client ${item.nomClient} supprimé du répertoire.`, "info");
@@ -2963,6 +3008,12 @@ const APP = {
     };
 
     SAMA_DATA.personnelCST.unshift(newAgent);
+
+    // Synchronisation Supabase
+    if (window.supabaseSync && typeof window.supabaseSync.syncSavePersonnel === 'function') {
+      window.supabaseSync.syncSavePersonnel(newAgent);
+    }
+
     this.personnelCurrentPage = 1;
     this.renderPersonnel();
     this.closeNewPersonnelModal();
@@ -2988,7 +3039,7 @@ const APP = {
       return;
     }
 
-    SAMA_DATA.personnelCST[this.editingPersonnelIdx] = {
+    const updatedAgent = {
       ...SAMA_DATA.personnelCST[this.editingPersonnelIdx],
       agent: agent.trim(),
       email: email.trim(),
@@ -2996,6 +3047,13 @@ const APP = {
       specialite: (specialite || '').trim(),
       telephone: (telephone || '').trim()
     };
+
+    SAMA_DATA.personnelCST[this.editingPersonnelIdx] = updatedAgent;
+
+    // Synchronisation Supabase
+    if (window.supabaseSync && typeof window.supabaseSync.syncSavePersonnel === 'function') {
+      window.supabaseSync.syncSavePersonnel(updatedAgent);
+    }
 
     this.renderPersonnel();
     this.closeEditPersonnelModal();
@@ -3006,6 +3064,9 @@ const APP = {
     if (index < 0 || index >= SAMA_DATA.personnelCST.length) return;
     const item = SAMA_DATA.personnelCST[index];
     if (confirm(`Confirmez-vous la suppression de l'agent "${item.agent}" (${item.pole}) ?`)) {
+      if (window.supabaseSync && typeof window.supabaseSync.syncDeletePersonnel === 'function') {
+        window.supabaseSync.syncDeletePersonnel(item.codeAgent || item.agent);
+      }
       SAMA_DATA.personnelCST.splice(index, 1);
       this.renderPersonnel();
       this.showToast(`Agent ${item.agent} supprimé du répertoire.`, "info");
@@ -3287,6 +3348,13 @@ const APP = {
     };
 
     SAMA_DATA.equipementsAtelier.unshift(newEquip);
+
+    // Synchronisation Supabase
+    if (window.supabaseSync && typeof window.supabaseSync.syncSaveEquipementAtelier === 'function') {
+      window.supabaseSync.syncSaveEquipementAtelier(newEquip);
+      window.supabaseSync.syncSaveTimelineStep(newEquip.codeEquipement, newEquip.timeline[0], 0);
+    }
+
     this.renderEquipementTable();
     this.closeNewEquipmentModal();
     this.showToast(`Équipement ${code} enregistré (${statut}) !`, "success");
