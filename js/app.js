@@ -91,6 +91,11 @@ const APP = {
     if (window.supabaseSync && typeof window.supabaseSync.init === 'function') {
       window.supabaseSync.init();
     }
+
+    // Initialisation du gestionnaire d'authentification et profil utilisateur
+    if (window.AUTH && typeof window.AUTH.init === 'function') {
+      window.AUTH.init();
+    }
   },
 
   renderCurrentView() {
