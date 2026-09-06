@@ -1,71 +1,78 @@
-# SAMA CST — Technologies Services
+# SAMA CST — Technologies Services (Next.js 14, Supabase, Tailwind CSS)
 
-Application web complète de **GMAO (Gestion de Maintenance Assistée par Ordinateur)** et de **Supervision Opérationnelle** conçue pour **Technologies Services (TS)**.
-
----
-
-## 🎯 Ce que fait l'application
-
-1. **Traçabilité des Réceptions & Sorties d'Atelier** : Enregistrement rigoureux de chaque entrée d'équipement avec code unique (`EQ-AT-XXXX`), assignation technique, motif de panne et suivi des délais d'immobilisation.
-2. **Fiche de Vie 360° de l'Équipement** : Historique chronologique complet (diagnostic, devis, attente pièces, commande, usinage, banc d'essai, contrôle qualité, livraison).
-3. **Pilotage de la Performance & des Délais** : Analyse en direct des 4 axes de blocage opérationnels, calcul du MTTR (*Mean Time To Repair*) et de la disponibilité globale du parc (**96.4%**).
-4. **Gestion Centralisée des Référentiels Métier** :
-   - Répertoire complet des clients (avec identifiants fiscaux NINEA & RC).
-   - Répertoire du personnel technique et ingénieurs CST avec affectation par pôle.
-   - Catalogue des équipements commercialisés et maintenus par Technologies Services.
-   - Base de données des sites clients et du parc de machines déployé.
+Application professionnelle de **GMAO (Gestion de Maintenance Assistée par Ordinateur)** et de **Supervision Opérationnelle** pour **Technologies Services**.
 
 ---
 
-## ⚡ Fonctionnalités Clés
+## 🚀 Stack Technique
 
-- **Supervision & KPIs** : 4 vues métiers (Synthèse Direction, Performance Technique, Risques & Dépendances, Disponibilité du Parc).
-- **Atelier GMAO 23 Colonnes** : Tableau exhaustif, filtres instantanés, création/modification d'équipements et export CSV/Excel avec BOM UTF-8.
-- **Fiche de Vie 360° coulissante (Drawer)** : Stepper chronologique interactif, ajout/modification d'étapes d'intervention, gestion des pièces de rechange et observations techniques.
-- **Base de Données TS** : Double vue interactive (Sites Clients sous contrat & Grille/Tableau du Parc Équipements 24 machines).
-- **Référentiel Clients** : 9 colonnes officielles avec NINEA et Registre de Commerce.
-- **Personnel CST** : 12 profils d'agents répartis par pôles (`BIOMED`, `IMAG-CHIRG`, `RÉCEPTION & ATELIER`, `BANC D'ESSAI & CONTRÔLE`, `QUALITÉ & MÉTROLOGIE`, `SUPPORT & SAV`).
+- **Frontend** : Next.js 14 (App Router, Server & Client Components, TypeScript)
+- **Base de Données & Authentification** : Supabase (PostgreSQL, Row Level Security, Auth Sessions, Realtime)
+- **Design & UI** : Tailwind CSS avec la charte officielle Technologies Services (Vert Pantone 368 C `#72C100`, Bleu Pantone 7684 C `#2E5090`, Navy `#16243D`)
+- **Icônes** : Lucide React
+- **Hébergement & Déploiement** : Vercel (CI/CD natif)
 
 ---
 
 ## 📁 Structure du Projet
 
 ```
-Sama CST/
-├── css/
-│   └── style.css            # Feuille de style complète (Charte Technologies Services)
-├── js/
-│   ├── app.js               # Logique applicative (navigation, modales, drawer, CRUD, filtres)
-│   ├── charts.js            # Graphiques Chart.js (Rotation, MTTR, Pôles)
-│   └── data.js              # Données de référence et état initial
-├── vendor/
-│   └── flatpickr/           # Sélecteurs de date/heure dynamiques
-├── index.html               # Application Web Standalone complète
-├── package.json             # Configuration et scripts de lancement
-└── README.md
+sama-cst/
+├── app/
+│   ├── (auth)/
+│   │   └── login/page.tsx              # Page de connexion Supabase Auth & Accès Démo
+│   ├── (dashboard)/
+│   │   ├── layout.tsx                  # Layout Global (Sidebar, Topbar, Modales)
+│   │   ├── page.tsx                    # Tableau de bord & KPIs Supervision
+│   │   ├── atelier/page.tsx            # Équipements en Atelier & Fiche de Vie 360°
+│   │   ├── base-ts/page.tsx            # Base TS (Vue Clients/Sites & Vue Équipements)
+│   │   ├── catalogue/page.tsx          # Catalogue des Équipements TS
+│   │   ├── clients/page.tsx            # Référentiel Clients & Contrats
+│   │   └── personnel/page.tsx          # Personnel CST (12 Agents)
+│   ├── api/auth/callback/route.ts      # Callback Auth Supabase
+│   ├── globals.css                     # Directives Tailwind & styles globaux
+│   └── layout.tsx                      # Root Layout
+├── components/
+│   ├── layout/                         # Sidebar, Topbar, HeaderBanner
+│   ├── ui/                             # Badge, Button, Modal, Drawer, DatePicker
+│   ├── dashboard/                      # KpiGrid, SupervisionCharts, RecentActivity
+│   ├── atelier/                        # AtelierTable, FicheDeVieDrawer, NewEquipmentModal
+│   ├── base-ts/                        # SitesGrid, ParcEquipementsGrid, ParcEquipementsTable
+│   ├── clients/                        # ClientsTable, NewClientModal
+│   ├── personnel/                      # PersonnelTable, NewPersonnelModal
+│   └── catalogue/                      # CatalogueTable
+├── lib/
+│   ├── supabase/                       # Clients Browser, Server et Middleware SSR
+│   ├── data/                           # Service de données avec bascule Supabase / Mock
+│   ├── types/                          # Typages TypeScript PostgreSQL
+│   └── utils/                          # Export CSV universel, formatters FCFA et dates
+├── supabase/
+│   ├── schema.sql                      # Schéma complet PostgreSQL (Tables, RLS, Index)
+│   └── seed.sql                        # Données de démonstration initiales
+├── vercel.json                         # Paramètres de build et sécurité Vercel
+├── tailwind.config.ts
+└── package.json
 ```
 
 ---
 
-## 🎨 Charte Graphique Technologies Services
+## 🛠️ Installation & Démarrage Local
 
-- 🟢 **Vert Vif TS** : `#72C100` (Validation, statuts fonctionnels, badges actifs)
-- 🔵 **Bleu Foncé TS** : `#2E5090` (Boutons d'action, sélections actives)
-- 🌑 **Bleu Navy TS** : `#16243D` & `#111D31` (Sidebar, en-têtes de prestige)
+1. **Installer les dépendances** :
+   ```bash
+   npm install
+   ```
 
----
+2. **Lancer le serveur de développement** :
+   ```bash
+   npm run dev
+   ```
+   L'application est disponible sur [http://localhost:3000](http://localhost:3000).
 
-## 🚀 Démarrage Rapide
-
-### Option 1 : Ouvrir directement dans le navigateur
-Double-cliquez simplement sur `index.html`.
-
-### Option 2 : Serveur local
-```bash
-# Avec Node.js :
-npm start
-
-# Ou avec Python :
-python3 -m http.server 3000
-```
-Puis ouvrez [http://localhost:3000](http://localhost:3000).
+3. **Variables d'Environnement Supabase (Optionnel pour le mode connecté)** :
+   Créez un fichier `.env.local` basé sur `.env.example` :
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=votre_url_supabase
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=votre_cle_anon
+   ```
+   *Note : Si ces variables ne sont pas renseignées, l'application utilise automatiquement le mode de secours local avec données complètes.*

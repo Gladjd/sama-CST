@@ -78,19 +78,58 @@ L'application **Sama CST** centralise l'ensemble des processus techniques et adm
 
 ```text
 Sama CST/
+├── app/
+│   ├── (auth)/
+│   │   └── login/page.tsx              # Page de connexion Supabase & Accès Démo
+│   ├── (dashboard)/
+│   │   ├── layout.tsx                  # Layout Global (Sidebar, Topbar, Modales)
+│   │   ├── page.tsx                    # Supervision & KPIs directeurs
+│   │   ├── atelier/page.tsx            # Atelier GMAO (23 colonnes & Fiche de Vie 360°)
+│   │   ├── base-ts/page.tsx            # Base TS (Sites Clients & Parc Équipements 24 machines)
+│   │   ├── catalogue/page.tsx          # Catalogue Référentiel Équipements
+│   │   ├── clients/page.tsx            # Répertoire Clients & Contrats (9 colonnes, NINEA/RC)
+│   │   └── personnel/page.tsx          # Référentiel Personnel CST (12 agents)
+│   ├── api/auth/callback/route.ts      # Route de callback OAuth/Auth Supabase
+│   ├── globals.css                     # Directives Tailwind & styles globaux
+│   └── layout.tsx                      # Root Layout avec polices Inter
+│
+├── components/
+│   ├── layout/                         # Sidebar, Topbar, HeaderBanner
+│   ├── ui/                             # Badge, Button, Modal, Drawer, DatePicker
+│   ├── dashboard/                      # KpiGrid, SupervisionCharts, RecentActivityList
+│   ├── atelier/                        # AtelierTable, FicheDeVieDrawer, NewEquipmentModal
+│   ├── base-ts/                        # SitesGrid, ParcEquipementsGrid, ParcEquipementsTable
+│   ├── clients/                        # ClientsTable, NewClientModal
+│   ├── personnel/                      # PersonnelTable, NewPersonnelModal
+│   └── catalogue/                      # CatalogueTable
+│
+├── lib/
+│   ├── supabase/                       # client.ts, server.ts, middleware.ts
+│   ├── data/                           # supabaseService.ts, mockData.ts
+│   └── utils/                          # csvExport.ts, formatters.ts
+│
+├── supabase/
+│   ├── schema.sql                      # DDL PostgreSQL, RLS, Indexes, Realtime
+│   └── seed.sql                        # Données de référence
+│
+├── types/
+│   └── database.types.ts               # Types TypeScript
+│
 ├── css/
-│   └── style.css                       # Feuille de style complète (Charte Technologies Services)
+│   └── style.css                       # Feuille de style complète de la version standalone
 │
 ├── js/
-│   ├── app.js                          # Moteur applicatif (navigation, modales, CRUD, drawer)
-│   ├── charts.js                       # Graphiques Chart.js & jauges de supervision
-│   └── data.js                         # Données initiales et référentiels métiers
+│   ├── app.js                          # Moteur applicatif standalone
+│   ├── charts.js                       # Graphiques Chart.js & jauges
+│   └── data.js                         # Données initiales standalone
 │
 ├── vendor/
 │   └── flatpickr/                      # Librairie sélecteur de dates en français
 │
-├── index.html                          # Application Web Standalone complète
-├── package.json                        # Configuration et scripts de lancement
+├── index.html                          # Application Web Standalone de secours
+├── package.json                        # Configuration et scripts Next.js
+├── tailwind.config.ts                  # Design System Tailwind TS
+├── tsconfig.json                       # Typages et alias de chemins (@/*)
 └── README.md                           # Guide d'utilisation et documentation
 ```
 
@@ -100,10 +139,12 @@ Sama CST/
 
 | Domaine | Technologie | Rôle |
 | :--- | :--- | :--- |
-| **Structure** | HTML5 Sémantique | Architecture de la Single Page Application |
-| **Styles & Design** | Vanilla CSS3 | Charte graphique TS (Variables CSS, Glassmorphism, Responsive) |
-| **Logique Applicative** | JavaScript ES6+ | Moteur d'état réactif, filtrage, modales, exports CSV |
-| **Graphiques & DataViz** | Chart.js 4.4.0 | Camemberts, MTTR, Pôles opérationnels, jauges de disponibilité |
+| **Framework Web** | Next.js 14.2.24 (App Router) | Architecture Server & Client Components |
+| **Langage** | TypeScript 5.7 | Typage strict et fiabilité |
+| **Base de Données & Auth** | Supabase (PostgreSQL 15) | Tables relationnelles, RLS, Auth Sessions, Realtime |
+| **Styles & Design** | Tailwind CSS 3.4 | Charte graphique TS (Variables CSS, Glassmorphism, Responsive) |
+| **Icônes** | Lucide React | Jeu d'icônes vectorielles professionnelles |
+| **Graphiques & DataViz** | Chart.js 4.4 / react-chartjs-2 | Camemberts, MTTR, Pôles opérationnels, jauges |
 | **Sélecteurs de Dates** | Flatpickr 4.6.13 | Sélecteurs Date & Heure dynamiques en français |
 
 ---
