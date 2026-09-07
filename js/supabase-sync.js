@@ -94,16 +94,23 @@ window.supabaseSync = {
       }
 
       // 2. Personnel CST
-      const { data: personnelData } = await this.client.from('personnel_cst').select('*').order('created_at', { ascending: false });
+      const { data: personnelData } = await this.client
+        .from('personnel_cst')
+        .select('*')
+        .order('code_agent', { ascending: true })
+        .range(0, 999);
+        
       if (personnelData && personnelData.length > 0) {
         SAMA_DATA.personnelCST = personnelData.map(p => ({
-          codeAgent: p.code_agent,
+          agent: p.nom_agent,
           nomAgent: p.nom_agent,
+          codeAgent: p.code_agent,
           fonction: p.fonction,
           pole: p.pole,
-          telephone: p.telephone,
-          email: p.email,
-          specialite: p.specialite,
+          telephone: p.telephone || '-',
+          email: p.email || '-',
+          specialite: p.specialite || p.fonction || '-',
+          statut: p.disponibilite || 'Actif',
           disponibilite: p.disponibilite || 'Disponible'
         }));
       }

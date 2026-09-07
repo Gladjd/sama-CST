@@ -1088,3 +1088,38 @@ VALUES
 ('TS-EQ-0448', 'VIDEO LARYNGOSCOPE', 'MCGRATH', 'MEDTRONIC', 'IMAG-CHIRG', 'Catégorie 1 (Paillasse & Petit Équipement)', 'Actif'),
 ('TS-EQ-0449', 'VISION PRINT VISION PRINT', 'VISION PRINT', 'VISION', 'BIOMED', 'Catégorie 1 (Paillasse & Petit Équipement)', 'Actif')
 ON CONFLICT (code_ts) DO UPDATE SET designation = EXCLUDED.designation, modele = EXCLUDED.modele, fournisseur = EXCLUDED.fournisseur, entite = EXCLUDED.entite, categorie = EXCLUDED.categorie, updated_at = NOW();
+
+-- ==============================================================================
+-- RÉFÉRENTIEL OFFICIEL DU PERSONNEL CST (TECHNOLOGIES SERVICES)
+-- Total : 24 Agents & Ingénieurs Référencés
+-- ==============================================================================
+
+TRUNCATE TABLE personnel_cst CASCADE;
+
+INSERT INTO personnel_cst (code_agent, nom_agent, fonction, pole, telephone, email, specialite, disponibilite)
+VALUES
+('AGT-0001', 'Oumar DIALLO', 'Directeur Technique', 'DIRECTION & CST', '+221 78 378 88 10', 'oumar.diallo@techserv.sn', 'Directeur Technique', 'Disponible'),
+('AGT-0002', 'Abdoulaye DIAO', 'Responsable Cst', 'DIRECTION & CST', '+221 78 458 77 67', 'diao.abdoulaye@techserv.sn', 'Responsable Cst', 'Disponible'),
+('AGT-0003', 'Barka GUEYE', 'Responsable Projet Cst', 'DIRECTION & CST', '+221 77 569 74 63', 'barka.gueye@techserv.sn', 'Responsable Projet Cst', 'Disponible'),
+('AGT-0004', 'Cheikh Ahmadou Ngary FAYE', 'Responsable It', 'IT & DIGITAL', '+221 77 569 74 61', 'cheikh.faye@techserv.sn', 'Responsable It', 'Disponible'),
+('AGT-0005', 'Seydou DIA', 'Assistant It', 'IT & DIGITAL', '+221 78 791 87 44', 'seydou.dia@techserv.sn', 'Assistant It', 'Disponible'),
+('AGT-0006', 'Samba Wade BA', 'Developpeur', 'IT & DIGITAL', '+221 78 364 19 15', 'samba.ba@techserv.sn', 'Developpeur', 'Disponible'),
+('AGT-0007', 'Momar CISSE', 'Superviseur Pole Biologie Medical', 'BIOMED', '+221 78 378 88 11', 'momar.cisse@techserv.sn', 'Superviseur Pole Biologie Medical', 'Disponible'),
+('AGT-0008', 'Glad J.D MOUKOUIRI', 'Specialiste Système Biologie Medicale', 'BIOMED', '+221 78 542 68 18', 'glad.moukouiri@techserv.sn', 'Specialiste Système Biologie Medicale', 'Disponible'),
+('AGT-0009', 'Abdoulaye SIDIBE', 'Specialiste Système Biologie Medicale', 'BIOMED', '+221 78 546 87 77', 'abdoulaye.sidibe@techserv.sn', 'Specialiste Système Biologie Medicale', 'Disponible'),
+('AGT-0010', 'Serigne Abdou Khadre Mbacke KEBE', 'Specialiste Système Biologie Medicale', 'BIOMED', '+221 77 458 35 12', 'khadre.kebe@techserv.sn', 'Specialiste Système Biologie Medicale', 'Disponible'),
+('AGT-0011', 'Ibou POUYE', 'Specialiste Système Biologie Medicale', 'BIOMED', '+221 77 569 74 62', 'ibou.pouye@techserv.sn', 'Specialiste Système Biologie Medicale', 'Disponible'),
+('AGT-0012', 'Pape Alioune MBODJI', 'Specialiste Système Biologie Medicale', 'BIOMED', '+221 77 396 97 18', 'alioune.mbodji@techserv.sn', 'Specialiste Système Biologie Medicale', 'Disponible'),
+('AGT-0013', 'Moustapha GAYE', 'Specialiste Système Biologie Medicale', 'BIOMED', '+221 77 095 31 93', 'moustapha.gaye@techserv.sn', 'Specialiste Système Biologie Medicale', 'Disponible'),
+('AGT-0014', 'Awa GUEYE', 'Specialiste Système Biologie Medicale', 'BIOMED', '+221 78 378 88 13', 'awa.gueye@techserv.sn', 'Specialiste Système Biologie Medicale', 'Disponible'),
+('AGT-0015', 'Mathieu Birame TINE', 'Specialiste Système Biologie Medicale', 'BIOMED', '+221 77 295 24 73', 'mathieu.tine@techserv.sn', 'Specialiste Système Biologie Medicale', 'Disponible'),
+('AGT-0016', 'Arona KA', 'Superviseur Pole Imagerie & Chirurgie Medicale', 'IMAG-CHIRG', '+221 77 058 88 91', 'arona.ka@techserv.sn', 'Superviseur Pole Imagerie & Chirurgie Medicale', 'Disponible'),
+('AGT-0017', 'Mame Balla NIANG', 'Specialiste Système Imagerie Medicale', 'IMAG-CHIRG', '+221 77 098 15 16', 'balla.niang@techserv.sn', 'Specialiste Système Imagerie Medicale', 'Disponible'),
+('AGT-0018', 'Seydou Arona THOMAS', 'Specialiste Système Imagerie Medicale', 'IMAG-CHIRG', '+221 77 413 91 60', 'arona.thomas@techserv.sn', 'Specialiste Système Imagerie Medicale', 'Disponible'),
+('AGT-0019', 'Seynabou NDONG', 'Specialiste Système Imagerie Medicale', 'IMAG-CHIRG', '+221 78 465 05 05', 'seynabou.ndong@techserv.sn', 'Specialiste Système Imagerie Medicale', 'Disponible'),
+('AGT-0020', 'Maurice Jonas NIOUKY', 'Responsable Ordonnancement Et Methodes', 'ORDONNANCEMENT & MÉTHODES', '+221 77 200 38 13', 'maurice.niouky@techserv.sn', 'Responsable Ordonnancement Et Methodes', 'Disponible'),
+('AGT-0021', 'Stephanie Geraldine COLY', 'Assistante Responsable Ordonnancement Et Methodes', 'ORDONNANCEMENT & MÉTHODES', '+221 77 095 33 65', 'stagiaire.cst@techserv.sn', 'Assistante Responsable Ordonnancement Et Methodes', 'Disponible'),
+('AGT-0022', 'Mouhamadou KANDJI', 'Agent Support Technique', 'SUPPORT & SAV', '+221 78 378 88 19', 'mouhamadou.kandji@techserv.sn', 'Agent Support Technique', 'Disponible'),
+('AGT-0023', 'Lamine KOULIBALI', 'Specialiste Système Imagerie Medicale', 'IMAG-CHIRG', '-', 'lamine.koulibali@techserv.sn', 'Specialiste Système Imagerie Medicale', 'Disponible'),
+('AGT-0024', 'Aziz FALL', 'Specialiste Système Imagerie Medicale', 'IMAG-CHIRG', '-', 'aziz.fall@techserv.sn', 'Specialiste Système Imagerie Medicale', 'Disponible')
+ON CONFLICT (code_agent) DO UPDATE SET nom_agent = EXCLUDED.nom_agent, fonction = EXCLUDED.fonction, pole = EXCLUDED.pole, telephone = EXCLUDED.telephone, email = EXCLUDED.email, specialite = EXCLUDED.specialite, updated_at = NOW();
