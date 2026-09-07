@@ -65,19 +65,30 @@ window.supabaseSync = {
 
     try {
       // 1. Clients
-      const { data: clientsData } = await this.client.from('clients').select('*').order('created_at', { ascending: false });
+      const { data: clientsData } = await this.client
+        .from('clients')
+        .select('*')
+        .order('code_client', { ascending: true })
+        .range(0, 4999);
+        
       if (clientsData && clientsData.length > 0) {
         SAMA_DATA.clients = clientsData.map(c => ({
+          client: c.code_client,
           codeClient: c.code_client,
           nomClient: c.nom_client,
-          secteur: c.secteur,
-          villeClient: c.ville_client,
+          secteur: c.secteur || 'Santé & Médical',
+          adresseClient: c.adresse_client || c.adresse || c.ville_client || '-',
+          villeClient: c.ville_client || 'Dakar',
           paysClient: c.pays_client || 'Sénégal',
-          telephone: c.telephone,
-          email: c.email,
-          contactPrincipal: c.contact_principal,
-          registreCommerce: c.registre_commerce,
-          ninea: c.ninea,
+          codePostal: c.code_postal || '-',
+          telephoneClient: c.telephone || '-',
+          telephone: c.telephone || '-',
+          mailClient: c.email || '-',
+          email: c.email || '-',
+          contactPrincipal: c.contact_principal || c.contact_nom || 'Direction / SAV',
+          registreCommerce: c.registre_commerce || '-',
+          ninea: c.ninea || '-',
+          rcNinea: c.rc_ninea || (c.ninea && c.ninea !== '-' ? `${c.registre_commerce || ''} / ${c.ninea}` : c.registre_commerce || '-'),
           statut: c.statut || 'Actif'
         }));
       }
@@ -343,16 +354,19 @@ window.supabaseSync = {
 
     try {
       const { error } = await this.client.from('clients').upsert({
-        code_client: client.codeClient,
+        code_client: client.codeClient || client.client,
         nom_client: client.nomClient,
-        secteur: client.secteur,
-        ville_client: client.villeClient,
+        secteur: client.secteur || 'Santé & Médical',
+        adresse_client: client.adresseClient || client.adresse || '',
+        ville_client: client.villeClient || 'Dakar',
         pays_client: client.paysClient || 'Sénégal',
-        telephone: client.telephone,
-        email: client.email,
-        contact_principal: client.contactPrincipal,
-        registre_commerce: client.registreCommerce,
-        ninea: client.ninea,
+        code_postal: client.codePostal || '-',
+        telephone: client.telephoneClient || client.telephone || '-',
+        email: client.mailClient || client.email || '-',
+        contact_principal: client.contactPrincipal || client.contact_nom || 'Direction / SAV',
+        registre_commerce: client.registreCommerce || '-',
+        ninea: client.ninea || '-',
+        rc_ninea: client.rcNinea || '-',
         statut: client.statut || 'Actif',
         updated_at: new Date().toISOString()
       }, { onConflict: 'code_client' });
