@@ -72,8 +72,4050 @@ const SAMA_DATA = {
   // 13. TOP 5 DES IMMOBILISATIONS MAXIMALES
   top5Durees: [],
 
-  // 14. CATALOGUE RÉFÉRENTIEL DES ÉQUIPEMENTS TS
-  equipementsTS: [],
+  // 14. CATALOGUE RÉFÉRENTIEL DES ÉQUIPEMENTS TS — 449 Modèles Référencés
+  equipementsTS: [
+    {
+        "codeTS": "TS-EQ-0001",
+        "designation": "SPECTROPHOTOMETRE",
+        "modele": "BTS 310",
+        "fournisseur": "BIOSYSTEMS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0002",
+        "designation": "SPECTROPHOTOMETRE",
+        "modele": "BTS 350",
+        "fournisseur": "BIOSYSTEMS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0003",
+        "designation": "SPECTROPHOTOMETRE",
+        "modele": "BTS NEW",
+        "fournisseur": "BIOSYSTEMS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0004",
+        "designation": "AUTOMATE DE BIOCHIMIE",
+        "modele": "A 15",
+        "fournisseur": "BIOSYSTEMS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0005",
+        "designation": "AUTOMATE DE BIOCHIMIE",
+        "modele": "A 25",
+        "fournisseur": "BIOSYSTEMS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0006",
+        "designation": "AUTOMATE DE BIOCHIMIE",
+        "modele": "BA 200",
+        "fournisseur": "BIOSYSTEMS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0007",
+        "designation": "AUTOMATE DE BIOCHIMIE",
+        "modele": "BA 400",
+        "fournisseur": "BIOSYSTEMS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0008",
+        "designation": "COAGULOMETRE",
+        "modele": "START 4",
+        "fournisseur": "STAGO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0009",
+        "designation": "COAGULOMETRE",
+        "modele": "START MAX",
+        "fournisseur": "STAGO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0010",
+        "designation": "AUTOMATE DE COAGULATION",
+        "modele": "STA COMPACT",
+        "fournisseur": "STAGO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0011",
+        "designation": "AUTOMATE DE COAGULATION",
+        "modele": "STA COMPACT MAX",
+        "fournisseur": "STAGO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0012",
+        "designation": "AUTOMATE DE COAGULATION",
+        "modele": "STA COMPACT DOS",
+        "fournisseur": "STAGO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0013",
+        "designation": "AUTOMATE DE COAGULATION",
+        "modele": "STA COMPACT MAX 2",
+        "fournisseur": "STAGO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0014",
+        "designation": "AUTOMATE DE COAGULATION",
+        "modele": "STA COMPACT MAX 3",
+        "fournisseur": "STAGO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0015",
+        "designation": "AUTOMATE DE COAGULATION",
+        "modele": "STA SATELLITE",
+        "fournisseur": "STAGO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0016",
+        "designation": "AUTOMATE DE COAGULATION",
+        "modele": "STA SATELLITE MAX",
+        "fournisseur": "STAGO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0017",
+        "designation": "AUTOMATE D'HEMATOLOGIE",
+        "modele": "ABX MICROS ES 60",
+        "fournisseur": "HORIBA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0018",
+        "designation": "AUTOMATE D'HEMATOLOGIE",
+        "modele": "PENTRA 60C+",
+        "fournisseur": "HORIBA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0019",
+        "designation": "AUTOMATE D'HEMATOLOGIE",
+        "modele": "PENTRA NEXUS",
+        "fournisseur": "HORIBA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0020",
+        "designation": "AUTOMATE D'HEMATOLOGIE",
+        "modele": "PENTRA XLR",
+        "fournisseur": "HORIBA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0021",
+        "designation": "AUTOMATE D'HEMATOLOGIE",
+        "modele": "YUMIZEN H550",
+        "fournisseur": "HORIBA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0022",
+        "designation": "AUTOMATE D'HEMATOLOGIE",
+        "modele": "YUMIZEN H500",
+        "fournisseur": "HORIBA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0023",
+        "designation": "SEMI-AUTOMATE D'ELECTROPHORESE SUR GEL",
+        "modele": "HYDRASYS",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0024",
+        "designation": "SEMI-AUTOMATE D'ELECTROPHORESE",
+        "modele": "HYDRASYS 2 SCAN",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0025",
+        "designation": "AUTOMATE D'ELECTROPHORESE",
+        "modele": "MINICAP FP",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0026",
+        "designation": "AUTOMATE D'ELECTROPHORESE CAPILLAIRES",
+        "modele": "CAPILLARYS 3 OCTA",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0027",
+        "designation": "AUTOMATE D'ELECTROPHORESE CAPILLAIRES",
+        "modele": "CAPILLARYS 2 FLEX PIERCING",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0028",
+        "designation": "AUTOMATE DE DILUTION ET DE PRÉPARATION DES ÉCHANTILLONS",
+        "modele": "HYDRAPLUS",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0029",
+        "designation": "AUTOMATE D'IMMUNOANALYSE",
+        "modele": "MAGLUMI 800",
+        "fournisseur": "SNIBE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0030",
+        "designation": "AUTOMATE D'IMMUNOANALYSE",
+        "modele": "MAGLUMI X6",
+        "fournisseur": "SNIBE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0031",
+        "designation": "AUTOMATE D'IMMUNOANALYSE",
+        "modele": "MAGLUMI X3",
+        "fournisseur": "SNIBE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0032",
+        "designation": "AUTOMATE D'HEMOCULTURE",
+        "modele": "BACTEC FX40",
+        "fournisseur": "BECTON DICKINSON",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0033",
+        "designation": "AUTOMATE D'HEMOCULTURE",
+        "modele": "BACTEC 9120",
+        "fournisseur": "BECTON DICKINSON",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0034",
+        "designation": "AUTOMATE D'HEMOCULTURE",
+        "modele": "BACTEC 9050",
+        "fournisseur": "BECTON DICKINSON",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0035",
+        "designation": "AUTOMATE DE CULTURE MYCOBACTÉRIES",
+        "modele": "MGIT 320",
+        "fournisseur": "BECTON DICKINSON",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0036",
+        "designation": "AUTOMATE DE CULTURE MYCOBACTÉRIES",
+        "modele": "MGIT 960",
+        "fournisseur": "BECTON DICKINSON",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0037",
+        "designation": "AUTOMATE DE MICROBIOLOGIE",
+        "modele": "PHOENIX M50",
+        "fournisseur": "BECTON DICKINSON",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0038",
+        "designation": "IONOGRAMME",
+        "modele": "DIESTRO 103APV4",
+        "fournisseur": "GMT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0039",
+        "designation": "ANALYSEUR D'ALBUMINE",
+        "modele": "ALBUMIN 201",
+        "fournisseur": "HEMOCUE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0040",
+        "designation": "ANALYSEUR HEMOGLOBINE GLYQUEE",
+        "modele": "D-10",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0041",
+        "designation": "ANALYSEUR HEMOGLOBINE GLYQUEE",
+        "modele": "HBA1C 301",
+        "fournisseur": "HEMOCUE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0042",
+        "designation": "ANALYSEUR HEMOGLOBINE GLYQUEE",
+        "modele": "HBA1C 201+",
+        "fournisseur": "HEMOCUE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0043",
+        "designation": "ANALYSEUR HEMOGLOBINE GLYQUEE",
+        "modele": "HBA1C 801",
+        "fournisseur": "HEMOCUE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0044",
+        "designation": "ANALYSEUR HEMOGLOBINE GLYQUEE",
+        "modele": "HBA1C 501",
+        "fournisseur": "HEMOCUE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0045",
+        "designation": "AUTOMATE DE CYTOLOGIE",
+        "modele": "IDC20",
+        "fournisseur": "ISLA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0046",
+        "designation": "AUTOMATE D'IMMUNOHISTOCHIMIE",
+        "modele": "BOND MAX",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0047",
+        "designation": "MICROSCOPE OPTIQUE BIOLOGIQUE",
+        "modele": "DM500",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0048",
+        "designation": "MICROSCOPE OPTIQUE AVEC CAMERA INTEGREE",
+        "modele": "DM500 + ICC50",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0049",
+        "designation": "CAMERA POUR MICROSCOPE",
+        "modele": "ICC50",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0050",
+        "designation": "MICROSCOPE OPTIQUE BIOLOGIQUE",
+        "modele": "DM750",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0051",
+        "designation": "MICROSCOPE OPTIQUE BIOLOGIQUE",
+        "modele": "DM300",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0052",
+        "designation": "MICROSCOPE OPTIQUE BIOLOGIQUE",
+        "modele": "CME",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0053",
+        "designation": "MICROSCOPE OPTIQUE DE LABORATOIRE",
+        "modele": "DM1000 LED",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0054",
+        "designation": "MICROSCOPE OPTIQUE DE LABORATOIRE AVEC SYSTÈME FLOW",
+        "modele": "DM1000 + FLOW",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0055",
+        "designation": "STEREOMICROSCOPE A ECLAIRAGE LED",
+        "modele": "SFC 182 AQ LED",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0056",
+        "designation": "STEREOMICROSCOPE",
+        "modele": "STEREOZOOM",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0057",
+        "designation": "STEREOMICROSCOPE NUMERIQUE HD",
+        "modele": "EZ4 HD",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0058",
+        "designation": "MICROSCOPE OPERATOIRE CHIRURGICAL",
+        "modele": "M620 TTS",
+        "fournisseur": "LEICA",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0059",
+        "designation": "MICROSCOPE OPERATOIRE OPHTALMIQUE",
+        "modele": "M220 F12N",
+        "fournisseur": "LEICA",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0060",
+        "designation": "MICROSCOPE OPERATOIRE DENTAIRE",
+        "modele": "M320D",
+        "fournisseur": "LEICA",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0061",
+        "designation": "MICROSCOPE OPERATOIRE OPHTALMIQUE",
+        "modele": "PROVEO 8 F42",
+        "fournisseur": "LEICA",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0062",
+        "designation": "MICROSCOPE OPERATOIRE",
+        "modele": "OHX M530",
+        "fournisseur": "LEICA",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0063",
+        "designation": "AUTOMATE DE TRAITEMENT DES TISSUS",
+        "modele": "TP1020",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0064",
+        "designation": "AUTOMATE DE PREPARATION DE TISSUS",
+        "modele": "ASP300S",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0065",
+        "designation": "AUTOMATE DE PREPARATION DES TISSUS",
+        "modele": "HISTOCORE PEARL",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0066",
+        "designation": "MICROTOME ROTATIF MANUEL",
+        "modele": "HISTOCORE BIOCUT",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0067",
+        "designation": "MICROTOME ROTATIF MOTORISE DE RECHERCHE",
+        "modele": "HISTOCORE NANO",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0068",
+        "designation": "MICROTOME ROTATIF AUTOMATISE",
+        "modele": "HISTOCORE AUTOCUT",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0069",
+        "designation": "ELECTROCARDIOGRAPHE",
+        "modele": "MAC600",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0070",
+        "designation": "ELECTROCARDIOGRAPHE",
+        "modele": "MAC2000",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0071",
+        "designation": "ELECTROCARDIOGRAPHE",
+        "modele": "MAC800",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0072",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "VERSANA PREMIER",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0073",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "VERSANA BALANCE",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0074",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "VERSANA ACTIVE",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0075",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "VERSANA ESSENTIAL",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0076",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "LOGIQ P7",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0077",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "LOGIQ ER7",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0078",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "LOGIQ F8",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0079",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "LOGIQ S8",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0080",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "LOGIQ V2",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0081",
+        "designation": "ECHOGRAPHE D'IMAGERIE GENERALE",
+        "modele": "LOGIQ P9",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0082",
+        "designation": "ECHOGRAPHE CARDIOVASCULAIRE",
+        "modele": "VIVID E9",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0083",
+        "designation": "ECHOGRAPHE CARDIOVASCULAIRE",
+        "modele": "VIVID E95",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0084",
+        "designation": "ECHOGRAPHE CARDIOVASCULAIRE",
+        "modele": "VIVID E90",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0085",
+        "designation": "ECHOGRAPHE CARDIOVASCULAIRE",
+        "modele": "VIVID T8",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0086",
+        "designation": "ECHOGRAPHE CARDIOVASCULAIRE",
+        "modele": "VIVID T9",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0087",
+        "designation": "ECHOGRAPHE CARDIOVASCULAIRE",
+        "modele": "VIVID S70",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0088",
+        "designation": "ECHOGRAPHE CARDIOVASCULAIRE",
+        "modele": "VIVID IQ",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0089",
+        "designation": "ECHOGRAPHE GYNECOLOGIE-OBSTETRIQUE",
+        "modele": "VOLUSON S18",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0090",
+        "designation": "ECHOGRAPHE GYNECOLOGIE-OBSTETRIQUE",
+        "modele": "VOLUSON S8",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0091",
+        "designation": "ECHOGRAPHE GYNECOLOGIE-OBSTETRIQUE",
+        "modele": "VOLUSON S10",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0092",
+        "designation": "ECHOGRAPHE GYNECOLOGIE-OBSTETRIQUE",
+        "modele": "VOLUSON P18",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0093",
+        "designation": "ECHOGRAPHE GYNECOLOGIE-OBSTETRIQUE",
+        "modele": "VOLUSON P8",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0094",
+        "designation": "ECHOGRAPHE GYNECOLOGIE-OBSTETRIQUE",
+        "modele": "VOLUSON S70",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0095",
+        "designation": "ECHOGRAPHE GYNECOLOGIE-OBSTETRIQUE",
+        "modele": "VOLUSON E",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0096",
+        "designation": "TABLE DE RADIOGRAPHIE CONVENTIONNELLE",
+        "modele": "XR6000",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0097",
+        "designation": "APPAREIL DE RADIOGRAPHIE MOBILE",
+        "modele": "XR115",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0098",
+        "designation": "CAPTEUR PLAN NUMÉRIQUE DE RADIOLOGIE",
+        "modele": "DEFINIUM XR120",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0099",
+        "designation": "CAPTEUR PLAN NUMÉRIQUE DE RADIOLOGIE",
+        "modele": "FOCUS 35C",
+        "fournisseur": "CARESTREAM",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0100",
+        "designation": "MAMMOGRAPHE NUMERIQUE",
+        "modele": "SENOGRAPHE PRISTINA",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0101",
+        "designation": "MAMMOGRAPHE NUMERIQUE",
+        "modele": "SENOGRAPHE CRYSTAL NOVA",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0102",
+        "designation": "SCANNER CT",
+        "modele": "REVOLUTION MAXIMA",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0103",
+        "designation": "SCANNER CT",
+        "modele": "REVOLUTION EVO",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0104",
+        "designation": "SCANNER CT",
+        "modele": "OPTIMA CT520",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0105",
+        "designation": "SCANNER CT",
+        "modele": "OPTIMA CT540",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0106",
+        "designation": "SCANNER CT",
+        "modele": "REVOLUTION ACT",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0107",
+        "designation": "SCANNER CT",
+        "modele": "REVOLUTION ACTs",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0108",
+        "designation": "CORONAROGRAPHE",
+        "modele": "OPTIMA IGS 330",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0109",
+        "designation": "CORONAROGRAPHE",
+        "modele": "OPTIMA IGS 320",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0110",
+        "designation": "TAPIS ROULANT D'EPREUVE D'EFFORT",
+        "modele": "T2100-ST1",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0111",
+        "designation": "TAPIS ROULANT D'EPREUVE D'EFFORT",
+        "modele": "T2100-ST2",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0112",
+        "designation": "AMPLIFICATEUR DE BRILLANCE",
+        "modele": "BRIVO 785",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0113",
+        "designation": "AMPLIFICATEUR DE BRILLANCE",
+        "modele": "BRIVO OEC ONE",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0114",
+        "designation": "AMPLIFICATEUR DE BRILLANCE",
+        "modele": "BRIVO XR115",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0115",
+        "designation": "SYSTÈME D'EPREUVE D'EFFORT CARDIAQUE",
+        "modele": "CARDIOSOFT",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0116",
+        "designation": "SYSTÈME D'EPREUVE D'EFFORT CARDIAQUE",
+        "modele": "CASE",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0117",
+        "designation": "VELO ERGOMETRIQUE MEDICALE",
+        "modele": "EBIKE",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0118",
+        "designation": "REPROGRAPHE",
+        "modele": "DRYVIEUW 5700",
+        "fournisseur": "CARESTREAM",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0119",
+        "designation": "REPROGRAPHE",
+        "modele": "DRYVIEUW 5950",
+        "fournisseur": "CARESTREAM",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0120",
+        "designation": "REPROGRAPHE",
+        "modele": "DRYVIEUW 6950",
+        "fournisseur": "CARESTREAM",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0121",
+        "designation": "NUMERISEUR RADIOLOGIQUE",
+        "modele": "CR VITA FLEX",
+        "fournisseur": "CARESTREAM",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0122",
+        "designation": "NUMERISEUR RADIOLOGIQUE",
+        "modele": "CR CLASSIC",
+        "fournisseur": "CARESTREAM",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0123",
+        "designation": "CHROMATOGRAPHE EN PHASE GAZEUSE",
+        "modele": "7820A GC SYSTEM",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0124",
+        "designation": "ETUVE",
+        "modele": "IPP110",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0125",
+        "designation": "ETUVE",
+        "modele": "UN55",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0126",
+        "designation": "ETUVE",
+        "modele": "HPP750",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0127",
+        "designation": "ETUVE",
+        "modele": "UN50",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0128",
+        "designation": "ETUVE",
+        "modele": "UNE 400",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0129",
+        "designation": "ETUVE",
+        "modele": "UNB 400",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0130",
+        "designation": "ETUVE",
+        "modele": "UNB500",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0131",
+        "designation": "ETUVE",
+        "modele": "UN30",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0132",
+        "designation": "ETUVE",
+        "modele": "UF160",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0133",
+        "designation": "ETUVE",
+        "modele": "IN110",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0134",
+        "designation": "ETUVE",
+        "modele": "UN260",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0135",
+        "designation": "ETUVE",
+        "modele": "UNE400",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0136",
+        "designation": "ETUVE",
+        "modele": "UN260",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0137",
+        "designation": "ETUVE",
+        "modele": "UN450",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0138",
+        "designation": "ETUVE",
+        "modele": "UF160",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0139",
+        "designation": "ETUVE",
+        "modele": "UF250",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0140",
+        "designation": "ETUVE",
+        "modele": "IPP260",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0141",
+        "designation": "ETUVE",
+        "modele": "IN75",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0142",
+        "designation": "ETUDE UNIVERSELLE",
+        "modele": "SFE 550",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0143",
+        "designation": "ETUVE",
+        "modele": "UNE600",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0144",
+        "designation": "BAIN MARIE DE LABORATOIRE",
+        "modele": "WNB22",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0145",
+        "designation": "BAIN MARIE DE LABORATOIRE",
+        "modele": "WNB14",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0146",
+        "designation": "BAIN MARIE DE LABORATOIRE",
+        "modele": "Hl1219",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0147",
+        "designation": "BAIN MARIE UNIVERSEL",
+        "modele": "YCW0122L",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0148",
+        "designation": "BAIN MARIE DE LABORATOIRE",
+        "modele": "WNB10",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0149",
+        "designation": "BAIN MARIE DE LABORATOIRE",
+        "modele": "WTB35",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0150",
+        "designation": "BAIN MARIE RECTANGULAIRE",
+        "modele": "Hl1210",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0151",
+        "designation": "BAIN MARIE THERMOSTATE",
+        "modele": "DIGIT COOL",
+        "fournisseur": "JP SELECTA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0152",
+        "designation": "BISTOURI ELECTRIQUE",
+        "modele": "FORCE FX",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0153",
+        "designation": "BISTOURI ELECTRIQUE",
+        "modele": "VALLEYLAB FT10",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0154",
+        "designation": "BISTOURI ELECTRIQUE",
+        "modele": "VALLEYLAB FX8",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0155",
+        "designation": "COUVERTURE CHAUFFANTE PATIENT",
+        "modele": "CALIMA",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0156",
+        "designation": "COUVERTURE CHAUFFANTE PATIENT",
+        "modele": "WARMTOUCH",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0157",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "PURIDEST PD8",
+        "fournisseur": "LAUDA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0158",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "2004",
+        "fournisseur": "GFL",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0159",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "2008",
+        "fournisseur": "GFL",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0160",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "2012",
+        "fournisseur": "GFL",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0161",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "2018",
+        "fournisseur": "GFL",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0162",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "2108",
+        "fournisseur": "GFL",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0163",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "2112",
+        "fournisseur": "GFL",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0164",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "2204",
+        "fournisseur": "GFL",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0165",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "2304",
+        "fournisseur": "GFL",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0166",
+        "designation": "DISTILLATEUR D'EAU",
+        "modele": "PURIDEST PD12R",
+        "fournisseur": "LAUDA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0167",
+        "designation": "ECHOGRAPHE OHPTALMIQUE",
+        "modele": "UD800",
+        "fournisseur": "NIDEK",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0168",
+        "designation": "APPAREIL DE TOMOGRAPHIE PAR COHERENCE OPTIQUE",
+        "modele": "OCT RS330",
+        "fournisseur": "NIDEK",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0169",
+        "designation": "AUTOCLAVE",
+        "modele": "3870 ELVG",
+        "fournisseur": "TUTTNAUER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0170",
+        "designation": "AUTOCLAVE",
+        "modele": "2540ML",
+        "fournisseur": "TUTTNAUER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0171",
+        "designation": "AUTOCLAVE",
+        "modele": "3150 EL",
+        "fournisseur": "TUTTNAUER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0172",
+        "designation": "AUTOCLAVE",
+        "modele": "DGT-45Z",
+        "fournisseur": "HICLINIQUE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0173",
+        "designation": "AUTOCLAVE",
+        "modele": "2540EA",
+        "fournisseur": "TUTTNAUER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0174",
+        "designation": "AUTOCLAVE",
+        "modele": "HRLM 80L",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0175",
+        "designation": "LOGICIEL PACS",
+        "modele": "ULTIMA PACS/RIS",
+        "fournisseur": "PAXERA",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0176",
+        "designation": "AUTO-KERATO REFRACTOMETRE",
+        "modele": "RC5000",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0177",
+        "designation": "AUTO-KERATO REFRACTOMETRE",
+        "modele": "RC800",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0178",
+        "designation": "AUTOREFRACTOMETRE BINOCULAIRE",
+        "modele": "A12C",
+        "fournisseur": "PLUSOPTIX",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0179",
+        "designation": "ANALYSEUR DE CHAMP VISUEL",
+        "modele": "AP-2500",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0180",
+        "designation": "LAMPE A FENTE OPHTALMIQUE",
+        "modele": "TSL 900H",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0181",
+        "designation": "LAMPE A FENTE OPHTALMIQUE",
+        "modele": "TSL 5000H",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0182",
+        "designation": "LAMPE A FENTE OPHTALMIQUE",
+        "modele": "TSL 800H",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0183",
+        "designation": "LAMPE A FENTE OPHTALMIQUE",
+        "modele": "TSL 7000H",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0184",
+        "designation": "INCUBATEUR POUR CARTES DG GEL",
+        "modele": "DG THERM",
+        "fournisseur": "GRIFOLS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0185",
+        "designation": "LECTEUR DE CARTES DG GEL",
+        "modele": "DG READER NET",
+        "fournisseur": "GRIFOLS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0186",
+        "designation": "CENTRIFUGEUSE POUR CARTES DG GEL",
+        "modele": "DG SPIN",
+        "fournisseur": "GRIFOLS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0187",
+        "designation": "HOTTE",
+        "modele": "HR1200-IIA2",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0188",
+        "designation": "HOTTES A FLUX LAMINAIRE",
+        "modele": "AH-100",
+        "fournisseur": "TELSTAR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0189",
+        "designation": "POSTE DE SECURITE MICROBIOLOGIQUE",
+        "modele": "BIO II",
+        "fournisseur": "TELSTAR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0190",
+        "designation": "POSTE DE SECURITE MICROBIOLOGIQUE",
+        "modele": "BIO II 9",
+        "fournisseur": "TELSTAR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0191",
+        "designation": "POSTE DE SECURITE MICROBIOLOGIQUE",
+        "modele": "BIO II ADVANCE PLUS",
+        "fournisseur": "TELSTAR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0192",
+        "designation": "HOTTES A FLUX LAMINAIRE",
+        "modele": "HCB-900V",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0193",
+        "designation": "HOTTE",
+        "modele": "HR30-IIA2",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0194",
+        "designation": "HOTTE",
+        "modele": "HR700-IIA2",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0195",
+        "designation": "HOTTE",
+        "modele": "HR1200-IIA-S",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0196",
+        "designation": "HOTTE",
+        "modele": "HR30-IIA2",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0197",
+        "designation": "HOTTES A FLUX LAMINAIRE",
+        "modele": "PV-30/70",
+        "fournisseur": "TELSTAR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0198",
+        "designation": "HOTTES A FLUX LAMINAIRE",
+        "modele": "V/PCR",
+        "fournisseur": "TELSTAR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0199",
+        "designation": "ENCEINTE DE SECURITE BIOLOGIQUE",
+        "modele": "MS2020 1.2",
+        "fournisseur": "THERMO FISHER SCIENTIFIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0200",
+        "designation": "REFRIGERATEUR",
+        "modele": "HYC-410",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0201",
+        "designation": "REFRIGERATEUR",
+        "modele": "HLR-310F",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0202",
+        "designation": "REFRIGERATEUR",
+        "modele": "HYC-118A",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0203",
+        "designation": "REFRIGERATEUR BANQUE DE SANG",
+        "modele": "HXC-429",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0204",
+        "designation": "REFRIGERATEUR BANQUE DE SANG",
+        "modele": "HXC-358",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0205",
+        "designation": "REFRIGERATEUR BANQUE DE SANG",
+        "modele": "HXC-629",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0206",
+        "designation": "CENTRIFUGEUSE REFRIGEREE",
+        "modele": "LX-75L400R",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0207",
+        "designation": "CONSOLE INTEGREE IPC",
+        "modele": "IPC",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0208",
+        "designation": "CONSOLE POST TRAITEMENT",
+        "modele": "ADVANTAGES WINDOWS 4.7",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0209",
+        "designation": "CONGELATEUR DE PLASMA",
+        "modele": "KJXIB",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0210",
+        "designation": "CONGELATEUR",
+        "modele": "DW-60W138L",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0211",
+        "designation": "CONGELATEUR",
+        "modele": "DW-40L528D",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0212",
+        "designation": "CONGELATEUR",
+        "modele": "DW-86L728J",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0213",
+        "designation": "CONGELATEUR",
+        "modele": "ULT -86°C - 490L -",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0214",
+        "designation": "CONGELATEUR",
+        "modele": "DW-40W380",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0215",
+        "designation": "CONGELATEUR",
+        "modele": "DW-86L579",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0216",
+        "designation": "CONGELATEUR",
+        "modele": "HYC410",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0217",
+        "designation": "CONGELATEUR",
+        "modele": "DW-25L300",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0218",
+        "designation": "CONGELATEUR",
+        "modele": "DW-40L508",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0219",
+        "designation": "CONGELATEUR",
+        "modele": "DW-25L262",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0220",
+        "designation": "CONGELATEUR",
+        "modele": "DW-30L508",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0221",
+        "designation": "CONGELATEUR",
+        "modele": "DW-30L528",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0222",
+        "designation": "CONGELATEUR-REFRIGERATEUR COMBINES",
+        "modele": "HYCD-469",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0223",
+        "designation": "REFRIGERATEUR BANQUE DE SANG",
+        "modele": "HXC-279",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0224",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "ROTOFIX 32 A",
+        "fournisseur": "HETTICH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0225",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "320R",
+        "fournisseur": "HETTICH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0226",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "ROTANTA 460RF",
+        "fournisseur": "HETTICH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0227",
+        "designation": "CONGELATEUR",
+        "modele": "DW-30L-278",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0228",
+        "designation": "CONGELATEUR",
+        "modele": "DW-30L-278",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0229",
+        "designation": "REFRIGERATEUR",
+        "modele": "HYC-290",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0230",
+        "designation": "CONGELATEUR",
+        "modele": "DW-86L338J",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0231",
+        "designation": "REFRIGERATEUR",
+        "modele": "HYC-85GD",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0232",
+        "designation": "REFRIGERATEUR SOLAIRE",
+        "modele": "HTCD-90",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0233",
+        "designation": "REFRIGERATEUR SOLAIRE",
+        "modele": "HTC-120",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0234",
+        "designation": "GLACIERE DE TRANSPORT",
+        "modele": "5L HZY-5B",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0235",
+        "designation": "GLACIERE DE TRANSPORT",
+        "modele": "FS-110LS",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0236",
+        "designation": "GLACIERE DE TRANSPORT",
+        "modele": "FS-18LS",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0237",
+        "designation": "GLACIERE ELECTRIQUE",
+        "modele": "ACTIVE 15P",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0238",
+        "designation": "GLACIERE ELECTRIQUE",
+        "modele": "ACTIVE 8P",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0239",
+        "designation": "GLACIERE ELECTRIQUE",
+        "modele": "50L",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0240",
+        "designation": "GLACIERE DE TRANSPORT",
+        "modele": "HZY-40Z",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0241",
+        "designation": "GLACIERE DE TRANSPORT",
+        "modele": "FS110",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0242",
+        "designation": "INCUBATEUR D'IMMUNOHEMATOLOGIE",
+        "modele": "ID-INCUBATEUR L",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0243",
+        "designation": "INCUBATEUR",
+        "modele": "PC900H",
+        "fournisseur": "HELMER SCIENTIFIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0244",
+        "designation": "INCUBATEUR",
+        "modele": "MK2000-2E",
+        "fournisseur": "ALLSHENG",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0245",
+        "designation": "INCUBATEUR",
+        "modele": "IPP200ECO",
+        "fournisseur": "MEMMERT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0246",
+        "designation": "INCUBATEUR SECHEUR",
+        "modele": "IS 80",
+        "fournisseur": "GRANT INSTRUMENTS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0247",
+        "designation": "AGITATEUR DE PLAQUE",
+        "modele": "MX-M",
+        "fournisseur": "DLAB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0248",
+        "designation": "AGITATEUR ROTATIF",
+        "modele": "MX-RD-PRO",
+        "fournisseur": "ONILAB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0249",
+        "designation": "AGITATEUR ROTATIF À TUBES",
+        "modele": "TR-200",
+        "fournisseur": "COLE-PARMER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0250",
+        "designation": "AGITATEUR VORTEX",
+        "modele": "MX-S",
+        "fournisseur": "DLAB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0251",
+        "designation": "AGITATEUR ROTATIF À TUBES",
+        "modele": "SB2",
+        "fournisseur": "COLE-PARMER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0252",
+        "designation": "AGITATEUR VORTEX À VITESSE VARIABLE",
+        "modele": "VSA8",
+        "fournisseur": "LABELIANS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0253",
+        "designation": "AGITATEUR VORTEX",
+        "modele": "SAB",
+        "fournisseur": "LABELIANS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0254",
+        "designation": "AGITATEUR KLINE",
+        "modele": "ATK",
+        "fournisseur": "FISHERBRAND",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0255",
+        "designation": "AGITATEUR DE POCHES DE SANG",
+        "modele": "BLOOD COLLECT",
+        "fournisseur": "LMB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0256",
+        "designation": "AGITATEUR DE MICROPLAQUES",
+        "modele": "LGD001",
+        "fournisseur": "LGD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0257",
+        "designation": "AGITATEUR DE MICROPLAQUES",
+        "modele": "RSLAB-12",
+        "fournisseur": "RSLAB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0258",
+        "designation": "AGITATEUR VORTEX",
+        "modele": "MX-T6-S+",
+        "fournisseur": "DLAB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0259",
+        "designation": "AGITATEUR MAGNÉTIQUE",
+        "modele": "WITEG",
+        "fournisseur": "WITEG",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0260",
+        "designation": "AGITATEUR MAGNÉTIQUE CHAUFFANT",
+        "modele": "MS-H-PROT",
+        "fournisseur": "DLAB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0261",
+        "designation": "AGITATEUR MAGNÉTIQUE CHAUFFANT",
+        "modele": "MS H280 PRO",
+        "fournisseur": "DLAB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0262",
+        "designation": "AGITATEUR MAGNÉTIQUE CHAUFFANT",
+        "modele": "SMHS-6",
+        "fournisseur": "SCILOGEX",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0263",
+        "designation": "AGITATEUR VORTEX",
+        "modele": "MS3BS000",
+        "fournisseur": "IKA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0264",
+        "designation": "AGITATEUR DE MICROTITRATION",
+        "modele": "MTS",
+        "fournisseur": "IKA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0265",
+        "designation": "AGITATEUR DE MICROTITRATION DIGITAL",
+        "modele": "MTS 2/4",
+        "fournisseur": "IKA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0266",
+        "designation": "AGITATEUR À PLAQUE CHAUFFANTE CÉRAMIQUE",
+        "modele": "CB302",
+        "fournisseur": "STUART",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0267",
+        "designation": "SPECTROPHOTOMETRE D'ABSORPTION ATOMIQUE",
+        "modele": "SPS3",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0268",
+        "designation": "MAPA (HOLTER TENSIONNEL)",
+        "modele": "TONOPORT V",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0269",
+        "designation": "MAPA (HOLTER TENSIONNEL)",
+        "modele": "WALK200B",
+        "fournisseur": "CARDIOLINE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0270",
+        "designation": "ELECTROCARDIOGRAPHE",
+        "modele": "ECG200S",
+        "fournisseur": "CARDIOLINE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0271",
+        "designation": "ELECTROCARDIOGRAPHE",
+        "modele": "ECG100S 6PISTES",
+        "fournisseur": "CARDIOLINE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0272",
+        "designation": "TAPIS DE COURSE POUR EPREUVE D'EFFORT",
+        "modele": "XR600R",
+        "fournisseur": "CARDIOLINE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0273",
+        "designation": "CYCLOERGOMETRE",
+        "modele": "XR100R",
+        "fournisseur": "CARDIOLINE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0274",
+        "designation": "ELECTROMYOGRAPHE (EMG)",
+        "modele": "NEURO MEP-4",
+        "fournisseur": "NEUROMED",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0275",
+        "designation": "ELECTROENCEPHALOGRAPHE (EEG)",
+        "modele": "NEURON-SPECTRUM 64",
+        "fournisseur": "NEUROMED",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0276",
+        "designation": "ANALYSEUR DE FAME",
+        "modele": "FIJI",
+        "fournisseur": "STANHOPE-SETA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0277",
+        "designation": "APPAREIL D'ANESTHESIE",
+        "modele": "WATO EX-35",
+        "fournisseur": "MINDRAY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0278",
+        "designation": "CHROMATOGRAPHE EN PHASE GAZEUSE AVEC DÉTECTEUR ECD",
+        "modele": "GC 6890N",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0279",
+        "designation": "APPAREIL DE DÉVELOPPEMENT AUTOMATIQUE DE PLAQUES CCM (CHROMATOGRAPHIE SUR COUCHE MINCE",
+        "modele": "ADC 2",
+        "fournisseur": "CAMAG",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0280",
+        "designation": "APPAREIL DE CHROMATOGRAPHIE SUR COUCHE MINCE (CCM/HPTLC)",
+        "modele": "TLC SCANNER",
+        "fournisseur": "CAMAG",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0281",
+        "designation": "APPAREIL DE DOSAGE HORMONALE",
+        "modele": "MAGLUMI",
+        "fournisseur": "SNIBE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0282",
+        "designation": "ARMOIRE FROIDE POSITIVE 700L",
+        "modele": "GN210",
+        "fournisseur": "POLAR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0283",
+        "designation": "ARMOIRE FROIDE NEGATIVE",
+        "modele": "CB921",
+        "fournisseur": "POLAR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0284",
+        "designation": "ÉCHANTILLONNEUR AUTOMATIQUE DE LIQUIDES POUR CHROMATOGRAPHIE EN PHASE GAZEUSE (GC AUTOSAMPLER)",
+        "modele": "7693A ALS",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0285",
+        "designation": "AUTOMATE DE DESHYDRATATION",
+        "modele": "AUTOSTAINER XL",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0286",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "EBA 200",
+        "fournisseur": "HETTICH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0287",
+        "designation": "CENTRIFUGEUSE A 24 TROUS",
+        "modele": "LX-60T500-J",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0288",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "LX-100T-J",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0289",
+        "designation": "MICROCENTRIFUGEUSE",
+        "modele": "LX-120T2Z",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0290",
+        "designation": "CENTRIFUGEUSE D'IMMUNOHÉMATOLOGIE",
+        "modele": "ID-CENTRIFUGE L",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0291",
+        "designation": "CENTRIFUGEUSE D'IMMUNOHÉMATOLOGIE",
+        "modele": "ID-CENTRIFUGE 12 S II",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0292",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "EBA 20",
+        "fournisseur": "HETTICH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0293",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "EBA 21",
+        "fournisseur": "HETTICH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0294",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "ROTINA 420",
+        "fournisseur": "HETTICH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0295",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "ROTINA 380R",
+        "fournisseur": "HETTICH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0296",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "SORVALL ST 4R PLUS",
+        "fournisseur": "THERMO SCIENTIFIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0297",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "UNIVERSAL 320R",
+        "fournisseur": "HETTICH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0298",
+        "designation": "CENTRIFUGEUSE DE PAILLASSE",
+        "modele": "3-30KS",
+        "fournisseur": "SIGMA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0299",
+        "designation": "LECTEUR ET CENTRIFUGEUSE DE CARTES D'IMMUNOHÉMATOLOGIE",
+        "modele": "SAXO ID-READER II",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0300",
+        "designation": "PIPETTEUR AUTOMATIQUE D'IMMUNOHÉMATOLOGIE",
+        "modele": "SWING SAXO",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0301",
+        "designation": "AUTOMATE DE COLORATION DE LAMES",
+        "modele": "XL ST5010",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0302",
+        "designation": "AUTO-ÉCHANTILLONNEUR DE LIQUIDES POUR CHROMATOGRAPHIE EN PHASE GAZEUSE",
+        "modele": "G2614A",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0303",
+        "designation": "SYSTÈME D'IMAGERIE ET DE DOCUMENTATION DE GELS",
+        "modele": "GEL DOC XR+",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0304",
+        "designation": "AUTOMATE D'INCLUSION EN PARAFFINE",
+        "modele": "EG1150H",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0305",
+        "designation": "AUTOMATE ELISA",
+        "modele": "EVOLIS TWIN PLUS",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0306",
+        "designation": "AUTOMATE DE LECTURE D'ANTIBIOGRAMMES",
+        "modele": "ADAGIO",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0307",
+        "designation": "MICRO CHROMATOGRAPHE EN PHASE GAZEUSE",
+        "modele": "490 MICRO GC",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0308",
+        "designation": "AUTOMATE DE PRÉLÈVEMENT DE POCHE DE SANG",
+        "modele": "BAGMATIC NOVO",
+        "fournisseur": "LMB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0309",
+        "designation": "MONITEUR DE COLLECTE DE SANG",
+        "modele": "CM735A",
+        "fournisseur": "LMB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0310",
+        "designation": "AUTOMATE D'IMMUNOSEROLOGIE",
+        "modele": "MAGLUMI SERIE",
+        "fournisseur": "SNIBE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0311",
+        "designation": "AUTOMATE DE GAZ DU SANG",
+        "modele": "ABL80 FLEX",
+        "fournisseur": "RADIOMETER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0312",
+        "designation": "BALANCE DE PRECISION",
+        "modele": "FB-BAL",
+        "fournisseur": "FISHERBRAND",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0313",
+        "designation": "IMPRIMANTE POUR BALANCE",
+        "modele": "YDP-30",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0314",
+        "designation": "BALANCE DE PRECISION",
+        "modele": "BCE1202I-1S",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0315",
+        "designation": "BALANCE ÉLECTRONIQUE DE PRÉCISION",
+        "modele": "TE601",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0316",
+        "designation": "BALANCE ELECTRONIQUE",
+        "modele": "ED2202S-CW",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0317",
+        "designation": "BALANCE ÉLECTRONIQUE DE PRÉCISION",
+        "modele": "PRACTUM 1102-1S",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0318",
+        "designation": "BALANCE DE PRECISION",
+        "modele": "PCB",
+        "fournisseur": "KERN",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0319",
+        "designation": "BALANCE DE PRECISION",
+        "modele": "SECURA 6101-1S",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0320",
+        "designation": "BALANCE ÉLECTRONIQUE DE PRÉCISION",
+        "modele": "TE6100",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0321",
+        "designation": "BALANCE DE PRÉCISION",
+        "modele": "BCE1202I-1S",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0322",
+        "designation": "BALANCE DE PRÉCISION",
+        "modele": "PRACTUM 2102-1S",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0323",
+        "designation": "BALANCE ELECTRONIQUE",
+        "modele": "TE 4101",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0324",
+        "designation": "BLOC CHAUFFANT NUMERIQUE",
+        "modele": "QBD2",
+        "fournisseur": "GRANT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0325",
+        "designation": "CHRONOMETRE DE LABORATOIRE",
+        "modele": "ROTILABO",
+        "fournisseur": "CARL ROTH",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0326",
+        "designation": "STATION DE DIAGNOSTIC",
+        "modele": "CID-3",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0327",
+        "designation": "COLONNE DE LAPAROSCOPIE",
+        "modele": "MLW-263C-DC",
+        "fournisseur": "MEDTRONIC",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0328",
+        "designation": "COLONNE DE LAPAROSCOPIE",
+        "modele": "LAPARO PRO",
+        "fournisseur": "MEDTRONIC",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0329",
+        "designation": "CHAINE HPLC 1 AUTO SAMPLE",
+        "modele": "1260 ALS",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0330",
+        "designation": "CHAINE HPLC 1 DAD",
+        "modele": "1260 DAD",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0331",
+        "designation": "CHAINE HPLC 1 POMPEQUAT",
+        "modele": "1260 QUAT",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0332",
+        "designation": "CHAINE HPLC 1 DEGAZEUR",
+        "modele": "1260 DEG",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0333",
+        "designation": "CHAINE DE DOSAGE PROTEINE MINERALISATEUR K 425",
+        "modele": "K-425",
+        "fournisseur": "BUCHI",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0334",
+        "designation": "CHAINE HPLC 3 1260 INF II FLD SPEC",
+        "modele": "1260 FLD",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0335",
+        "designation": "CHAINE HPLC 3 1260 INF II DAD",
+        "modele": "1260 DAD II",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0336",
+        "designation": "CHAINE HPLC 3 1260 INF II MCT",
+        "modele": "1260 MCT",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0337",
+        "designation": "CHAINE HPLC 3 1260 INF II VIA",
+        "modele": "1260 VIA",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0338",
+        "designation": "CHAINE HPLC 3 INFINITYLAB SAMPLE T",
+        "modele": "INFINITYLAB",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0339",
+        "designation": "CHAINE HPLC 3 1260 QUAT PUMP 600BA",
+        "modele": "1260 QUAT 600",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0340",
+        "designation": "INCUBATEUR POUR CHAINE ELISA TS21DG",
+        "modele": "TS21DG",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0341",
+        "designation": "LECTEUR DE MICROPLAQUES POUR CHAINE ELISA",
+        "modele": "VEG-500",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0342",
+        "designation": "INCUBATEUR POUR CHAINE ELISA TS21DG",
+        "modele": "TS21DG-2",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0343",
+        "designation": "CHAINE HPLC INFINITY LAB",
+        "modele": "INFINITY LAB PRO",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0344",
+        "designation": "CHAINE ELISA PR 4100",
+        "modele": "PR 4100",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0345",
+        "designation": "COMPRESSEUR MP-AES",
+        "modele": "LFX7FF",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0346",
+        "designation": "COMPTEUR DE CELLULES ELECTRIQUE",
+        "modele": "CELL-COUNTER",
+        "fournisseur": "CORNING",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0347",
+        "designation": "FRONTOFOCOMETRE AUTOMATIQUE",
+        "modele": "TL-100",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0348",
+        "designation": "FRONTO PHOTOMETRE",
+        "modele": "LM - 1800P",
+        "fournisseur": "NIDEK",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0349",
+        "designation": "GEL IMAGING GEL DOC XR +",
+        "modele": "GEL DOC XR+",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0350",
+        "designation": "GENERATEUR DE LIGASURE",
+        "modele": "LS10",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0351",
+        "designation": "GENERATEUR",
+        "modele": "FB300",
+        "fournisseur": "FISHER SCIENTIFIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0352",
+        "designation": "GENERATEUR D'AZOTE POUR SPECTROPHOTOMETRE D'EMISSION ATOMIQUE",
+        "modele": "THYSTER DF",
+        "fournisseur": "PEAK SCIENTIFIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0353",
+        "designation": "IMAGERIE PAR RESONANCE MAGNETIQUE",
+        "modele": "SIGNA PRIME",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0354",
+        "designation": "IMAGERIE PAR RESONANCE MAGNETIQUE",
+        "modele": "SIGNA CREATOR",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 3 (Lourd & Imagerie Médicale)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0355",
+        "designation": "CHAINE DE DOSAGE PROTEINE MINERALISATEUR K 425",
+        "modele": "K-425 DUO",
+        "fournisseur": "BUCHI",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0356",
+        "designation": "CRANIOTOME COVIDIEN",
+        "modele": "MIDAS REX",
+        "fournisseur": "MEDTRONIC",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0357",
+        "designation": "CUVE ELECTROPHORESE K 20",
+        "modele": "K-20",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0358",
+        "designation": "DBOMÈTRE PORTATIF ÉTANCHE",
+        "modele": "HI98193",
+        "fournisseur": "HANNA INSTRUMENTS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0359",
+        "designation": "DECOUPEUR DE PLAQUES DE VERRE TLC ET HPLC SMART CUT",
+        "modele": "SMART CUT",
+        "fournisseur": "CAMAG",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0360",
+        "designation": "DEMINERALISATEUR",
+        "modele": "EUROPURE",
+        "fournisseur": "EUROWATER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0361",
+        "designation": "DENSITOMETRE GELSCAN",
+        "modele": "GELSCAN",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0362",
+        "designation": "OSTEODENSITOMETRE",
+        "modele": "LUNAR PRODIGY",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0363",
+        "designation": "DERIVATIZER",
+        "modele": "DERIVATIZER-1",
+        "fournisseur": "CAMAG",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0364",
+        "designation": "AUTOMATE DE DILUTION HYDRAPLUS",
+        "modele": "HYDRAPLUS II",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0365",
+        "designation": "DILUTEUR (SPECTROPHOTOMETRE D'ABSORPTION ATOMIQUE)",
+        "modele": "DIL-500",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0366",
+        "designation": "DISPOSITIF POUR APPLICATION D'ECHANTILLONS SUR LES PLAQUES TLC ET HPLC - TLC SAMPLER 4 (ATS 4)",
+        "modele": "ATS 4",
+        "fournisseur": "CAMAG",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0367",
+        "designation": "ECHOBIOMETRE (ULTRASONIC SCAN)",
+        "modele": "UD800",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 2 (Automates & Systèmes Moyens)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0368",
+        "designation": "ELECTROPHORESE",
+        "modele": "MG-300",
+        "fournisseur": "SEBIA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0369",
+        "designation": "EXTRACTEUR MANUEL DE PLASMA",
+        "modele": "MP10000",
+        "fournisseur": "LMB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0370",
+        "designation": "EXTRACTEUR D'ADN MAXWELL RSC",
+        "modele": "MAXWELL RSC",
+        "fournisseur": "PROMEGA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0371",
+        "designation": "EXTRACTEUR DE PLASMA SEPARATOR",
+        "modele": "ES 315",
+        "fournisseur": "LMB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0372",
+        "designation": "FAUTEUIL DE PRELEVEMENT",
+        "modele": "BK-BC100",
+        "fournisseur": "BIOBASE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0373",
+        "designation": "FAUTEUIL DE PRELEVEMENT",
+        "modele": "SERIE CONFORT",
+        "fournisseur": "VERMEIREN",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0374",
+        "designation": "FAUTEUIL DE PRELEVEMENT",
+        "modele": "SERIE IV",
+        "fournisseur": "ACTUALWAY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0375",
+        "designation": "HEMOMIXEUR",
+        "modele": "DOCON7",
+        "fournisseur": "LMB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0376",
+        "designation": "HOLTER CARDIAQUE",
+        "modele": "SEER 1000",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0377",
+        "designation": "LAVEUR DE PLAQUES",
+        "modele": "PW 40",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0378",
+        "designation": "LAVEUR ELISA MICROPLAQUE",
+        "modele": "PW-41",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0379",
+        "designation": "LECTEUR DE PLAQUES",
+        "modele": "PR 4100",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0380",
+        "designation": "LECTEUR DE PLAQUES",
+        "modele": "MULTISKAN 60",
+        "fournisseur": "THERMO SCIENTIFIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0381",
+        "designation": "LECTEUR",
+        "modele": "DAD 07115A",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0382",
+        "designation": "LECTEUR DE PLAQUES",
+        "modele": "PR 2100",
+        "fournisseur": "BIO-RAD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0383",
+        "designation": "LENSOMETRE AUTOMATIQUE",
+        "modele": "TL-6100",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0384",
+        "designation": "LOGICIEL ECOPACK",
+        "modele": "V202",
+        "fournisseur": "PAXERA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0385",
+        "designation": "LOGICIEL VNG ULMER",
+        "modele": "ULMER VNG",
+        "fournisseur": "SYNAPSYS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0386",
+        "designation": "MACHINE A LAVER",
+        "modele": "RMG 623 LCE",
+        "fournisseur": "MIELE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0387",
+        "designation": "MACHINE A GLACONS",
+        "modele": "CB184AHC",
+        "fournisseur": "ICEMATIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0388",
+        "designation": "MONITEUR DE SURVEILLANCE",
+        "modele": "CARESCAPE B450",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0389",
+        "designation": "MONITEUR DE SURVEILLANCE",
+        "modele": "B125",
+        "fournisseur": "GE HEALTHCARE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0390",
+        "designation": "MONITEUR DE SURVEILLANCE",
+        "modele": "NIM ECLIPSE",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0391",
+        "designation": "MONITEUR FOETAL",
+        "modele": "F3",
+        "fournisseur": "EDAN",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0392",
+        "designation": "MONTEUSE DE LAMELLE",
+        "modele": "CV5030",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0393",
+        "designation": "PACHYMETRE POCKET II",
+        "modele": "POCKET II",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0394",
+        "designation": "PACHYMETRE BIOPACHYMETER",
+        "modele": "AL 400",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0395",
+        "designation": "PISTOLET A BIOPSIE",
+        "modele": "FAST GUN",
+        "fournisseur": "STERYLAB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0396",
+        "designation": "PLAQUE CHAUFFANT",
+        "modele": "HI1220",
+        "fournisseur": "THERMO SCIENTIFIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0397",
+        "designation": "PLAQUE CHAUFFANT",
+        "modele": "ISOTEMP",
+        "fournisseur": "THERMO SCIENTIFIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0398",
+        "designation": "PLAQUE CHAUFFANTE VELP SAENTIFICA",
+        "modele": "AREX-6",
+        "fournisseur": "VELP SCIENTIFICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0399",
+        "designation": "PLAQUE CHAUFFANTE TCL PLATE HEATER 3",
+        "modele": "PLATE HEATER 3",
+        "fournisseur": "CAMAG",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0400",
+        "designation": "PLASMA APHERISIS SYSTEM",
+        "modele": "COM.TEC",
+        "fournisseur": "FRESENIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0401",
+        "designation": "POMPE",
+        "modele": "G7111B",
+        "fournisseur": "AGILENT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0402",
+        "designation": "POUSSE SERINGUE",
+        "modele": "ESP300",
+        "fournisseur": "ALASIS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0403",
+        "designation": "PROGRAMMATEUR DE PACEMAKER",
+        "modele": "2090",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0404",
+        "designation": "PROGRAMMATEUR DE PACEMAKER",
+        "modele": "CARELINK 2",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0405",
+        "designation": "PROGRAMMATEUR DE PACEMAKER",
+        "modele": "2290",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0406",
+        "designation": "PROJECTEUR DE TEST",
+        "modele": "TCP4042",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0407",
+        "designation": "VIDEOPROJECTEUR",
+        "modele": "TCP2002",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0408",
+        "designation": "PURIFICATEUR D'EAU",
+        "modele": "H2O AOV-50",
+        "fournisseur": "SARTORIUS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0409",
+        "designation": "REFRIGERATEUR",
+        "modele": "LAD0402",
+        "fournisseur": "LIEBHERR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0410",
+        "designation": "REFRIGERATEUR",
+        "modele": "FKV3643X",
+        "fournisseur": "LIEBHERR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0411",
+        "designation": "REFRIGERATEUR PROFILINE",
+        "modele": "PROFILINE 400",
+        "fournisseur": "LIEBHERR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0412",
+        "designation": "REFRIGERATEUR WEAPO R0001",
+        "modele": "R0001",
+        "fournisseur": "WEAPO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0413",
+        "designation": "REFRIGERATEUR 5010 INDEX 12A/001",
+        "modele": "5010",
+        "fournisseur": "LIEBHERR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0414",
+        "designation": "REFRIGERATEURS LABORT 2T",
+        "modele": "LABORT 2T",
+        "fournisseur": "LIEBHERR",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0415",
+        "designation": "REFRIGERATEUR",
+        "modele": "HYC-940",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0416",
+        "designation": "REFRIGERATEUR BANQUE DE SANG",
+        "modele": "HXC-829",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0417",
+        "designation": "REFRIGERATEUR COMBINE ENDURO",
+        "modele": "ENDURO 350",
+        "fournisseur": "ENDURO",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0418",
+        "designation": "RESPIRATEUR",
+        "modele": "PB980",
+        "fournisseur": "MEDTRONIC",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0419",
+        "designation": "RESPIRATEUR DE REANIMATION NEWPORT PLUS (PORTATIF) -",
+        "modele": "NEWPORT HT50",
+        "fournisseur": "NEWPORT",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0420",
+        "designation": "RHESUSCOPE",
+        "modele": "SOC-RHE 3F",
+        "fournisseur": "SOCIMED",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0421",
+        "designation": "ROTATEUR DE TUBE A VITESSE FIXE",
+        "modele": "STR4",
+        "fournisseur": "STUART",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0422",
+        "designation": "SEPARATEUR DE SANG MICROMATIC",
+        "modele": "LMB",
+        "fournisseur": "LMB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0423",
+        "designation": "SLIT-LAMP",
+        "modele": "TSL 6000H",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0424",
+        "designation": "SOUDEUSE",
+        "modele": "LS005",
+        "fournisseur": "LMB",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0425",
+        "designation": "SOUDEUSE POCHE A SANG A BATTERIE",
+        "modele": "TS SE 700",
+        "fournisseur": "TS",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0426",
+        "designation": "STATION D'ENROBAGE DE PARAFFINE",
+        "modele": "HISTOCORE ARCADIA",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0427",
+        "designation": "STATION ENROBAGE",
+        "modele": "EG1150C",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0428",
+        "designation": "STEREOMICROSCOPE",
+        "modele": "M80",
+        "fournisseur": "LEICA",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0429",
+        "designation": "STERILISATEUR D'AIR",
+        "modele": "KJ450",
+        "fournisseur": "HAIER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0430",
+        "designation": "SYSTEM ROBOT GRAVEUR AUTOMATIQUE",
+        "modele": "PP 100-2",
+        "fournisseur": "EPSON",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0431",
+        "designation": "TABLE ELECTRIQUE",
+        "modele": "TT 4060",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0432",
+        "designation": "TABLE DE MACROSCOPIE",
+        "modele": "TI1800",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0433",
+        "designation": "TABLE DE MACROSCOPIE",
+        "modele": "15ST",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0434",
+        "designation": "TABLE ELECTRIQUE",
+        "modele": "CV230",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0435",
+        "designation": "TABLE ELECTRIQUE",
+        "modele": "TTUD 1000",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0436",
+        "designation": "TABLE DE REANIMATION NEONATALE",
+        "modele": "HKN-2000",
+        "fournisseur": "DAVID",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0437",
+        "designation": "TABLE OPERATOIRE",
+        "modele": "CARAT",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0438",
+        "designation": "TABLE INOX AVEC 4 ROUES",
+        "modele": "TI-4R",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0439",
+        "designation": "TETIERE MAYFIELD",
+        "modele": "A-1018",
+        "fournisseur": "MAYFIELD",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0440",
+        "designation": "THERMOHYGROMETRE",
+        "modele": "9221AT",
+        "fournisseur": "IHM-MOINEAU",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0441",
+        "designation": "TONOMETRE",
+        "modele": "TAT-80R",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0442",
+        "designation": "TONOMETRE PERKINS",
+        "modele": "PERKINS MK3",
+        "fournisseur": "KEELER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0443",
+        "designation": "TONOMETRE",
+        "modele": "FT-1000",
+        "fournisseur": "TOMEY",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0444",
+        "designation": "TONOMETRE KEELER",
+        "modele": "PULSAIR",
+        "fournisseur": "KEELER",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0445",
+        "designation": "TRANSLUMINATOR BENCH TOP 3UV",
+        "modele": "LMS-20",
+        "fournisseur": "UVP",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0446",
+        "designation": "TYMPANOMETRE AT 235",
+        "modele": "AT235",
+        "fournisseur": "POURET MEDICAL",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0447",
+        "designation": "UGO BASILE PLETHYSOMETRE",
+        "modele": "7140",
+        "fournisseur": "UGO BASILE",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0448",
+        "designation": "VIDEO LARYNGOSCOPE",
+        "modele": "MCGRATH",
+        "fournisseur": "MEDTRONIC",
+        "entite": "IMAG-CHIRG",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    },
+    {
+        "codeTS": "TS-EQ-0449",
+        "designation": "VISION PRINT VISION PRINT",
+        "modele": "VISION PRINT",
+        "fournisseur": "VISION",
+        "entite": "BIOMED",
+        "categorie": "Catégorie 1 (Paillasse & Petit Équipement)",
+        "statut": "Actif"
+    }
+],
 
   // 15. RÉPERTOIRE DES CLIENTS TS (9 Colonnes Officielles) — 608 Partenaires
   clients: [

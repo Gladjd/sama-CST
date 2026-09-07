@@ -109,7 +109,12 @@ window.supabaseSync = {
       }
 
       // 3. Catalogue Équipements TS
-      const { data: catData } = await this.client.from('equipements_ts').select('*').order('created_at', { ascending: false });
+      const { data: catData } = await this.client
+        .from('equipements_ts')
+        .select('*')
+        .order('code_ts', { ascending: true })
+        .range(0, 4999);
+        
       if (catData && catData.length > 0) {
         SAMA_DATA.equipementsTS = catData.map(e => ({
           codeTS: e.code_ts,
