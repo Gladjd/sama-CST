@@ -2152,7 +2152,7 @@ const APP = {
     // Mise à jour des indicateurs de tri visuels dans le header
     ['fournisseur', 'designation', 'modele', 'categorie', 'entite'].forEach(col => {
       const indEl = document.getElementById(`sort-ts-${col}`);
-      if (indEl) {
+      if (indEl && indEl.style) {
         if (this.tsSortColumn === col) {
           indEl.textContent = this.tsSortDirection === 'asc' ? '▲' : '▼';
           indEl.style.color = 'var(--ts-green-dark)';
@@ -2465,7 +2465,7 @@ const APP = {
     // Mise à jour des indicateurs de tri visuels dans le header
     ['client', 'nomClient', 'adresseClient', 'villeClient', 'paysClient', 'codePostal', 'telephoneClient', 'mailClient', 'rcNinea'].forEach(col => {
       const indEl = document.getElementById(`sort-client-${col}`);
-      if (indEl) {
+      if (indEl && indEl.style) {
         if (this.clientSortColumn === col) {
           indEl.textContent = this.clientSortDirection === 'asc' ? '▲' : '▼';
           indEl.style.color = 'var(--ts-green-dark)';
@@ -4352,7 +4352,10 @@ const APP = {
   }
 };
 
+window.APP = APP;
+
 // Initialisation au chargement du DOM
 document.addEventListener('DOMContentLoaded', () => {
   APP.init();
 });
+

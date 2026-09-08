@@ -60,6 +60,49 @@ window.supabaseSync = {
     }
   },
 
+  // Helper pour récupérer TOUTES les lignes d'une table avec pagination automatique (contourne la limite PostgREST de 1000 lignes)
+  async fetchAllTableRows(tableName, orderBy = null, ascending = true) {
+    if (!this.client) return [];
+    const PAGE_SIZE = 1000;
+    let allRows = [];
+    let from = 0;
+    let hasMore = true;
+
+    try {
+      while (hasMore) {
+        let query = this.client
+          .from(tableName)
+          .select('*')
+          .range(from, from + PAGE_SIZE - 1);
+
+        if (orderBy) {
+          query = query.order(orderBy, { ascending });
+        }
+
+        const { data, error } = await query;
+        if (error) {
+          console.error(`❌ Erreur chargement ${tableName} (offset ${from}):`, error);
+          break;
+        }
+
+        if (data && data.length > 0) {
+          allRows = allRows.concat(data);
+          if (data.length < PAGE_SIZE) {
+            hasMore = false;
+          } else {
+            from += PAGE_SIZE;
+          }
+        } else {
+          hasMore = false;
+        }
+      }
+    } catch (e) {
+      console.error(`❌ Exception fetchAllTableRows(${tableName}):`, e);
+    }
+
+    return allRows;
+  },
+
   // Charge toutes les tables depuis Supabase et met à jour SAMA_DATA
   async loadAllDataFromSupabase() {
     if (!this.isConnected || !this.client) return;
@@ -68,12 +111,8 @@ window.supabaseSync = {
     this.updateStatusBadge();
 
     try {
-      // 1. Clients
-      const { data: clientsData } = await this.client
-        .from('clients')
-        .select('*')
-        .order('code_client', { ascending: true })
-        .range(0, 4999);
+      // 1. Clients (toutes les pages)
+      const clientsData = await this.fetchAllTableRows('clients', 'code_client', true);
         
       if (clientsData && clientsData.length > 0) {
         SAMA_DATA.clients = clientsData.map(c => ({
@@ -97,12 +136,8 @@ window.supabaseSync = {
         }));
       }
 
-      // 2. Personnel CST
-      const { data: personnelData } = await this.client
-        .from('personnel_cst')
-        .select('*')
-        .order('code_agent', { ascending: true })
-        .range(0, 999);
+      // 2. Personnel CST (toutes les pages)
+      const personnelData = await this.fetchAllTableRows('personnel_cst', 'code_agent', true);
         
       if (personnelData && personnelData.length > 0) {
         SAMA_DATA.personnelCST = personnelData.map(p => ({
@@ -119,12 +154,8 @@ window.supabaseSync = {
         }));
       }
 
-      // 3. Catalogue Équipements TS
-      const { data: catData } = await this.client
-        .from('equipements_ts')
-        .select('*')
-        .order('code_ts', { ascending: true })
-        .range(0, 4999);
+      // 3. Catalogue Équipements TS (toutes les pages)
+      const catData = await this.fetchAllTableRows('equipements_ts', 'code_ts', true);
         
       if (catData && catData.length > 0) {
         SAMA_DATA.equipementsTS = catData.map(e => ({
@@ -138,12 +169,8 @@ window.supabaseSync = {
         }));
       }
 
-      // 4. Sites TS
-      const { data: sitesData } = await this.client
-        .from('sites_ts')
-        .select('*')
-        .order('parc_equipements', { ascending: false })
-        .range(0, 4999);
+      // 4. Sites TS (toutes les pages)
+      const sitesData = await this.fetchAllTableRows('sites_ts', 'parc_equipements', false);
         
       if (sitesData && sitesData.length > 0) {
         SAMA_DATA.sitesTS = sitesData.map(s => ({
@@ -173,12 +200,8 @@ window.supabaseSync = {
         }));
       }
 
-      // 5. Parc Équipements Déployé
-      const { data: parcData } = await this.client
-        .from('parc_equipements_ts')
-        .select('*')
-        .order('code_machine', { ascending: true })
-        .range(0, 4999);
+      // 5. Parc Équipements Déployé (2 883 machines - toutes les pages)
+      const parcData = await this.fetchAllTableRows('parc_equipements_ts', 'code_machine', true);
         
       if (parcData && parcData.length > 0) {
         SAMA_DATA.parcEquipementsTS = parcData.map(p => {
@@ -216,12 +239,12 @@ window.supabaseSync = {
         });
       }
 
-      // 6. Équipements Atelier & Interventions
-      const { data: atelierData } = await this.client.from('equipements_atelier').select('*').order('created_at', { ascending: false });
+      // 6. Équipements Atelier & Interventions (toutes les pages)
+      const atelierData = await this.fetchAllTableRows('equipements_atelier', 'created_at', false);
       if (atelierData && atelierData.length > 0) {
-        // Récupérer les étapes et pièces
-        const { data: etapesData } = await this.client.from('interventions_etapes').select('*').order('ordre', { ascending: true });
-        const { data: piecesData } = await this.client.from('pieces_rechange').select('*');
+        // Récupérer les étapes et pièces (toutes les pages)
+        const etapesData = await this.fetchAllTableRows('interventions_etapes', 'ordre', true);
+        const piecesData = await this.fetchAllTableRows('pieces_rechange');
 
         SAMA_DATA.equipementsAtelier = atelierData.map(eq => {
           const eqEtapes = (etapesData || []).filter(et => et.code_equipement === eq.code_equipement).map(et => ({
