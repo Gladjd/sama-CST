@@ -788,6 +788,23 @@
               <option value="Fonctionnel / Dégradé">Fonctionnel / Dégradé</option>
               <option value="Non fonctionnel">Non fonctionnel</option>
             </select>
+
+            <!-- Filtre Zone Actuelle -->
+            <select class="filter-select" id="filter-zone">
+              <option value="all">📍 Toutes les Zones</option>
+              <option value="Hors atelier">Hors atelier</option>
+              <option value="Attente pièces/devis">Attente pièces/devis</option>
+              <option value="Paillasse 1">Paillasse 1</option>
+              <option value="Paillasse 2">Paillasse 2</option>
+              <option value="Paillasse 3">Paillasse 3</option>
+              <option value="Paillasse 4">Paillasse 4</option>
+              <option value="Paillasse 5">Paillasse 5</option>
+              <option value="Paillasse 6">Paillasse 6</option>
+              <option value="Paillasse 7">Paillasse 7</option>
+              <option value="Zone réception">Zone réception</option>
+              <option value="Zone de départ">Zone de départ</option>
+              <option value="Zone de stock">Zone de stock</option>
+            </select>
           </div>
 
           <div style="display: flex; align-items: center; gap: 10px;">
@@ -1576,25 +1593,25 @@
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12.5px;">
-          <div><span style="color: var(--text-muted);">Client / Site :</span> <strong id="fv-client">Ciments du Sahel</strong></div>
-          <div><span style="color: var(--text-muted);">N° de Série :</span> <span id="fv-serial" style="font-family: monospace; font-weight: 700; color: #1E293B;">CAT-320D-SN84920</span></div>
-          <div><span style="color: var(--text-muted);">Modèle / Marque :</span> <strong id="fv-model">Caterpillar 320D L</strong></div>
+          <div><span style="color: var(--text-muted);">Client / Site :</span> <strong id="fv-client">-</strong></div>
+          <div><span style="color: var(--text-muted);">N° de Série :</span> <span id="fv-serial" style="font-family: monospace; font-weight: 700; color: #1E293B;">-</span></div>
+          <div><span style="color: var(--text-muted);">Modèle / Marque :</span> <strong id="fv-model">-</strong></div>
           <div><span style="color: var(--text-muted);">Entité Responsable :</span> <span id="fv-entite" class="badge-tag blue" style="font-weight: 800;">BIOMED</span></div>
-          <div><span style="color: var(--text-muted);">Situation Actuelle :</span> <span id="fv-situation" class="badge-tag green">Clôturé</span></div>
-          <div><span style="color: var(--text-muted);">État de Sortie :</span> <span id="fv-etat-sortie" class="badge-tag green">Fonctionnel</span></div>
+          <div><span style="color: var(--text-muted);">Situation Actuelle :</span> <span id="fv-situation" class="badge-tag green">En traitement</span></div>
+          <div><span style="color: var(--text-muted);">État de Sortie :</span> <span id="fv-etat-sortie" class="badge-tag green">Non fonctionnel</span></div>
           <div><span style="color: var(--text-muted);">Zone Actuelle :</span> <span id="fv-zone" class="badge-tag slate">Zone réception</span></div>
-          <div><span style="color: var(--text-muted);">Responsable Tech :</span> <strong id="fv-tech">Ousmane Fall</strong></div>
-          <div><span style="color: var(--text-muted);">Responsable Réception :</span> <strong id="fv-reception">Modou Faye</strong></div>
-          <div><span style="color: var(--text-muted);">Date d'Entrée :</span> <span id="fv-date-entree" style="font-weight: 600;">2026-08-20</span></div>
+          <div><span style="color: var(--text-muted);">Responsable Tech :</span> <strong id="fv-tech">-</strong></div>
+          <div><span style="color: var(--text-muted);">Responsable Réception :</span> <strong id="fv-reception">Glad MOUKOUIRI</strong></div>
+          <div><span style="color: var(--text-muted);">Date d'Entrée :</span> <span id="fv-date-entree" style="font-weight: 600;">-</span></div>
           <div><span style="color: var(--text-muted);">Date de Sortie :</span> <span id="fv-date-sortie" style="font-weight: 600;">-</span></div>
-          <div><span style="color: var(--text-muted);">Durée / Nb Jours :</span> <span id="fv-days" class="days-badge red">13 jours</span></div>
-          <div><span style="color: var(--text-muted);">Prise en charge :</span> <span id="fv-pec" style="font-size: 12px; color: #16243D;">2026-08-20 (2h 30m)</span></div>
-          <div><span style="color: var(--text-muted);">Émission FRB :</span> <span id="fv-frb" style="font-size: 12px; color: #16243D;">2026-08-22 (42h 45m)</span></div>
-          <div><span style="color: var(--text-muted);">Coût Estimé Intervention :</span> <strong id="fv-cout" style="color: #2563EB;">8 450 000 FCFA</strong></div>
+          <div><span style="color: var(--text-muted);">Durée / Nb Jours :</span> <span id="fv-days" class="days-badge red">-</span></div>
+          <div><span style="color: var(--text-muted);">Prise en charge :</span> <span id="fv-pec" style="font-size: 12px; color: #16243D;">-</span></div>
+          <div><span style="color: var(--text-muted);">Émission FRB :</span> <span id="fv-frb" style="font-size: 12px; color: #16243D;">-</span></div>
+          <div><span style="color: var(--text-muted);">Coût Estimé Intervention :</span> <strong id="fv-cout" style="color: #2563EB;">0 FCFA</strong></div>
           <div style="grid-column: span 2;">
             <span style="color: var(--text-muted);">Motif de panne / Diagnostic :</span>
             <div id="fv-motif" style="margin-top: 4px; padding: 10px 12px; background: #F8FAFC; border: 1px solid var(--border-light); border-radius: 6px; font-size: 12px; color: #1E293B; line-height: 1.5;">
-              Fuite vérin de flèche
+              -
             </div>
           </div>
         </div>
@@ -1760,6 +1777,7 @@
                 <option value="Paillasse 7">Paillasse 7</option>
                 <option value="Zone réception">Zone réception</option>
                 <option value="Zone de départ">Zone de départ</option>
+                <option value="Zone de stock">Zone de stock</option>
               </select>
             </div>
             <div class="form-group">
@@ -2125,6 +2143,7 @@
         <option value="Paillasse 7">Paillasse 7</option>
         <option value="Zone réception" selected>Zone réception</option>
         <option value="Zone de départ">Zone de départ</option>
+        <option value="Zone de stock">Zone de stock</option>
       </select>
     </div>
     <div class="form-group col-span-2">

@@ -42,7 +42,7 @@ L'application **Sama CST** centralise l'ensemble des processus techniques et adm
 ### B. Gestion des Équipements en Atelier (GMAO 23 Colonnes)
 - **Tableau GMAO exhaustif conforme aux 23 colonnes réglementaires** :
   `Code Équipement`, `Fiche de Vie`, `Description`, `N° Série`, `Client`, `Date Entrée`, `Date Sortie`, `Resp. Réception`, `Resp. Technique`, `Zone Actuelle`, `Motif`, `Situation`, `Statut (CLÔTURE / DEPENDANT)`, `État Sortie`, `Jours Atelier`, `N° Devis/FRB`, `Montant FRB`, `Date Émission FRB`, `Date Accord Client`, `Date Commande Pièces`, `Date Réception Pièces`, `Diagnostic Réception`, `Actions / Décision`.
-- **Filtres multi-critères instantanés** : Recherche plein-texte, filtre Entité/Pôle, Statut, Situation, État de sortie, Priorité.
+- **Filtres multi-critères instantanés** : Recherche plein-texte, filtre Entité/Pôle, Statut, Situation, État de sortie, Zone Actuelle (12 zones d'atelier).
 - **Ajout & Modification d'Équipements** : Modales complètes avec calcul automatique de la durée de séjour et validation des données.
 - **Export CSV Universel** avec encodage UTF-8 BOM compatible Microsoft Excel.
 

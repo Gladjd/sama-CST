@@ -10,6 +10,7 @@ const APP = {
   filterStatut: 'all',
   filterSituation: 'all',
   filterEtatSortie: 'all',
+  filterZone: 'all',
   sortColumn: 'codeEquipement',
   sortDirection: 'asc',
   currentPage: 1,
@@ -390,6 +391,14 @@ const APP = {
       });
     }
 
+    const filterZoneSelect = document.getElementById('filter-zone');
+    if (filterZoneSelect) {
+      filterZoneSelect.addEventListener('change', (e) => {
+        this.filterZone = e.target.value;
+        this.renderEquipementTable();
+      });
+    }
+
     // Modal Nouvel Équipement / Client / Personnel (Topbar bouton principal intelligent)
     const btnNewEquip = document.getElementById('btn-add-equipment');
     if (btnNewEquip) {
@@ -683,6 +692,11 @@ const APP = {
       items = items.filter(item => item.etatSortie === this.filterEtatSortie);
     }
 
+    // 6. Filtre Zone Actuelle
+    if (this.filterZone && this.filterZone !== 'all') {
+      items = items.filter(item => item.zoneActuelle === this.filterZone);
+    }
+
     // 5. Tri robuste
     items.sort((a, b) => {
       let valA = a[this.sortColumn];
@@ -924,8 +938,8 @@ const APP = {
     setTxt('fv-situation', eq.situation || 'En traitement');
     setTxt('fv-etat-sortie', eq.etatSortie || 'Non fonctionnel');
     setTxt('fv-zone', eq.zoneActuelle || 'Zone réception');
-    setTxt('fv-tech', eq.responsableTechnique || 'Ousmane Fall');
-    setTxt('fv-reception', eq.responsableReception || 'Modou Faye');
+    setTxt('fv-tech', eq.responsableTechnique || '-');
+    setTxt('fv-reception', eq.responsableReception || 'Glad MOUKOUIRI');
     setTxt('fv-date-entree', eq.dateEntree);
     setTxt('fv-date-sortie', eq.dateSortie);
     setTxt('fv-pec', `${eq.datePriseEnCharge || '-'} (Délai : ${eq.delaisPriseEnCharge || '-'})`);
@@ -1025,8 +1039,8 @@ const APP = {
     setVal('edit-fv-situation', eq.situation || 'En traitement');
     setVal('edit-fv-etat-sortie', eq.etatSortie || 'Non fonctionnel');
     setVal('edit-fv-zone', eq.zoneActuelle || 'Zone réception');
-    setVal('edit-fv-tech', eq.responsableTechnique || 'Ousmane Fall');
-    setVal('edit-fv-reception', eq.responsableReception || 'Modou Faye');
+    setVal('edit-fv-tech', eq.responsableTechnique || '');
+    setVal('edit-fv-reception', eq.responsableReception || 'Glad MOUKOUIRI');
     setVal('edit-fv-delais-pec', eq.delaisPriseEnCharge || '');
     setVal('edit-fv-delais-frb', eq.delaisFRB || '');
     setVal('edit-fv-cout', eq.coutEstime || '');
@@ -3705,9 +3719,9 @@ const APP = {
       client: client,
       dateEntree: dateEntree,
       dateSortie: dateSortie,
-      responsableReception: "Modou Faye",
+      responsableReception: "Glad MOUKOUIRI",
       responsableTechnique: tech,
-      zoneActuelle: zone || "Zone réception",
+      zoneActuelle: zone,
       motif: motif || "Entrée atelier pour révision",
       situation: situation,
       statut: statut,
