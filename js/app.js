@@ -923,7 +923,7 @@ const APP = {
     setTxt('fv-entite', eq.entite || 'BIOMED');
     setTxt('fv-situation', eq.situation || 'En traitement');
     setTxt('fv-etat-sortie', eq.etatSortie || 'Non fonctionnel');
-    setTxt('fv-zone', eq.zoneActuelle || 'Atelier Mécanique Lourde');
+    setTxt('fv-zone', eq.zoneActuelle || 'Zone réception');
     setTxt('fv-tech', eq.responsableTechnique || 'Ousmane Fall');
     setTxt('fv-reception', eq.responsableReception || 'Modou Faye');
     setTxt('fv-date-entree', eq.dateEntree);
@@ -1024,7 +1024,7 @@ const APP = {
     setVal('edit-fv-statut', eq.statut || 'DEPENDANT');
     setVal('edit-fv-situation', eq.situation || 'En traitement');
     setVal('edit-fv-etat-sortie', eq.etatSortie || 'Non fonctionnel');
-    setVal('edit-fv-zone', eq.zoneActuelle || 'Atelier Mécanique Lourde');
+    setVal('edit-fv-zone', eq.zoneActuelle || 'Zone réception');
     setVal('edit-fv-tech', eq.responsableTechnique || 'Ousmane Fall');
     setVal('edit-fv-reception', eq.responsableReception || 'Modou Faye');
     setVal('edit-fv-delais-pec', eq.delaisPriseEnCharge || '');
@@ -3623,6 +3623,10 @@ const APP = {
       if (motifInput) {
         motifInput.value = prefillData.motifPanne || prefillData.motif || "Entrée atelier pour diagnostic et révision";
       }
+      const zoneSelect = document.getElementById('form-zone');
+      if (zoneSelect) {
+        zoneSelect.value = prefillData.zoneActuelle || prefillData.zone || 'Zone réception';
+      }
     } else {
       if (codeInput) codeInput.value = '';
       if (descInput) descInput.value = '';
@@ -3630,6 +3634,8 @@ const APP = {
       if (fournInput) fournInput.value = '';
       if (modeleInput) modeleInput.value = '';
       if (motifInput) motifInput.value = '';
+      const zoneSelect = document.getElementById('form-zone');
+      if (zoneSelect) zoneSelect.value = 'Zone réception';
     }
 
     if (modal && overlay) {
@@ -3701,7 +3707,7 @@ const APP = {
       dateSortie: dateSortie,
       responsableReception: "Modou Faye",
       responsableTechnique: tech,
-      zoneActuelle: zone,
+      zoneActuelle: zone || "Zone réception",
       motif: motif || "Entrée atelier pour révision",
       situation: situation,
       statut: statut,
