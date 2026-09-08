@@ -89,6 +89,9 @@ const APP = {
     // Initialisation des sélecteurs de Date et Date & Heure dynamiques
     this.initDatePickers();
 
+    // Initialisation du moteur d'auto-complétion intelligente des équipements
+    this.initEquipmentAutocomplete();
+
     // Initialisation Supabase asynchrone (mode hybride)
     if (window.supabaseSync && typeof window.supabaseSync.init === 'function') {
       window.supabaseSync.init();
@@ -114,6 +117,7 @@ const APP = {
     this.renderRedAlerts();
     this.renderEntityAvailability();
     this.renderTop5List();
+    this.populateEquipmentDatalists();
     if (window.SAMA_CHARTS && typeof window.SAMA_CHARTS.initAllDashboardCharts === 'function') {
       window.SAMA_CHARTS.initAllDashboardCharts();
     }
@@ -2289,7 +2293,7 @@ const APP = {
     const overlay = document.getElementById('modal-overlay');
     if (modal && overlay) {
       overlay.classList.add('active');
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
       setTimeout(() => {
         document.getElementById('form-ts-fournisseur')?.focus();
       }, 50);
@@ -2657,7 +2661,7 @@ const APP = {
 
     if (modal && overlay) {
       overlay.classList.add('active');
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
       setTimeout(() => {
         document.getElementById('form-clt-nom')?.focus();
       }, 50);
@@ -2740,7 +2744,7 @@ const APP = {
 
     if (modal && overlay) {
       overlay.classList.add('active');
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
       setTimeout(() => {
         document.getElementById('edit-clt-nom')?.focus();
       }, 50);
@@ -3066,7 +3070,7 @@ const APP = {
     const overlay = document.getElementById('modal-overlay');
     if (modal && overlay) {
       overlay.classList.add('active');
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
       setTimeout(() => {
         document.getElementById('form-prs-agent')?.focus();
       }, 50);
@@ -3095,7 +3099,7 @@ const APP = {
     const overlay = document.getElementById('modal-overlay');
     if (modal && overlay) {
       overlay.classList.add('active');
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
       setTimeout(() => {
         document.getElementById('edit-prs-agent')?.focus();
       }, 50);
@@ -3796,6 +3800,348 @@ const APP = {
     }
   },
 
+  // ------------------------------------------------------------------------
+  // SMART BIDIRECTIONAL AUTO-FILL & AUTOCOMPLETE ENGINE (PARC & CATALOGUE TS)
+  // ------------------------------------------------------------------------
+  highlightField(el) {
+    if (!el) return;
+    el.classList.add('autofilled');
+    setTimeout(() => {
+      el.classList.remove('autofilled');
+    }, 2500);
+  },
+
+  showAutoFillBanner(msg) {
+    const banner = document.getElementById('modal-autofill-banner');
+    const textEl = document.getElementById('modal-autofill-text');
+    if (banner && textEl) {
+      textEl.textContent = msg;
+      banner.classList.add('active');
+    }
+  },
+
+  hideAutoFillBanner() {
+    const banner = document.getElementById('modal-autofill-banner');
+    if (banner) {
+      banner.classList.remove('active');
+    }
+  },
+
+  populateEquipmentDatalists(clientFilter = null) {
+    const codeDatalist = document.getElementById('datalist-form-codes');
+    const descDatalist = document.getElementById('datalist-form-descs');
+    const serialDatalist = document.getElementById('datalist-form-serials');
+
+    if (!codeDatalist || !descDatalist || !serialDatalist) return;
+
+    const codesMap = new Map();
+    const descsSet = new Set();
+    const serialsSet = new Set();
+
+    const clean = str => (str && str !== '-' && str !== 'N/A') ? String(str).trim() : '';
+
+    // 1. Parc TS (2800+ machines)
+    (SAMA_DATA.parcEquipementsTS || []).forEach(p => {
+      const code = clean(p.code || p.codeEquipement);
+      const desc = clean(p.nom || p.designation || p.description || p.nomEquipement);
+      const serial = clean(p.numSerie || p.numeroSerie || p.serial);
+      const client = clean(p.client || p.site);
+
+      if (code) {
+        codesMap.set(code.toLowerCase(), {
+          code,
+          label: `${code}${desc ? ' • ' + desc : ''}${client ? ' (' + client + ')' : ''}`,
+          client,
+          item: p,
+          type: 'parc'
+        });
+      }
+      if (desc) descsSet.add(desc);
+      if (serial) serialsSet.add(serial);
+    });
+
+    // 2. Équipements Atelier
+    (SAMA_DATA.equipementsAtelier || []).forEach(e => {
+      const code = clean(e.codeEquipement || e.code);
+      const desc = clean(e.description);
+      const serial = clean(e.numSerie);
+      const client = clean(e.client);
+
+      if (code && !codesMap.has(code.toLowerCase())) {
+        codesMap.set(code.toLowerCase(), {
+          code,
+          label: `${code}${desc ? ' • ' + desc : ''}${client ? ' (' + client + ')' : ''}`,
+          client,
+          item: e,
+          type: 'atelier'
+        });
+      }
+      if (desc) descsSet.add(desc);
+      if (serial) serialsSet.add(serial);
+    });
+
+    // 3. Catalogue TS (440+ modèles)
+    (SAMA_DATA.equipementsTS || []).forEach(t => {
+      const code = clean(t.codeTS || t.code);
+      const desc = clean(t.designation);
+      const fourn = clean(t.fournisseur);
+      const mod = clean(t.modele);
+
+      if (code && !codesMap.has(code.toLowerCase())) {
+        codesMap.set(code.toLowerCase(), {
+          code,
+          label: `${code} • ${desc || mod || 'Catalogue'}${fourn ? ' (' + fourn + ')' : ''}`,
+          client: '',
+          item: t,
+          type: 'catalogue'
+        });
+      }
+      if (desc) descsSet.add(desc);
+    });
+
+    // Priorisation si un client est sélectionné
+    let codesArray = Array.from(codesMap.values());
+    if (clientFilter && clientFilter.trim() !== '') {
+      const filterLower = clientFilter.trim().toLowerCase();
+      codesArray.sort((a, b) => {
+        const aMatch = a.client.toLowerCase().includes(filterLower) ? 1 : 0;
+        const bMatch = b.client.toLowerCase().includes(filterLower) ? 1 : 0;
+        if (aMatch !== bMatch) return bMatch - aMatch;
+        return a.code.localeCompare(b.code, 'fr', { numeric: true });
+      });
+    } else {
+      codesArray.sort((a, b) => a.code.localeCompare(b.code, 'fr', { numeric: true }));
+    }
+
+    const renderedCodes = codesArray.slice(0, 800);
+    codeDatalist.innerHTML = renderedCodes.map(c => `<option value="${c.code.replace(/"/g, '&quot;')}">${c.label.replace(/"/g, '&quot;')}</option>`).join('');
+
+    const descsArray = Array.from(descsSet).sort((a, b) => a.localeCompare(b, 'fr')).slice(0, 500);
+    descDatalist.innerHTML = descsArray.map(d => `<option value="${d.replace(/"/g, '&quot;')}"></option>`).join('');
+
+    const serialsArray = Array.from(serialsSet).sort((a, b) => a.localeCompare(b, 'fr')).slice(0, 500);
+    serialDatalist.innerHTML = serialsArray.map(s => `<option value="${s.replace(/"/g, '&quot;')}"></option>`).join('');
+  },
+
+  applyEquipmentAutoFill(item, type = 'parc') {
+    if (!item) return;
+
+    const codeInput = document.getElementById('form-code');
+    const descInput = document.getElementById('form-desc');
+    const serialInput = document.getElementById('form-serial');
+    const clientSelect = document.getElementById('form-client');
+    const fournInput = document.getElementById('form-fournisseur');
+    const modeleInput = document.getElementById('form-modele');
+    const entiteSelect = document.getElementById('form-entite');
+    const techSelect = document.getElementById('form-tech');
+    const zoneSelect = document.getElementById('form-zone');
+
+    const code = item.code || item.codeEquipement || item.codeTS;
+    const desc = item.nom || item.designation || item.description || item.nomEquipement;
+    const serial = item.numSerie || item.numeroSerie || item.serial;
+    const client = item.client || item.site || item.nomClient;
+    const fourn = item.fournisseur || item.marque;
+    const modele = item.modele;
+    const pole = item.pole || item.entite;
+    const tech = item.technicienReferent || item.responsableTechnique || item.technicien;
+    const zone = item.zone || item.zoneActuelle;
+
+    if (code && codeInput && (!codeInput.value || codeInput.value.trim().toLowerCase() !== code.toLowerCase())) {
+      codeInput.value = code;
+      this.highlightField(codeInput);
+    }
+
+    if (desc && descInput && (!descInput.value || descInput.value.trim() !== desc)) {
+      descInput.value = desc;
+      this.highlightField(descInput);
+    }
+
+    if (serial && serialInput && serial !== '-' && serial !== 'N/A' && (!serialInput.value || serialInput.value.trim() !== serial)) {
+      serialInput.value = serial;
+      this.highlightField(serialInput);
+    }
+
+    if (client && clientSelect) {
+      const opts = Array.from(clientSelect.options);
+      const match = opts.find(o => o.value.toLowerCase() === client.toLowerCase() || o.text.toLowerCase() === client.toLowerCase() || (o.value && client.toLowerCase().includes(o.value.toLowerCase())));
+      if (match) {
+        clientSelect.value = match.value;
+        this.highlightField(clientSelect);
+      }
+    }
+
+    if (fourn && fournInput && (!fournInput.value || fournInput.value.trim() !== fourn)) {
+      fournInput.value = fourn;
+      this.highlightField(fournInput);
+    }
+
+    if (modele && modeleInput && (!modeleInput.value || modeleInput.value.trim() !== modele)) {
+      modeleInput.value = modele;
+      this.highlightField(modeleInput);
+    }
+
+    if (pole && entiteSelect) {
+      if (pole.toUpperCase().includes('IMAG') || pole.toUpperCase().includes('CHIRG')) {
+        entiteSelect.value = 'IMAG-CHIRG';
+      } else if (pole.toUpperCase().includes('BIO')) {
+        entiteSelect.value = 'BIOMED';
+      }
+      this.highlightField(entiteSelect);
+    }
+
+    if (tech && techSelect) {
+      const opts = Array.from(techSelect.options);
+      const match = opts.find(o => o.value.toLowerCase() === tech.toLowerCase() || o.text.toLowerCase().includes(tech.toLowerCase()));
+      if (match) {
+        techSelect.value = match.value;
+        this.highlightField(techSelect);
+      }
+    }
+
+    if (zone && zoneSelect) {
+      const opts = Array.from(zoneSelect.options);
+      const match = opts.find(o => o.value.toLowerCase() === zone.toLowerCase());
+      if (match) {
+        zoneSelect.value = match.value;
+        this.highlightField(zoneSelect);
+      }
+    }
+
+    const clientName = client || (item.site || 'Référentiel TS');
+    const typeLabel = type === 'parc' ? `Parc Machines (${clientName})` : (type === 'catalogue' ? 'Catalogue TS' : 'Atelier CST');
+    this.showAutoFillBanner(`✨ Équipement "${code || desc}" identifié dans le ${typeLabel} : données pré-remplies !`);
+  },
+
+  handleCodeAutoFill(val) {
+    const codeVal = (val || document.getElementById('form-code')?.value || '').trim().toLowerCase();
+    if (!codeVal) {
+      this.hideAutoFillBanner();
+      return;
+    }
+
+    // 1. Parc Equipements TS
+    const parcMatch = (SAMA_DATA.parcEquipementsTS || []).find(p => {
+      const c = (p.code || p.codeEquipement || '').trim().toLowerCase();
+      return c === codeVal;
+    });
+    if (parcMatch) {
+      this.applyEquipmentAutoFill(parcMatch, 'parc');
+      return;
+    }
+
+    // 2. Equipements Atelier
+    const atelierMatch = (SAMA_DATA.equipementsAtelier || []).find(e => {
+      const c = (e.codeEquipement || e.code || '').trim().toLowerCase();
+      return c === codeVal;
+    });
+    if (atelierMatch) {
+      this.applyEquipmentAutoFill(atelierMatch, 'atelier');
+      return;
+    }
+
+    // 3. Catalogue TS
+    const catMatch = (SAMA_DATA.equipementsTS || []).find(t => {
+      const c = (t.codeTS || t.code || '').trim().toLowerCase();
+      return c === codeVal;
+    });
+    if (catMatch) {
+      this.applyEquipmentAutoFill(catMatch, 'catalogue');
+      return;
+    }
+  },
+
+  handleSerialAutoFill(val) {
+    const serialVal = (val || document.getElementById('form-serial')?.value || '').trim().toLowerCase();
+    if (!serialVal || serialVal === '-' || serialVal === 'n/a') return;
+
+    // Search Parc
+    const parcMatch = (SAMA_DATA.parcEquipementsTS || []).find(p => {
+      const s = (p.numSerie || p.numeroSerie || p.serial || '').trim().toLowerCase();
+      return s && s === serialVal;
+    });
+    if (parcMatch) {
+      this.applyEquipmentAutoFill(parcMatch, 'parc');
+      return;
+    }
+
+    // Search Atelier
+    const atelierMatch = (SAMA_DATA.equipementsAtelier || []).find(e => {
+      const s = (e.numSerie || '').trim().toLowerCase();
+      return s && s === serialVal;
+    });
+    if (atelierMatch) {
+      this.applyEquipmentAutoFill(atelierMatch, 'atelier');
+      return;
+    }
+  },
+
+  handleDescAutoFill(val) {
+    const descVal = (val || document.getElementById('form-desc')?.value || '').trim().toLowerCase();
+    if (!descVal || descVal.length < 3) return;
+
+    const codeInput = document.getElementById('form-code');
+    if (codeInput && codeInput.value && codeInput.value.trim() !== '') {
+      return;
+    }
+
+    // Search in Parc
+    const parcMatch = (SAMA_DATA.parcEquipementsTS || []).find(p => {
+      const d = (p.nom || p.designation || p.description || p.nomEquipement || '').trim().toLowerCase();
+      return d === descVal;
+    });
+    if (parcMatch) {
+      this.applyEquipmentAutoFill(parcMatch, 'parc');
+      return;
+    }
+
+    // Search in Catalogue
+    const catMatch = (SAMA_DATA.equipementsTS || []).find(t => {
+      const d = (t.designation || '').trim().toLowerCase();
+      return d === descVal;
+    });
+    if (catMatch) {
+      this.applyEquipmentAutoFill(catMatch, 'catalogue');
+      return;
+    }
+  },
+
+  handleClientChangeAutoFill(clientVal) {
+    const client = (clientVal || document.getElementById('form-client')?.value || '').trim();
+    this.populateEquipmentDatalists(client);
+  },
+
+  initEquipmentAutocomplete() {
+    const codeInput = document.getElementById('form-code');
+    const serialInput = document.getElementById('form-serial');
+    const descInput = document.getElementById('form-desc');
+    const clientSelect = document.getElementById('form-client');
+
+    if (codeInput && !codeInput._hasAutoFillListener) {
+      codeInput._hasAutoFillListener = true;
+      codeInput.addEventListener('input', (e) => this.handleCodeAutoFill(e.target.value));
+      codeInput.addEventListener('change', (e) => this.handleCodeAutoFill(e.target.value));
+    }
+
+    if (serialInput && !serialInput._hasAutoFillListener) {
+      serialInput._hasAutoFillListener = true;
+      serialInput.addEventListener('input', (e) => this.handleSerialAutoFill(e.target.value));
+      serialInput.addEventListener('change', (e) => this.handleSerialAutoFill(e.target.value));
+    }
+
+    if (descInput && !descInput._hasAutoFillListener) {
+      descInput._hasAutoFillListener = true;
+      descInput.addEventListener('input', (e) => this.handleDescAutoFill(e.target.value));
+      descInput.addEventListener('change', (e) => this.handleDescAutoFill(e.target.value));
+    }
+
+    if (clientSelect && !clientSelect._hasAutoFillListener) {
+      clientSelect._hasAutoFillListener = true;
+      clientSelect.addEventListener('change', (e) => this.handleClientChangeAutoFill(e.target.value));
+    }
+
+    this.populateEquipmentDatalists();
+  },
+
   openNewEquipmentModal(prefillData = null) {
     const modal = document.getElementById('modal-new-equipment');
     const overlay = document.getElementById('modal-overlay');
@@ -3814,6 +4160,8 @@ const APP = {
     const techToSelect = prefillData ? (prefillData.technicienReferent || prefillData.respTechnique || '') : '';
 
     this.populateClientAndTechSelects(clientToSelect, techToSelect);
+    this.initEquipmentAutocomplete();
+    this.populateEquipmentDatalists(clientToSelect);
 
     const codeInput = document.getElementById('form-code');
     const descInput = document.getElementById('form-desc');
@@ -3839,6 +4187,8 @@ const APP = {
       if (zoneSelect) {
         zoneSelect.value = prefillData.zoneActuelle || prefillData.zone || 'Zone réception';
       }
+      const clientName = clientToSelect || 'Référentiel TS';
+      this.showAutoFillBanner(`✨ Équipement sélectionné depuis la Base TS (${clientName}) : données pré-remplies !`);
     } else {
       if (codeInput) codeInput.value = '';
       if (descInput) descInput.value = '';
@@ -3848,11 +4198,15 @@ const APP = {
       if (motifInput) motifInput.value = '';
       const zoneSelect = document.getElementById('form-zone');
       if (zoneSelect) zoneSelect.value = 'Zone réception';
+      this.hideAutoFillBanner();
     }
 
     if (modal && overlay) {
       overlay.classList.add('active');
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
+      setTimeout(() => {
+        if (codeInput && !codeInput.value) codeInput.focus();
+      }, 50);
     }
   },
 

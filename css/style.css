@@ -2542,6 +2542,112 @@ body {
   border: 2px solid rgba(114, 193, 0, 0.4);
 }
 
+/* ==========================================================================
+   MODERN RESPONSIVE MODAL DIALOGS (3-PART ARCHITECTURE)
+   ========================================================================== */
+.modal-dialog-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 720px;
+  max-width: 94vw;
+  max-height: min(90vh, 840px);
+  background: #FFFFFF;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-modal);
+  border: 1px solid rgba(46, 80, 144, 0.2);
+  z-index: 220;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-dialog-box.modal-md {
+  width: 640px;
+}
+
+.modal-dialog-box.modal-lg {
+  width: 740px;
+}
+
+.modal-dialog-box.modal-sm {
+  width: 520px;
+}
+
+@keyframes modalPopIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.modal-dialog-header {
+  padding: 18px 24px;
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.modal-dialog-header .card-title-group h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--primary-navy);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-dialog-header .card-title-group p {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 3px 0 0 0;
+}
+
+.modal-dialog-body {
+  padding: 22px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-dialog-body::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-dialog-body::-webkit-scrollbar-track {
+  background: #F1F5F9;
+  border-radius: 4px;
+}
+.modal-dialog-body::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+.modal-dialog-body::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+.modal-dialog-footer {
+  padding: 14px 24px;
+  background: #F8FAFC;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
 /* Modal Form styling */
 .form-grid-2col {
   display: grid;
@@ -2563,6 +2669,15 @@ body {
   font-size: 12px;
   font-weight: 700;
   color: var(--primary-navy);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-group label .field-hint {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-muted);
 }
 
 .form-input, .form-select, .form-textarea {
@@ -2575,7 +2690,7 @@ body {
   color: var(--text-main);
   outline: none;
   background: #FFFFFF;
-  transition: var(--transition-fast);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 }
 
 .form-textarea {
@@ -2587,6 +2702,52 @@ body {
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   border-color: var(--ts-blue);
   box-shadow: 0 0 0 3px rgba(46, 80, 144, 0.18);
+}
+
+/* Smart Auto-fill Styling & Badges */
+.autofill-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #F0FDF4 0%, #EEF3FA 100%);
+  border: 1px solid #BBF7D0;
+  margin-bottom: 16px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.autofill-banner.active {
+  display: flex;
+}
+
+.autofill-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #166534;
+  font-weight: 600;
+}
+
+.autofill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 700;
+  background: var(--ts-green-light);
+  color: var(--ts-green-dark);
+  border: 1px solid var(--ts-green-border);
+}
+
+.form-input.autofilled, .form-select.autofilled {
+  background-color: #F0FDF4 !important;
+  border-color: #86EFAC !important;
+  box-shadow: 0 0 0 2px rgba(114, 193, 0, 0.15) !important;
 }
 
 /* ==========================================================================
@@ -2936,15 +3097,36 @@ body {
   }
 
   /* Modals on mobile */
+  .modal-dialog-box,
   #modal-new-personnel,
   #modal-edit-personnel,
   #modal-new-client,
+  #modal-edit-client,
   #modal-new-equipement-ts,
   #modal-new-equipment {
-    width: 94vw !important;
-    max-width: 94vw !important;
-    max-height: 92vh !important;
-    padding: 16px !important;
+    width: 96vw !important;
+    max-width: 96vw !important;
+    max-height: 94vh !important;
+    padding: 0 !important;
+  }
+
+  .modal-dialog-header {
+    padding: 14px 16px !important;
+  }
+
+  .modal-dialog-body {
+    padding: 14px 16px !important;
+  }
+
+  .modal-dialog-footer {
+    padding: 12px 16px !important;
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+  }
+
+  .modal-dialog-footer button {
+    width: 100% !important;
+    justify-content: center !important;
   }
 
   .form-grid-2col {

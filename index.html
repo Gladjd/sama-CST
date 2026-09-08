@@ -2031,127 +2031,149 @@
 <!-- ======================================================================
      MODAL NOUVEL ÉQUIPEMENT (AJOUT 23 COLONNES)
      ====================================================================== -->
-<div id="modal-new-equipment" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 680px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
-  <div class="card-header">
+<div id="modal-new-equipment" class="modal-dialog-box modal-lg">
+  <div class="modal-dialog-header">
     <div class="card-title-group">
+      <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-green); border-radius: 50%;"></span>
+        <span style="font-size: 11px; font-weight: 800; color: var(--ts-green-dark); text-transform: uppercase;">GMAO Atelier TS</span>
+      </div>
       <h3>Ajouter un Équipement en Atelier</h3>
-      <p>Renseignez les données d'entrée et d'affectation technique</p>
+      <p>Renseignez les données d'entrée et d'affectation technique (23 colonnes)</p>
     </div>
-    <button class="icon-btn" onclick="APP.closeNewEquipmentModal()">
+    <button class="icon-btn" type="button" onclick="APP.closeNewEquipmentModal()" title="Fermer">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
 
-  <form onsubmit="APP.saveNewEquipment(event)" class="form-grid-2col">
-    <div class="form-group">
-      <label>Code Équipement *</label>
-      <input type="text" id="form-code" class="form-input" placeholder="ex: EQ-CAT-777-11" required>
-    </div>
-    <div class="form-group">
-      <label>Description / Nom *</label>
-      <input type="text" id="form-desc" class="form-input" placeholder="ex: Tombereau Rigide 100T" required>
-    </div>
-    <div class="form-group">
-      <label>N° de Série</label>
-      <input type="text" id="form-serial" class="form-input" placeholder="ex: CAT-777D-9981">
-    </div>
-    <div class="form-group">
-      <label>Client *</label>
-      <select id="form-client" class="form-select" required>
-        <option value="">-- Sélectionner un client --</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Date d'Entrée Atelier *</label>
-      <div class="input-date-wrapper">
-        <input type="text" id="form-date-entree" class="form-input date-picker-input" placeholder="AAAA-MM-JJ" required onchange="APP.handleModalDateChange()">
-        <span class="input-date-icon" title="Ouvrir le calendrier">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-        </span>
+  <form id="form-new-equipment" onsubmit="APP.saveNewEquipment(event)" style="display: flex; flex-direction: column; flex: 1; min-height: 0; margin: 0;">
+    <div class="modal-dialog-body">
+      <!-- Auto-fill alert banner -->
+      <div id="modal-autofill-banner" class="autofill-banner">
+        <div class="autofill-banner-content">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          <span id="modal-autofill-text">Équipement identifié : champs pré-remplis automatiquement.</span>
+        </div>
+        <span class="autofill-badge">✨ Auto-rempli</span>
       </div>
-    </div>
-    <div class="form-group">
-      <label>Date de Sortie Atelier</label>
-      <div class="input-date-wrapper">
-        <input type="text" id="form-date-sortie" class="form-input date-picker-input" placeholder="AAAA-MM-JJ" onchange="APP.handleModalDateChange()">
-        <span class="input-date-icon" title="Ouvrir le calendrier">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-        </span>
+
+      <!-- Datalists for smart autocomplete -->
+      <datalist id="datalist-form-codes"></datalist>
+      <datalist id="datalist-form-descs"></datalist>
+      <datalist id="datalist-form-serials"></datalist>
+
+      <div class="form-grid-2col">
+        <div class="form-group">
+          <label for="form-code">Code Équipement * <span class="field-hint">Auto-complétion active</span></label>
+          <input type="text" id="form-code" list="datalist-form-codes" class="form-input" placeholder="ex: EQ-CAT-777-11 ou TS-..." required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="form-desc">Description / Nom * <span class="field-hint">Auto-complétion active</span></label>
+          <input type="text" id="form-desc" list="datalist-form-descs" class="form-input" placeholder="ex: Tombereau Rigide 100T" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="form-serial">N° de Série <span class="field-hint">Recherche parc</span></label>
+          <input type="text" id="form-serial" list="datalist-form-serials" class="form-input" placeholder="ex: CAT-777D-9981" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="form-client">Client *</label>
+          <select id="form-client" class="form-select" required>
+            <option value="">-- Sélectionner un client --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="form-date-entree">Date d'Entrée Atelier *</label>
+          <div class="input-date-wrapper">
+            <input type="text" id="form-date-entree" class="form-input date-picker-input" placeholder="AAAA-MM-JJ" required onchange="APP.handleModalDateChange()">
+            <span class="input-date-icon" title="Ouvrir le calendrier">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="form-date-sortie">Date de Sortie Atelier</label>
+          <div class="input-date-wrapper">
+            <input type="text" id="form-date-sortie" class="form-input date-picker-input" placeholder="AAAA-MM-JJ" onchange="APP.handleModalDateChange()">
+            <span class="input-date-icon" title="Ouvrir le calendrier">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">💡 Si renseignée, bascule automatiquement le statut en <strong>CLÔTURE</strong></div>
+        </div>
+        <div class="form-group">
+          <label for="form-entite">Entité Responsable</label>
+          <select id="form-entite" class="form-select">
+            <option value="BIOMED">BIOMED</option>
+            <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="form-statut">Statut</label>
+          <select id="form-statut" class="form-select">
+            <option value="DEPENDANT">DEPENDANT</option>
+            <option value="CLÔTURE">CLÔTURE</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="form-situation">Situation</label>
+          <select id="form-situation" class="form-select">
+            <option value="En traitement">En traitement</option>
+            <option value="En attente pièces">En attente pièces</option>
+            <option value="Devis à envoyer">Devis à envoyer</option>
+            <option value="Devis envoyé">Devis envoyé</option>
+            <option value="Back Up">Back Up</option>
+            <option value="Inventaire atelier">Inventaire atelier</option>
+            <option value="A retourner">A retourner</option>
+            <option value="Clôturé">Clôturé</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="form-etat-sortie">État de Sortie</label>
+          <select id="form-etat-sortie" class="form-select">
+            <option value="Non fonctionnel">Non fonctionnel</option>
+            <option value="Fonctionnel / Dégradé">Fonctionnel / Dégradé</option>
+            <option value="Fonctionnel">Fonctionnel</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="form-tech">Responsable Technique</label>
+          <select id="form-tech" class="form-select">
+            <option value="">-- Sélectionner un responsable technique --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="form-fournisseur">Fournisseur / Marque</label>
+          <input type="text" id="form-fournisseur" class="form-input" placeholder="ex: Caterpillar, Siemens, GE...">
+        </div>
+        <div class="form-group">
+          <label for="form-modele">Modèle</label>
+          <input type="text" id="form-modele" class="form-input" placeholder="ex: 777D Off-Highway">
+        </div>
+        <div class="form-group">
+          <label for="form-zone">Zone Actuelle Atelier</label>
+          <select id="form-zone" class="form-select">
+            <option value="Hors atelier">Hors atelier</option>
+            <option value="Attente pièces/devis">Attente pièces/devis</option>
+            <option value="Paillasse 1">Paillasse 1</option>
+            <option value="Paillasse 2">Paillasse 2</option>
+            <option value="Paillasse 3">Paillasse 3</option>
+            <option value="Paillasse 4">Paillasse 4</option>
+            <option value="Paillasse 5">Paillasse 5</option>
+            <option value="Paillasse 6">Paillasse 6</option>
+            <option value="Paillasse 7">Paillasse 7</option>
+            <option value="Zone réception" selected>Zone réception</option>
+            <option value="Zone de départ">Zone de départ</option>
+            <option value="Zone de stock">Zone de stock</option>
+          </select>
+        </div>
+        <div class="form-group col-span-2">
+          <label for="form-motif">Motif d'entrée / Symptômes de panne</label>
+          <textarea id="form-motif" class="form-textarea" placeholder="Description détaillée du dysfonctionnement constaté..."></textarea>
+        </div>
       </div>
-      <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">💡 Si renseignée, bascule automatiquement le statut en <strong>CLÔTURE</strong></div>
-    </div>
-    <div class="form-group">
-      <label>Entité Responsable</label>
-      <select id="form-entite" class="form-select">
-        <option value="BIOMED">BIOMED</option>
-        <option value="IMAG-CHIRG">IMAG-CHIRG</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Statut</label>
-      <select id="form-statut" class="form-select">
-        <option value="DEPENDANT">DEPENDANT</option>
-        <option value="CLÔTURE">CLÔTURE</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Situation</label>
-      <select id="form-situation" class="form-select">
-        <option value="En traitement">En traitement</option>
-        <option value="En attente pièces">En attente pièces</option>
-        <option value="Devis à envoyer">Devis à envoyer</option>
-        <option value="Devis envoyé">Devis envoyé</option>
-        <option value="Back Up">Back Up</option>
-        <option value="Inventaire atelier">Inventaire atelier</option>
-        <option value="A retourner">A retourner</option>
-        <option value="Clôturé">Clôturé</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>État de Sortie</label>
-      <select id="form-etat-sortie" class="form-select">
-        <option value="Non fonctionnel">Non fonctionnel</option>
-        <option value="Fonctionnel / Dégradé">Fonctionnel / Dégradé</option>
-        <option value="Fonctionnel">Fonctionnel</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Responsable Technique</label>
-      <select id="form-tech" class="form-select">
-        <option value="">-- Sélectionner un responsable technique --</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Fournisseur / Marque</label>
-      <input type="text" id="form-fournisseur" class="form-input" placeholder="ex: Caterpillar">
-    </div>
-    <div class="form-group">
-      <label>Modèle</label>
-      <input type="text" id="form-modele" class="form-input" placeholder="ex: 777D Off-Highway">
-    </div>
-    <div class="form-group">
-      <label>Zone Actuelle Atelier</label>
-      <select id="form-zone" class="form-select">
-        <option value="Hors atelier">Hors atelier</option>
-        <option value="Attente pièces/devis">Attente pièces/devis</option>
-        <option value="Paillasse 1">Paillasse 1</option>
-        <option value="Paillasse 2">Paillasse 2</option>
-        <option value="Paillasse 3">Paillasse 3</option>
-        <option value="Paillasse 4">Paillasse 4</option>
-        <option value="Paillasse 5">Paillasse 5</option>
-        <option value="Paillasse 6">Paillasse 6</option>
-        <option value="Paillasse 7">Paillasse 7</option>
-        <option value="Zone réception" selected>Zone réception</option>
-        <option value="Zone de départ">Zone de départ</option>
-        <option value="Zone de stock">Zone de stock</option>
-      </select>
-    </div>
-    <div class="form-group col-span-2">
-      <label>Motif d'entrée / Symptômes de panne</label>
-      <textarea id="form-motif" class="form-textarea" placeholder="Description détaillée du dysfonctionnement constaté..."></textarea>
     </div>
 
-    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+    <div class="modal-dialog-footer">
       <button type="button" class="btn-secondary" onclick="APP.closeNewEquipmentModal()">Annuler</button>
       <button type="submit" class="btn-primary">Enregistrer l'équipement</button>
     </div>
@@ -2161,8 +2183,8 @@
 <!-- ======================================================================
      MODAL NOUVEL ÉQUIPEMENT TS (CATALOGUE 5 COLONNES)
      ====================================================================== -->
-<div id="modal-new-equipement-ts" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 620px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
-  <div class="card-header">
+<div id="modal-new-equipement-ts" class="modal-dialog-box modal-md">
+  <div class="modal-dialog-header">
     <div class="card-title-group">
       <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
         <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-green); border-radius: 50%;"></span>
@@ -2171,35 +2193,39 @@
       <h3>Ajouter un Équipement TS au Catalogue</h3>
       <p>Enregistrement d'un modèle et d'un fournisseur dans le référentiel TS (5 colonnes)</p>
     </div>
-    <button class="icon-btn" onclick="APP.closeNewEquipementTSModal()">
+    <button class="icon-btn" type="button" onclick="APP.closeNewEquipementTSModal()" title="Fermer">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
-  <form id="form-new-equipement-ts" onsubmit="APP.saveNewEquipementTS(event)" class="form-grid-2col">
-    <div class="form-group">
-      <label>Fournisseur / Marque *</label>
-      <input type="text" id="form-ts-fournisseur" class="form-input" placeholder="ex: GE Healthcare, Siemens, Caterpillar..." required>
+  <form id="form-new-equipement-ts" onsubmit="APP.saveNewEquipementTS(event)" style="display: flex; flex-direction: column; flex: 1; min-height: 0; margin: 0;">
+    <div class="modal-dialog-body">
+      <div class="form-grid-2col">
+        <div class="form-group">
+          <label>Fournisseur / Marque *</label>
+          <input type="text" id="form-ts-fournisseur" class="form-input" placeholder="ex: GE Healthcare, Siemens, Caterpillar..." required>
+        </div>
+        <div class="form-group">
+          <label>Désignation de l'Équipement *</label>
+          <input type="text" id="form-ts-designation" class="form-input" placeholder="ex: Échographe Doppler Couleur..." required>
+        </div>
+        <div class="form-group">
+          <label>Modèle *</label>
+          <input type="text" id="form-ts-modele" class="form-input" placeholder="ex: Voluson E10, SOMATOM..." required>
+        </div>
+        <div class="form-group">
+          <label>Catégorie Équipement *</label>
+          <input type="text" id="form-ts-categorie" class="form-input" placeholder="ex: Imagerie Médicale, Bloc Opératoire..." required>
+        </div>
+        <div class="form-group col-span-2">
+          <label>Entité Responsable *</label>
+          <select id="form-ts-entite" class="form-select" required>
+            <option value="BIOMED">BIOMED</option>
+            <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Désignation de l'Équipement *</label>
-      <input type="text" id="form-ts-designation" class="form-input" placeholder="ex: Échographe Doppler Couleur..." required>
-    </div>
-    <div class="form-group">
-      <label>Modèle *</label>
-      <input type="text" id="form-ts-modele" class="form-input" placeholder="ex: Voluson E10, SOMATOM..." required>
-    </div>
-    <div class="form-group">
-      <label>Catégorie Équipement *</label>
-      <input type="text" id="form-ts-categorie" class="form-input" placeholder="ex: Imagerie Médicale, Bloc Opératoire..." required>
-    </div>
-    <div class="form-group col-span-2">
-      <label>Entité Responsable *</label>
-      <select id="form-ts-entite" class="form-select" required>
-        <option value="BIOMED">BIOMED</option>
-        <option value="IMAG-CHIRG">IMAG-CHIRG</option>
-      </select>
-    </div>
-    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+    <div class="modal-dialog-footer">
       <button type="button" class="btn-secondary" onclick="APP.closeNewEquipementTSModal()">Annuler</button>
       <button type="submit" class="btn-primary">Ajouter au Catalogue TS</button>
     </div>
@@ -2209,8 +2235,8 @@
 <!-- ======================================================================
      MODAL NOUVEAU CLIENT (9 COLONNES OFFICIELLES)
      ====================================================================== -->
-<div id="modal-new-client" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 700px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
-  <div class="card-header">
+<div id="modal-new-client" class="modal-dialog-box modal-lg">
+  <div class="modal-dialog-header">
     <div class="card-title-group">
       <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
         <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-green); border-radius: 50%;"></span>
@@ -2219,48 +2245,52 @@
       <h3>Ajouter un Nouveau Client</h3>
       <p>Création d'une fiche client avec coordonnées, localisation et identifiants fiscaux (9 colonnes)</p>
     </div>
-    <button class="icon-btn" onclick="APP.closeNewClientModal()">
+    <button class="icon-btn" type="button" onclick="APP.closeNewClientModal()" title="Fermer">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
-  <form id="form-new-client" onsubmit="APP.saveNewClient(event)" class="form-grid-2col">
-    <div class="form-group">
-      <label>Code Client (CLIENT) *</label>
-      <input type="text" id="form-clt-code" class="form-input" placeholder="ex: CLT-015" required>
+  <form id="form-new-client" onsubmit="APP.saveNewClient(event)" style="display: flex; flex-direction: column; flex: 1; min-height: 0; margin: 0;">
+    <div class="modal-dialog-body">
+      <div class="form-grid-2col">
+        <div class="form-group">
+          <label>Code Client (CLIENT) *</label>
+          <input type="text" id="form-clt-code" class="form-input" placeholder="ex: CLT-015" required>
+        </div>
+        <div class="form-group">
+          <label>Nom du Client (NOM CLIENT) *</label>
+          <input type="text" id="form-clt-nom" class="form-input" placeholder="ex: Clinique du Cap Dakar" required>
+        </div>
+        <div class="form-group col-span-2">
+          <label>Adresse Complète (ADRESSE CLIENT) *</label>
+          <input type="text" id="form-clt-adresse" class="form-input" placeholder="ex: Avenue Pasteur, Plateau, Immeuble Horizon" required>
+        </div>
+        <div class="form-group">
+          <label>Ville du Client (VILLE DU CLIENT) *</label>
+          <input type="text" id="form-clt-ville" class="form-input" placeholder="ex: Dakar, Thiès, Saint-Louis..." required>
+        </div>
+        <div class="form-group">
+          <label>Pays du Client (PAYS DU CLIENT) *</label>
+          <input type="text" id="form-clt-pays" class="form-input" value="Sénégal" required>
+        </div>
+        <div class="form-group">
+          <label>Code Postal (CODE POSTAL)</label>
+          <input type="text" id="form-clt-codepostal" class="form-input" placeholder="ex: 10000">
+        </div>
+        <div class="form-group">
+          <label>Téléphone du Client (TELEPHONE CLIENT) *</label>
+          <input type="tel" id="form-clt-telephone" class="form-input" placeholder="ex: +221 33 800 00 00" required>
+        </div>
+        <div class="form-group">
+          <label>Email du Client (MAIL DU CLIENT) *</label>
+          <input type="email" id="form-clt-mail" class="form-input" placeholder="ex: contact@client.sn" required>
+        </div>
+        <div class="form-group">
+          <label>RC / NINEA *</label>
+          <input type="text" id="form-clt-rcninea" class="form-input" placeholder="ex: SN-DKR-2024-B-8901 / 009845123" required>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Nom du Client (NOM CLIENT) *</label>
-      <input type="text" id="form-clt-nom" class="form-input" placeholder="ex: Clinique du Cap Dakar" required>
-    </div>
-    <div class="form-group col-span-2">
-      <label>Adresse Complète (ADRESSE CLIENT) *</label>
-      <input type="text" id="form-clt-adresse" class="form-input" placeholder="ex: Avenue Pasteur, Plateau, Immeuble Horizon" required>
-    </div>
-    <div class="form-group">
-      <label>Ville du Client (VILLE DU CLIENT) *</label>
-      <input type="text" id="form-clt-ville" class="form-input" placeholder="ex: Dakar, Thiès, Saint-Louis..." required>
-    </div>
-    <div class="form-group">
-      <label>Pays du Client (PAYS DU CLIENT) *</label>
-      <input type="text" id="form-clt-pays" class="form-input" value="Sénégal" required>
-    </div>
-    <div class="form-group">
-      <label>Code Postal (CODE POSTAL)</label>
-      <input type="text" id="form-clt-codepostal" class="form-input" placeholder="ex: 10000">
-    </div>
-    <div class="form-group">
-      <label>Téléphone du Client (TELEPHONE CLIENT) *</label>
-      <input type="tel" id="form-clt-telephone" class="form-input" placeholder="ex: +221 33 800 00 00" required>
-    </div>
-    <div class="form-group">
-      <label>Email du Client (MAIL DU CLIENT) *</label>
-      <input type="email" id="form-clt-mail" class="form-input" placeholder="ex: contact@client.sn" required>
-    </div>
-    <div class="form-group">
-      <label>RC / NINEA *</label>
-      <input type="text" id="form-clt-rcninea" class="form-input" placeholder="ex: SN-DKR-2024-B-8901 / 009845123" required>
-    </div>
-    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+    <div class="modal-dialog-footer">
       <button type="button" class="btn-secondary" onclick="APP.closeNewClientModal()">Annuler</button>
       <button type="submit" class="btn-primary">Enregistrer le Client</button>
     </div>
@@ -2270,8 +2300,8 @@
 <!-- ======================================================================
      MODAL MODIFICATION CLIENT (9 COLONNES OFFICIELLES)
      ====================================================================== -->
-<div id="modal-edit-client" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 700px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
-  <div class="card-header">
+<div id="modal-edit-client" class="modal-dialog-box modal-lg">
+  <div class="modal-dialog-header">
     <div class="card-title-group">
       <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
         <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-blue); border-radius: 50%;"></span>
@@ -2280,49 +2310,53 @@
       <h3>Modifier la Fiche Client</h3>
       <p>Mettre à jour les coordonnées, la localisation et les identifiants fiscaux du compte client.</p>
     </div>
-    <button class="icon-btn" onclick="APP.closeEditClientModal()">
+    <button class="icon-btn" type="button" onclick="APP.closeEditClientModal()" title="Fermer">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
-  <form id="form-edit-client" onsubmit="APP.saveEditClient(event)" class="form-grid-2col">
+  <form id="form-edit-client" onsubmit="APP.saveEditClient(event)" style="display: flex; flex-direction: column; flex: 1; min-height: 0; margin: 0;">
     <input type="hidden" id="edit-clt-index">
-    <div class="form-group">
-      <label>Code Client (CLIENT) *</label>
-      <input type="text" id="edit-clt-code" class="form-input" required>
+    <div class="modal-dialog-body">
+      <div class="form-grid-2col">
+        <div class="form-group">
+          <label>Code Client (CLIENT) *</label>
+          <input type="text" id="edit-clt-code" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label>Nom du Client (NOM CLIENT) *</label>
+          <input type="text" id="edit-clt-nom" class="form-input" required>
+        </div>
+        <div class="form-group col-span-2">
+          <label>Adresse Complète (ADRESSE CLIENT) *</label>
+          <input type="text" id="edit-clt-adresse" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label>Ville du Client (VILLE DU CLIENT) *</label>
+          <input type="text" id="edit-clt-ville" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label>Pays du Client (PAYS DU CLIENT) *</label>
+          <input type="text" id="edit-clt-pays" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label>Code Postal (CODE POSTAL)</label>
+          <input type="text" id="edit-clt-codepostal" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Téléphone du Client (TELEPHONE CLIENT) *</label>
+          <input type="tel" id="edit-clt-telephone" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label>Email du Client (MAIL DU CLIENT) *</label>
+          <input type="email" id="edit-clt-mail" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label>RC / NINEA *</label>
+          <input type="text" id="edit-clt-rcninea" class="form-input" required>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Nom du Client (NOM CLIENT) *</label>
-      <input type="text" id="edit-clt-nom" class="form-input" required>
-    </div>
-    <div class="form-group col-span-2">
-      <label>Adresse Complète (ADRESSE CLIENT) *</label>
-      <input type="text" id="edit-clt-adresse" class="form-input" required>
-    </div>
-    <div class="form-group">
-      <label>Ville du Client (VILLE DU CLIENT) *</label>
-      <input type="text" id="edit-clt-ville" class="form-input" required>
-    </div>
-    <div class="form-group">
-      <label>Pays du Client (PAYS DU CLIENT) *</label>
-      <input type="text" id="edit-clt-pays" class="form-input" required>
-    </div>
-    <div class="form-group">
-      <label>Code Postal (CODE POSTAL)</label>
-      <input type="text" id="edit-clt-codepostal" class="form-input">
-    </div>
-    <div class="form-group">
-      <label>Téléphone du Client (TELEPHONE CLIENT) *</label>
-      <input type="tel" id="edit-clt-telephone" class="form-input" required>
-    </div>
-    <div class="form-group">
-      <label>Email du Client (MAIL DU CLIENT) *</label>
-      <input type="email" id="edit-clt-mail" class="form-input" required>
-    </div>
-    <div class="form-group">
-      <label>RC / NINEA *</label>
-      <input type="text" id="edit-clt-rcninea" class="form-input" required>
-    </div>
-    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+    <div class="modal-dialog-footer">
       <button type="button" class="btn-secondary" onclick="APP.closeEditClientModal()">Annuler</button>
       <button type="submit" class="btn-primary">Mettre à Jour le Client</button>
     </div>
@@ -2332,8 +2366,8 @@
 <!-- ======================================================================
      MODAL NOUVEL AGENT PERSONNEL CST
      ====================================================================== -->
-<div id="modal-new-personnel" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
-  <div class="card-header">
+<div id="modal-new-personnel" class="modal-dialog-box modal-md">
+  <div class="modal-dialog-header">
     <div class="card-title-group">
       <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
         <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-green); border-radius: 50%;"></span>
@@ -2342,39 +2376,43 @@
       <h3>Ajouter un Agent / Technicien CST</h3>
       <p>Renseignez l'identité de l'agent, son adresse email professionnelle et son pôle d'affectation.</p>
     </div>
-    <button class="icon-btn" onclick="APP.closeNewPersonnelModal()">
+    <button class="icon-btn" type="button" onclick="APP.closeNewPersonnelModal()" title="Fermer">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
-  <form id="form-new-personnel" onsubmit="APP.saveNewPersonnel(event)" class="form-grid-2col">
-    <div class="form-group col-span-2">
-      <label>Nom & Prénom de l'Agent (AGENT) *</label>
-      <input type="text" id="form-prs-agent" class="form-input" placeholder="ex: Ousmane Fall, Fatou Kiné Ndiaye..." required>
+  <form id="form-new-personnel" onsubmit="APP.saveNewPersonnel(event)" style="display: flex; flex-direction: column; flex: 1; min-height: 0; margin: 0;">
+    <div class="modal-dialog-body">
+      <div class="form-grid-2col">
+        <div class="form-group col-span-2">
+          <label>Nom & Prénom de l'Agent (AGENT) *</label>
+          <input type="text" id="form-prs-agent" class="form-input" placeholder="ex: Ousmane Fall, Fatou Kiné Ndiaye..." required>
+        </div>
+        <div class="form-group col-span-2">
+          <label>Adresse Email Professionnelle (EMAIL) *</label>
+          <input type="email" id="form-prs-email" class="form-input" placeholder="ex: prenom.nom@technologies-services.sn" required>
+        </div>
+        <div class="form-group col-span-2">
+          <label>Pôle d'Affectation (POLE) *</label>
+          <select id="form-prs-pole" class="form-select" required>
+            <option value="BIOMED">BIOMED</option>
+            <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+            <option value="RÉCEPTION & ATELIER">RÉCEPTION & ATELIER</option>
+            <option value="BANC D'ESSAI & CONTRÔLE">BANC D'ESSAI & CONTRÔLE</option>
+            <option value="QUALITÉ & MÉTROLOGIE">QUALITÉ & MÉTROLOGIE</option>
+            <option value="SUPPORT & SAV">SUPPORT & SAV</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Spécialité / Expertise</label>
+          <input type="text" id="form-prs-specialite" class="form-input" placeholder="ex: Échographie & IRM, Électricité...">
+        </div>
+        <div class="form-group">
+          <label>Téléphone Professionnel</label>
+          <input type="tel" id="form-prs-telephone" class="form-input" placeholder="ex: +221 77 000 00 00">
+        </div>
+      </div>
     </div>
-    <div class="form-group col-span-2">
-      <label>Adresse Email Professionnelle (EMAIL) *</label>
-      <input type="email" id="form-prs-email" class="form-input" placeholder="ex: prenom.nom@technologies-services.sn" required>
-    </div>
-    <div class="form-group col-span-2">
-      <label>Pôle d'Affectation (POLE) *</label>
-      <select id="form-prs-pole" class="form-select" required>
-        <option value="BIOMED">BIOMED</option>
-        <option value="IMAG-CHIRG">IMAG-CHIRG</option>
-        <option value="RÉCEPTION & ATELIER">RÉCEPTION & ATELIER</option>
-        <option value="BANC D'ESSAI & CONTRÔLE">BANC D'ESSAI & CONTRÔLE</option>
-        <option value="QUALITÉ & MÉTROLOGIE">QUALITÉ & MÉTROLOGIE</option>
-        <option value="SUPPORT & SAV">SUPPORT & SAV</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Spécialité / Expertise</label>
-      <input type="text" id="form-prs-specialite" class="form-input" placeholder="ex: Échographie & IRM, Électricité...">
-    </div>
-    <div class="form-group">
-      <label>Téléphone Professionnel</label>
-      <input type="tel" id="form-prs-telephone" class="form-input" placeholder="ex: +221 77 000 00 00">
-    </div>
-    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+    <div class="modal-dialog-footer">
       <button type="button" class="btn-secondary" onclick="APP.closeNewPersonnelModal()">Annuler</button>
       <button type="submit" class="btn-primary">Enregistrer l'Agent</button>
     </div>
@@ -2384,8 +2422,8 @@
 <!-- ======================================================================
      MODAL MODIFICATION AGENT PERSONNEL CST
      ====================================================================== -->
-<div id="modal-edit-personnel" class="card-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; max-width: 95vw; z-index: 220; max-height: 90vh; overflow-y: auto;">
-  <div class="card-header">
+<div id="modal-edit-personnel" class="modal-dialog-box modal-md">
+  <div class="modal-dialog-header">
     <div class="card-title-group">
       <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px;">
         <span style="display: inline-block; width: 8px; height: 8px; background: var(--ts-blue); border-radius: 50%;"></span>
@@ -2394,39 +2432,44 @@
       <h3>Modifier la Fiche Agent</h3>
       <p>Mettre à jour les coordonnées et le pôle d'affectation de l'agent.</p>
     </div>
-    <button class="icon-btn" onclick="APP.closeEditPersonnelModal()">
+    <button class="icon-btn" type="button" onclick="APP.closeEditPersonnelModal()" title="Fermer">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
-  <form id="form-edit-personnel" onsubmit="APP.saveEditPersonnel(event)" class="form-grid-2col">
-    <div class="form-group col-span-2">
-      <label>Nom & Prénom de l'Agent (AGENT) *</label>
-      <input type="text" id="edit-prs-agent" class="form-input" required>
+  <form id="form-edit-personnel" onsubmit="APP.saveEditPersonnel(event)" style="display: flex; flex-direction: column; flex: 1; min-height: 0; margin: 0;">
+    <input type="hidden" id="edit-prs-agent-orig">
+    <div class="modal-dialog-body">
+      <div class="form-grid-2col">
+        <div class="form-group col-span-2">
+          <label>Nom & Prénom de l'Agent (AGENT) *</label>
+          <input type="text" id="edit-prs-agent" class="form-input" required>
+        </div>
+        <div class="form-group col-span-2">
+          <label>Adresse Email Professionnelle (EMAIL) *</label>
+          <input type="email" id="edit-prs-email" class="form-input" required>
+        </div>
+        <div class="form-group col-span-2">
+          <label>Pôle d'Affectation (POLE) *</label>
+          <select id="edit-prs-pole" class="form-select" required>
+            <option value="BIOMED">BIOMED</option>
+            <option value="IMAG-CHIRG">IMAG-CHIRG</option>
+            <option value="RÉCEPTION & ATELIER">RÉCEPTION & ATELIER</option>
+            <option value="BANC D'ESSAI & CONTRÔLE">BANC D'ESSAI & CONTRÔLE</option>
+            <option value="QUALITÉ & MÉTROLOGIE">QUALITÉ & MÉTROLOGIE</option>
+            <option value="SUPPORT & SAV">SUPPORT & SAV</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Spécialité / Expertise</label>
+          <input type="text" id="edit-prs-specialite" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Téléphone Professionnel</label>
+          <input type="tel" id="edit-prs-telephone" class="form-input">
+        </div>
+      </div>
     </div>
-    <div class="form-group col-span-2">
-      <label>Adresse Email Professionnelle (EMAIL) *</label>
-      <input type="email" id="edit-prs-email" class="form-input" required>
-    </div>
-    <div class="form-group col-span-2">
-      <label>Pôle d'Affectation (POLE) *</label>
-      <select id="edit-prs-pole" class="form-select" required>
-        <option value="BIOMED">BIOMED</option>
-        <option value="IMAG-CHIRG">IMAG-CHIRG</option>
-        <option value="RÉCEPTION & ATELIER">RÉCEPTION & ATELIER</option>
-        <option value="BANC D'ESSAI & CONTRÔLE">BANC D'ESSAI & CONTRÔLE</option>
-        <option value="QUALITÉ & MÉTROLOGIE">QUALITÉ & MÉTROLOGIE</option>
-        <option value="SUPPORT & SAV">SUPPORT & SAV</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Spécialité / Expertise</label>
-      <input type="text" id="edit-prs-specialite" class="form-input">
-    </div>
-    <div class="form-group">
-      <label>Téléphone Professionnel</label>
-      <input type="tel" id="edit-prs-telephone" class="form-input">
-    </div>
-    <div class="form-group col-span-2" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+    <div class="modal-dialog-footer">
       <button type="button" class="btn-secondary" onclick="APP.closeEditPersonnelModal()">Annuler</button>
       <button type="submit" class="btn-primary">Enregistrer les Modifications</button>
     </div>
