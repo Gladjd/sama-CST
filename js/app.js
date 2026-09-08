@@ -49,9 +49,20 @@ const APP = {
   baseEqEntiteFilter: 'all',
   baseEqEtatFilter: 'all',
   baseEqCurrentPage: 1,
-  baseEqPageSize: 48,
-
   init() {
+    // 0. Restauration locale instantanée des équipements d'atelier
+    try {
+      const savedAtelier = localStorage.getItem('sama_cst_equipements_atelier');
+      if (savedAtelier) {
+        const parsed = JSON.parse(savedAtelier);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          SAMA_DATA.equipementsAtelier = parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('LocalStorage restore notice:', e);
+    }
+
     this.bindEvents();
     this.renderDashboardKPIs();
     this.renderEquipementTable();
@@ -294,14 +305,16 @@ const APP = {
     // Menu Mobile Toggle
     if (mobileBtn && sidebar) {
       mobileBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('mobile-open');
+        const isOpen = sidebar.classList.toggle('mobile-open');
         if (overlay) {
-          if (sidebar.classList.contains('mobile-open')) {
+          if (isOpen) {
             overlay.classList.add('active');
             overlay.setAttribute('data-mobile-menu', 'true');
+            document.body.style.overflow = 'hidden';
           } else {
             overlay.classList.remove('active');
             overlay.removeAttribute('data-mobile-menu');
+            document.body.style.overflow = '';
           }
         }
       });
@@ -317,13 +330,7 @@ const APP = {
         link.classList.add('active');
 
         // Fermer la sidebar sur mobile
-        if (sidebar && sidebar.classList.contains('mobile-open')) {
-          sidebar.classList.remove('mobile-open');
-          if (overlay) {
-            overlay.classList.remove('active');
-            overlay.removeAttribute('data-mobile-menu');
-          }
-        }
+        this.closeMobileMenu();
 
         this.switchModule(target);
       });
@@ -342,14 +349,24 @@ const APP = {
       });
     });
 
-    // Recherche globale (Debounced)
+    // Recherche globale unifiée et contextuelle (Debounced)
     const globalSearch = document.getElementById('global-search-input');
     if (globalSearch) {
       globalSearch.addEventListener('input', window.debounce((e) => {
-        this.tableSearchQuery = e.target.value.toLowerCase();
-        this.renderEquipementTable();
+        this.handleGlobalSearch(e.target.value);
       }, 250));
     }
+
+    // Raccourci clavier universel ⌘K / Ctrl+K
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        if (globalSearch) {
+          globalSearch.focus();
+          globalSearch.select();
+        }
+      }
+    });
 
     // Filtres Entité Global (Topbar)
     const globalEntityFilter = document.getElementById('global-entity-filter');
@@ -540,6 +557,62 @@ const APP = {
     }
   },
 
+  // Moteur de recherche globale unifié et contextuel
+  handleGlobalSearch(query) {
+    const q = (query || '').toLowerCase().trim();
+    this.currentSearchQuery = q;
+
+    switch (this.currentModule) {
+      case 'atelier-equipements':
+        this.tableSearchQuery = q;
+        this.renderEquipementTable();
+        break;
+
+      case 'equipements-ts':
+        this.tsSearchQuery = q;
+        this.tsCurrentPage = 1;
+        const searchTSInput = document.getElementById('search-equipements-ts');
+        if (searchTSInput && searchTSInput.value !== query) searchTSInput.value = query;
+        this.renderEquipementsTS();
+        break;
+
+      case 'base-ts':
+        if (this.currentBaseTSTab === 'sites') {
+          this.siteSearchQuery = q;
+          this.renderSitesTS();
+        } else {
+          this.baseEqSearchQuery = q;
+          this.baseEqCurrentPage = 1;
+          const searchParcInput = document.getElementById('search-base-equipements');
+          if (searchParcInput && searchParcInput.value !== query) searchParcInput.value = query;
+          this.renderParcEquipementsTS();
+        }
+        break;
+
+      case 'clients':
+        this.clientSearchQuery = q;
+        this.clientCurrentPage = 1;
+        const searchClientInput = document.getElementById('search-clients');
+        if (searchClientInput && searchClientInput.value !== query) searchClientInput.value = query;
+        this.renderClients();
+        break;
+
+      case 'personnel-cst':
+        this.personnelSearchQuery = q;
+        this.personnelCurrentPage = 1;
+        const searchPersonnelInput = document.getElementById('search-personnel');
+        if (searchPersonnelInput && searchPersonnelInput.value !== query) searchPersonnelInput.value = query;
+        this.renderPersonnel();
+        break;
+
+      case 'dashboard':
+      default:
+        this.tableSearchQuery = q;
+        this.renderEquipementTable();
+        break;
+    }
+  },
+
   // Changement de module principal (Dashboard, Atelier, Catalogue TS, Clients, Personnel CST, Base TS, Showcase)
   switchModule(moduleId) {
     this.currentModule = moduleId;
@@ -666,15 +739,16 @@ const APP = {
 
     // 1. Filtrage Recherche plein texte
     if (this.tableSearchQuery) {
-      const q = this.tableSearchQuery;
+      const q = String(this.tableSearchQuery).toLowerCase().trim();
       items = items.filter(item => 
-        item.codeEquipement.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q) ||
-        item.numSerie.toLowerCase().includes(q) ||
-        item.client.toLowerCase().includes(q) ||
-        item.responsableTechnique.toLowerCase().includes(q) ||
-        item.zoneActuelle.toLowerCase().includes(q) ||
-        item.motif.toLowerCase().includes(q)
+        (item.codeEquipement && String(item.codeEquipement).toLowerCase().includes(q)) ||
+        (item.description && String(item.description).toLowerCase().includes(q)) ||
+        (item.numSerie && String(item.numSerie).toLowerCase().includes(q)) ||
+        (item.client && String(item.client).toLowerCase().includes(q)) ||
+        (item.responsableReception && String(item.responsableReception).toLowerCase().includes(q)) ||
+        (item.responsableTechnique && String(item.responsableTechnique).toLowerCase().includes(q)) ||
+        (item.zoneActuelle && String(item.zoneActuelle).toLowerCase().includes(q)) ||
+        (item.motif && String(item.motif).toLowerCase().includes(q))
       );
     }
 
@@ -1048,12 +1122,42 @@ const APP = {
     setVal('edit-fv-situation', eq.situation || 'En traitement');
     setVal('edit-fv-etat-sortie', eq.etatSortie || 'Non fonctionnel');
     setVal('edit-fv-zone', eq.zoneActuelle || 'Zone réception');
-    setVal('edit-fv-tech', eq.responsableTechnique || '');
-    setVal('edit-fv-reception', eq.responsableReception || 'Glad MOUKOUIRI');
     setVal('edit-fv-delais-pec', eq.delaisPriseEnCharge || '');
     setVal('edit-fv-delais-frb', eq.delaisFRB || '');
     setVal('edit-fv-cout', eq.coutEstime || '');
     setVal('edit-fv-motif', eq.motif || '');
+
+    // Populate dynamic personnel options for Tech & Réception
+    const editTechSelect = document.getElementById('edit-fv-tech');
+    const editReceptionSelect = document.getElementById('edit-fv-reception');
+    const personnelNames = [
+      ...new Set([
+        ...(SAMA_DATA.personnelCST || []).map(p => p.agent || p.nomAgent || p.nom),
+        eq.responsableTechnique,
+        eq.responsableReception,
+        "Glad MOUKOUIRI",
+        "Ousmane Fall",
+        "Momar CISSE",
+        "Arona KA",
+        "Abdoulaye SIDIBE",
+        "Ibrahima Gueye",
+        "Abdoulaye Sow",
+        "Moussa Diakhaté",
+        "Modou Faye"
+      ])
+    ].filter(Boolean).sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
+
+    if (editTechSelect) {
+      editTechSelect.innerHTML = `<option value="">-- Sélectionner un responsable technique --</option>` +
+        personnelNames.map(p => `<option value="${p.replace(/"/g, '&quot;')}" ${p.toLowerCase() === (eq.responsableTechnique || '').toLowerCase() ? 'selected' : ''}>${p}</option>`).join('');
+      if (eq.responsableTechnique) editTechSelect.value = eq.responsableTechnique;
+    }
+
+    if (editReceptionSelect) {
+      editReceptionSelect.innerHTML = `<option value="">-- Sélectionner un responsable réception --</option>` +
+        personnelNames.map(p => `<option value="${p.replace(/"/g, '&quot;')}" ${p.toLowerCase() === (eq.responsableReception || 'Glad MOUKOUIRI').toLowerCase() ? 'selected' : ''}>${p}</option>`).join('');
+      if (eq.responsableReception) editReceptionSelect.value = eq.responsableReception;
+    }
 
     // Synchronisation des datepickers
     this.initDatePickers();
@@ -1521,7 +1625,11 @@ const APP = {
       window.SAMA_CHARTS.initAllDashboardCharts();
     }
 
-    // Synchronisation Supabase en arrière-plan
+    // Synchronisation Supabase & Sauvegarde locale
+    try {
+      localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
+    } catch (err) {}
+
     if (window.supabaseSync && typeof window.supabaseSync.syncSaveEquipementAtelier === 'function') {
       window.supabaseSync.syncSaveEquipementAtelier(eq);
       window.supabaseSync.syncReplaceAllTimelineSteps(eq.codeEquipement, eq.timeline);
@@ -1878,12 +1986,13 @@ const APP = {
     }
 
     paginationEl.innerHTML = `
-      <div style="font-size: 12.5px; color: #64748B;">
+      <div style="font-size: 12.5px; color: #64748B; font-weight: 500;">
         Affichage de <strong>${startIdx.toLocaleString('fr-FR')}</strong> à <strong>${endIdx.toLocaleString('fr-FR')}</strong> sur <strong>${totalItems.toLocaleString('fr-FR')}</strong> équipements
       </div>
       <div class="pagination-controls">
         <button class="page-btn" onclick="APP.setBaseEqPage(${cur - 1})" ${cur === 1 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} title="Page précédente">‹</button>
-        ${pagesHtml}
+        <span class="pagination-pages-desktop">${pagesHtml}</span>
+        <span class="pagination-pages-mobile" style="display:none; font-size:12px; font-weight:700; color:var(--ts-blue); padding:0 8px;">Page ${cur} / ${totalPages}</span>
         <button class="page-btn" onclick="APP.setBaseEqPage(${cur + 1})" ${cur === totalPages ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} title="Page suivante">›</button>
       </div>
     `;
@@ -3399,6 +3508,10 @@ const APP = {
         window.supabaseSync.syncDeleteEquipementAtelier(codeEquipement);
       }
       SAMA_DATA.equipementsAtelier.splice(idx, 1);
+      try {
+        localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
+      } catch (err) {}
+
       this.renderEquipementTable();
       this.renderDashboardKPIs();
       this.renderCriticiteTable();
@@ -3842,9 +3955,10 @@ const APP = {
   // ------------------------------------------------------------------------
   // MODAL NOUVEL ÉQUIPEMENT & EXPORT
   // ------------------------------------------------------------------------
-  populateClientAndTechSelects(selectedClient = '', selectedTech = '') {
+  populateClientAndTechSelects(selectedClient = '', selectedTech = '', selectedReception = '') {
     const clientSelect = document.getElementById('form-client');
     const techSelect = document.getElementById('form-tech');
+    const receptionSelect = document.getElementById('form-resp-reception');
 
     // 1. Clients
     if (clientSelect) {
@@ -3891,33 +4005,68 @@ const APP = {
       }
     }
 
+    // Extraction et déduplication du personnel CST
+    const personnelMap = new Map();
+    (SAMA_DATA.personnelCST || []).forEach(p => {
+      const nom = (p.nomAgent || p.agent || p.nom || '').trim();
+      const pole = p.pole || 'CST';
+      if (nom && nom !== '-') {
+        personnelMap.set(nom.toLowerCase(), { nom, pole });
+      }
+    });
+
+    // Fallbacks si la liste est vide
+    if (personnelMap.size === 0) {
+      const fallbacks = [
+        { nom: "Glad MOUKOUIRI", pole: "RÉCEPTION & ATELIER" },
+        { nom: "Ousmane Fall", pole: "BIOMED" },
+        { nom: "Momar CISSE", pole: "IMAG-CHIRG" },
+        { nom: "Arona KA", pole: "BANC D'ESSAI & CONTRÔLE" },
+        { nom: "Abdoulaye SIDIBE", pole: "QUALITÉ & MÉTROLOGIE" },
+        { nom: "Ibrahima Gueye", pole: "BIOMED" },
+        { nom: "Abdoulaye Sow", pole: "IMAG-CHIRG" },
+        { nom: "Moussa Diakhaté", pole: "SUPPORT & SAV" },
+        { nom: "Modou Faye", pole: "RÉCEPTION & ATELIER" }
+      ];
+      fallbacks.forEach(f => personnelMap.set(f.nom.toLowerCase(), f));
+    }
+
+    const sortedPersonnel = Array.from(personnelMap.values()).sort((a, b) => a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' }));
+
     // 2. Techniciens
     if (techSelect) {
-      const techMap = new Map();
-
-      (SAMA_DATA.personnelCST || []).forEach(p => {
-        const nom = (p.nomAgent || p.agent || p.nom || '').trim();
-        const pole = p.pole || 'CST';
-        if (nom && nom !== '-') {
-          techMap.set(nom.toLowerCase(), { nom, pole });
-        }
-      });
-
       if (selectedTech && selectedTech.trim() !== '') {
         const trimTech = selectedTech.trim();
-        if (!techMap.has(trimTech.toLowerCase())) {
-          techMap.set(trimTech.toLowerCase(), { nom: trimTech, pole: 'Technicien Référent' });
+        if (!personnelMap.has(trimTech.toLowerCase())) {
+          personnelMap.set(trimTech.toLowerCase(), { nom: trimTech, pole: 'Technicien Référent' });
         }
       }
 
-      const sortedTechs = Array.from(techMap.values()).sort((a, b) => a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' }));
-
       techSelect.innerHTML = `<option value="">-- Sélectionner un responsable technique --</option>` +
-        sortedTechs.map(t => `<option value="${t.nom.replace(/"/g, '&quot;')}">${t.nom} (${t.pole})</option>`).join('');
+        sortedPersonnel.map(t => `<option value="${t.nom.replace(/"/g, '&quot;')}">${t.nom} (${t.pole})</option>`).join('');
 
       if (selectedTech && selectedTech.trim() !== '') {
-        const match = sortedTechs.find(t => t.nom.toLowerCase() === selectedTech.trim().toLowerCase()) || { nom: selectedTech.trim() };
+        const match = sortedPersonnel.find(t => t.nom.toLowerCase() === selectedTech.trim().toLowerCase()) || { nom: selectedTech.trim() };
         techSelect.value = match.nom;
+      }
+    }
+
+    // 3. Responsable Réception (Atelier)
+    if (receptionSelect) {
+      const defaultReception = selectedReception || 'Glad MOUKOUIRI';
+      if (defaultReception && defaultReception.trim() !== '') {
+        const trimRec = defaultReception.trim();
+        if (!personnelMap.has(trimRec.toLowerCase())) {
+          personnelMap.set(trimRec.toLowerCase(), { nom: trimRec, pole: 'Réception Atelier' });
+        }
+      }
+
+      receptionSelect.innerHTML = `<option value="">-- Sélectionner un responsable réception --</option>` +
+        sortedPersonnel.map(r => `<option value="${r.nom.replace(/"/g, '&quot;')}">${r.nom} (${r.pole})</option>`).join('');
+
+      const matchRec = sortedPersonnel.find(r => r.nom.toLowerCase() === defaultReception.trim().toLowerCase()) || sortedPersonnel[0];
+      if (matchRec) {
+        receptionSelect.value = matchRec.nom;
       }
     }
   },
@@ -4280,8 +4429,9 @@ const APP = {
 
     const clientToSelect = prefillData ? (prefillData.client || prefillData.site || '') : '';
     const techToSelect = prefillData ? (prefillData.technicienReferent || prefillData.respTechnique || '') : '';
+    const receptionToSelect = prefillData ? (prefillData.responsableReception || prefillData.respReception || '') : '';
 
-    this.populateClientAndTechSelects(clientToSelect, techToSelect);
+    this.populateClientAndTechSelects(clientToSelect, techToSelect, receptionToSelect);
     this.initEquipmentAutocomplete();
     this.populateEquipmentDatalists(clientToSelect);
 
@@ -4349,27 +4499,41 @@ const APP = {
     }
   },
 
+  closeMobileMenu() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('modal-overlay');
+    if (sidebar && sidebar.classList.contains('mobile-open')) {
+      sidebar.classList.remove('mobile-open');
+    }
+    if (overlay && overlay.getAttribute('data-mobile-menu') === 'true') {
+      overlay.classList.remove('active');
+      overlay.removeAttribute('data-mobile-menu');
+    }
+    document.body.style.overflow = '';
+  },
+
   closeNewEquipmentModal() {
     const modal = document.getElementById('modal-new-equipment');
     const overlay = document.getElementById('modal-overlay');
     if (modal) modal.style.display = 'none';
-    if (overlay) overlay.classList.remove('active');
+    if (overlay && overlay.getAttribute('data-mobile-menu') !== 'true') overlay.classList.remove('active');
   },
 
   saveNewEquipment(e) {
     if (e) e.preventDefault();
-    const code = document.getElementById('form-code').value;
-    const desc = document.getElementById('form-desc').value;
-    const client = document.getElementById('form-client').value;
-    const serial = document.getElementById('form-serial').value;
-    const tech = document.getElementById('form-tech').value;
-    const zone = document.getElementById('form-zone').value;
-    const motif = document.getElementById('form-motif').value;
-    const entite = document.getElementById('form-entite').value;
+    const code = document.getElementById('form-code')?.value?.trim();
+    const desc = document.getElementById('form-desc')?.value?.trim();
+    const client = document.getElementById('form-client')?.value;
+    const serial = document.getElementById('form-serial')?.value?.trim() || "N/A";
+    const respReception = document.getElementById('form-resp-reception')?.value || "Glad MOUKOUIRI";
+    const tech = document.getElementById('form-tech')?.value || "Ousmane Fall";
+    const zone = document.getElementById('form-zone')?.value || "Zone réception";
+    const motif = document.getElementById('form-motif')?.value?.trim();
+    const entite = document.getElementById('form-entite')?.value || "BIOMED";
     const dateEntree = document.getElementById('form-date-entree')?.value || new Date().toISOString().split('T')[0];
     const dateSortieVal = document.getElementById('form-date-sortie')?.value;
-    const fournisseur = document.getElementById('form-fournisseur').value;
-    const modele = document.getElementById('form-modele').value;
+    const fournisseur = document.getElementById('form-fournisseur')?.value?.trim() || "Technologies Services";
+    const modele = document.getElementById('form-modele')?.value?.trim() || "Standard";
     const formSituation = document.getElementById('form-situation')?.value;
     const formEtatSortie = document.getElementById('form-etat-sortie')?.value;
 
@@ -4389,11 +4553,11 @@ const APP = {
     const newEquip = {
       codeEquipement: code,
       description: desc,
-      numSerie: serial || "N/A",
+      numSerie: serial,
       client: client,
       dateEntree: dateEntree,
       dateSortie: dateSortie,
-      responsableReception: "Glad MOUKOUIRI",
+      responsableReception: respReception,
       responsableTechnique: tech,
       zoneActuelle: zone,
       motif: motif || "Entrée atelier pour révision",
@@ -4402,22 +4566,27 @@ const APP = {
       etatSortie: etatSortie,
       nombreJoursAtelier: nbJours,
       dureeAtelier: dureeAtelier,
-      entite: entite || "BIOMED",
-      fournisseur: fournisseur || "Caterpillar",
-      modele: modele || "Standard HD",
+      entite: entite,
+      fournisseur: fournisseur,
+      modele: modele,
       datePriseEnCharge: new Date().toISOString().replace('T', ' ').substring(0, 16),
       delaisPriseEnCharge: "0h 30m",
       dateFRB: "-",
       delaisFRB: "En attente",
       criticite: "B (Majeur)",
-      coutEstime: "1 500 000 FCFA",
+      coutEstime: "0 FCFA",
       timeline: [
-        { date: new Date().toISOString().replace('T', ' ').substring(0, 16), event: "Réception & Enregistrement atelier", agent: "Modou Faye", status: "done" }
+        { date: new Date().toISOString().replace('T', ' ').substring(0, 16), event: "Réception & Enregistrement atelier", agent: respReception, status: "done" }
       ],
       pieces: []
     };
 
     SAMA_DATA.equipementsAtelier.unshift(newEquip);
+
+    // Sauvegarde locale instantanée
+    try {
+      localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
+    } catch (err) {}
 
     // Synchronisation Supabase
     if (window.supabaseSync && typeof window.supabaseSync.syncSaveEquipementAtelier === 'function') {
@@ -4426,6 +4595,17 @@ const APP = {
     }
 
     this.renderEquipementTable();
+    this.renderDashboardKPIs();
+    this.renderCriticiteTable();
+    this.renderRedAlerts();
+    this.renderEntityAvailability();
+    this.renderTop5List();
+    this.renderBlocages4Axes();
+    this.renderTechnicians();
+    if (window.SAMA_CHARTS && typeof window.SAMA_CHARTS.initAllDashboardCharts === 'function') {
+      window.SAMA_CHARTS.initAllDashboardCharts();
+    }
+
     this.closeNewEquipmentModal();
     this.showToast(`Équipement ${code} enregistré (${statut}) !`, "success");
   },
