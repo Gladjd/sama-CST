@@ -2789,12 +2789,23 @@ body {
   cursor: pointer;
   flex-shrink: 0;
   transition: var(--transition-fast);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.mobile-menu-btn svg {
+  pointer-events: none;
 }
 
 .mobile-menu-btn:hover {
   background: var(--ts-blue-light);
   border-color: var(--ts-blue-border);
   color: var(--ts-blue);
+}
+
+.mobile-menu-btn:active {
+  transform: scale(0.92);
 }
 
 .sidebar-close-btn {
@@ -2810,11 +2821,22 @@ body {
   cursor: pointer;
   flex-shrink: 0;
   transition: var(--transition-fast);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sidebar-close-btn svg {
+  pointer-events: none;
 }
 
 .sidebar-close-btn:hover {
   background: #EF4444;
   border-color: #EF4444;
+}
+
+.modal-overlay[data-mobile-menu="true"] {
+  z-index: 550 !important;
+  cursor: pointer;
 }
 
 /* Mobile Bottom Navigation Bar (Hidden on desktop & large screens) */
@@ -2906,11 +2928,16 @@ body {
     transform: translateX(-100%) !important;
     box-shadow: none !important;
     transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s ease !important;
+    will-change: transform;
+    pointer-events: none;
+    visibility: hidden;
   }
 
   .sidebar.mobile-open {
     transform: translateX(0) !important;
     box-shadow: 12px 0 50px rgba(0, 0, 0, 0.6) !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
   }
 
   .main-wrapper {
