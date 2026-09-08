@@ -395,7 +395,10 @@ const SAMA_CHARTS = {
       if (ctx._chartInstance) ctx._chartInstance.destroy();
 
       const parcTotal = (window.SAMA_DATA && window.SAMA_DATA.parcEquipementsTS && window.SAMA_DATA.parcEquipementsTS.length) || 2883;
-      const inAtelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier && window.SAMA_DATA.equipementsAtelier.filter(e => e.statut !== 'CLÔTURÉ').length) || 0;
+      const inAtelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier && window.SAMA_DATA.equipementsAtelier.filter(e => {
+        const isClosed = e.statut === 'CLÔTURE' || e.statut === 'CLÔTURÉ' || (e.dateSortie && e.dateSortie !== '-' && e.dateSortie.trim() !== '');
+        return !isClosed;
+      }).length) || 0;
       const preventif = 43;
       const nominal = Math.max(0, parcTotal - inAtelier - preventif);
 

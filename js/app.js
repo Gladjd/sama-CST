@@ -785,6 +785,9 @@ const APP = {
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                 <span>Éditer</span>
               </button>
+              <button class="btn-ts-delete" title="Supprimer cet équipement de l'atelier" style="padding: 5px 8px; border-radius: 6px;" onclick="APP.deleteEquipementAtelier('${eq.codeEquipement}')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
             </div>
           </td>
           <!-- 3. Description -->
@@ -1501,14 +1504,24 @@ const APP = {
 
     // Re-rendre le tableau et actualiser les composants dépendants
     this.renderEquipementTable();
+    this.renderDirectionKpis();
     this.renderCriticiteTable();
     this.renderRedAlerts();
     this.renderEntityAvailability();
+    this.renderTop5List();
+    this.renderBlocages4Axes();
+    this.renderTechnicians();
+    if (window.SAMA_CHARTS && typeof window.SAMA_CHARTS.initAllDashboardCharts === 'function') {
+      window.SAMA_CHARTS.initAllDashboardCharts();
+    }
 
     // Synchronisation Supabase en arrière-plan
     if (window.supabaseSync && typeof window.supabaseSync.syncSaveEquipementAtelier === 'function') {
       window.supabaseSync.syncSaveEquipementAtelier(eq);
       window.supabaseSync.syncReplaceAllTimelineSteps(eq.codeEquipement, eq.timeline);
+      if (typeof window.supabaseSync.syncReplaceAllPieces === 'function') {
+        window.supabaseSync.syncReplaceAllPieces(eq.codeEquipement, eq.pieces);
+      }
     }
 
     // Rebasculer en mode consultation
@@ -1696,12 +1709,30 @@ const APP = {
           </div>
         </div>
 
-        <button class="site-footer-btn" onclick="APP.filterByClient('${site.nomClient}')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          Voir les équipements de ce site
-        </button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
+          <button class="site-footer-btn" onclick="APP.filterParcByClient('${site.nomClient}')" style="margin-top: 0; padding: 7px 10px; font-size: 11.5px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            Parc (${site.parcEquipements || 0})
+          </button>
+          <button class="site-footer-btn" onclick="APP.filterByClient('${site.nomClient}')" style="margin-top: 0; padding: 7px 10px; font-size: 11.5px; background: #EEF2FF; color: #2E5090; border: 1px solid #C7D2FE;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Atelier (${site.equipementsEnAtelier || 0})
+          </button>
+        </div>
       </div>
     `).join('');
+  },
+
+  filterParcByClient(clientNom) {
+    this.switchModule('base-ts');
+    this.switchBaseTSView('equipements');
+    const searchInput = document.getElementById('search-base-equipements');
+    if (searchInput) {
+      searchInput.value = clientNom;
+    }
+    this.baseEqSearchQuery = (clientNom || '').toLowerCase().trim();
+    this.renderParcEquipementsTS();
+    this.showToast(`Parc TS filtré pour le site : ${clientNom}`, 'info');
   },
 
   // ------------------------------------------------------------------------
@@ -2554,6 +2585,10 @@ const APP = {
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                   <span>Équipements</span>
                 </button>
+                <button class="btn-ts-action" title="Modifier ce client" onclick="APP.openEditClientModal(${globalIdx})" style="background: #EEF2FF; color: #2E5090; border: 1px solid #C7D2FE;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                  <span>Modifier</span>
+                </button>
                 <button class="btn-ts-delete" title="Supprimer ce client" onclick="APP.deleteClient(${globalIdx})">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </button>
@@ -2648,21 +2683,21 @@ const APP = {
     const mail = document.getElementById('form-clt-mail')?.value;
     const rcNinea = document.getElementById('form-clt-rcninea')?.value;
 
-    if (!code || !nom || !adresse || !ville || !telephone || !mail || !rcNinea) {
-      this.showToast("Veuillez remplir tous les champs obligatoires du formulaire client.", "error");
+    if (!code || !nom) {
+      this.showToast("Veuillez renseigner au moins le Code et le Nom du client.", "error");
       return;
     }
 
     const newClient = {
-      client: code.trim(),
-      nomClient: nom.trim(),
-      adresseClient: adresse.trim(),
-      villeClient: ville.trim(),
-      paysClient: pays.trim(),
-      codePostal: codePostal.trim(),
-      telephoneClient: telephone.trim(),
-      mailClient: mail.trim(),
-      rcNinea: rcNinea.trim()
+      client: (code || '').trim(),
+      nomClient: (nom || '').trim(),
+      adresseClient: (adresse || '-').trim(),
+      villeClient: (ville || 'Dakar').trim(),
+      paysClient: (pays || 'Sénégal').trim(),
+      codePostal: (codePostal || '-').trim(),
+      telephoneClient: (telephone || '-').trim(),
+      mailClient: (mail || '-').trim(),
+      rcNinea: (rcNinea || '-').trim()
     };
 
     SAMA_DATA.clients.unshift(newClient);
@@ -2674,9 +2709,98 @@ const APP = {
 
     this.clientCurrentPage = 1;
     this.renderClients();
+    this.populateClientAndTechSelects();
+    this.renderDirectionKpis();
     this.closeNewClientModal();
     this.showToast(`Client "${nom}" (${code}) enregistré avec succès !`, "success");
     document.getElementById('form-new-client')?.reset();
+  },
+
+  openEditClientModal(index) {
+    if (index < 0 || index >= SAMA_DATA.clients.length) return;
+    const clt = SAMA_DATA.clients[index];
+    const modal = document.getElementById('modal-edit-client');
+    const overlay = document.getElementById('modal-overlay');
+
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = (val !== undefined && val !== null) ? val : '';
+    };
+
+    setVal('edit-clt-index', index);
+    setVal('edit-clt-code', clt.client || clt.codeClient);
+    setVal('edit-clt-nom', clt.nomClient || clt.nom);
+    setVal('edit-clt-adresse', clt.adresseClient || clt.adresse);
+    setVal('edit-clt-ville', clt.villeClient || clt.ville);
+    setVal('edit-clt-pays', clt.paysClient || clt.pays || 'Sénégal');
+    setVal('edit-clt-codepostal', clt.codePostal);
+    setVal('edit-clt-telephone', clt.telephoneClient || clt.telephone);
+    setVal('edit-clt-mail', clt.mailClient || clt.mail || clt.email);
+    setVal('edit-clt-rcninea', clt.rcNinea || clt.rc_ninea);
+
+    if (modal && overlay) {
+      overlay.classList.add('active');
+      modal.style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('edit-clt-nom')?.focus();
+      }, 50);
+    }
+  },
+
+  closeEditClientModal() {
+    const modal = document.getElementById('modal-edit-client');
+    const overlay = document.getElementById('modal-overlay');
+    if (modal) modal.style.display = 'none';
+    if (overlay) overlay.classList.remove('active');
+  },
+
+  saveEditClient(e) {
+    if (e) e.preventDefault();
+    const idx = parseInt(document.getElementById('edit-clt-index')?.value, 10);
+    if (isNaN(idx) || idx < 0 || idx >= SAMA_DATA.clients.length) {
+      this.showToast("Erreur d'index client.", "error");
+      return;
+    }
+
+    const code = document.getElementById('edit-clt-code')?.value;
+    const nom = document.getElementById('edit-clt-nom')?.value;
+    const adresse = document.getElementById('edit-clt-adresse')?.value;
+    const ville = document.getElementById('edit-clt-ville')?.value;
+    const pays = document.getElementById('edit-clt-pays')?.value || 'Sénégal';
+    const codePostal = document.getElementById('edit-clt-codepostal')?.value || '';
+    const telephone = document.getElementById('edit-clt-telephone')?.value;
+    const mail = document.getElementById('edit-clt-mail')?.value;
+    const rcNinea = document.getElementById('edit-clt-rcninea')?.value;
+
+    if (!code || !nom) {
+      this.showToast("Veuillez renseigner au moins le Code et le Nom du client.", "error");
+      return;
+    }
+
+    const updatedClient = {
+      ...SAMA_DATA.clients[idx],
+      client: (code || '').trim(),
+      nomClient: (nom || '').trim(),
+      adresseClient: (adresse || '-').trim(),
+      villeClient: (ville || 'Dakar').trim(),
+      paysClient: (pays || 'Sénégal').trim(),
+      codePostal: (codePostal || '-').trim(),
+      telephoneClient: (telephone || '-').trim(),
+      mailClient: (mail || '-').trim(),
+      rcNinea: (rcNinea || '-').trim()
+    };
+
+    SAMA_DATA.clients[idx] = updatedClient;
+
+    if (window.supabaseSync && typeof window.supabaseSync.syncSaveClient === 'function') {
+      window.supabaseSync.syncSaveClient(updatedClient);
+    }
+
+    this.renderClients();
+    this.populateClientAndTechSelects();
+    this.renderDirectionKpis();
+    this.closeEditClientModal();
+    this.showToast(`Fiche client "${nom}" mise à jour !`, "success");
   },
 
   deleteClient(index) {
@@ -2688,6 +2812,8 @@ const APP = {
       }
       SAMA_DATA.clients.splice(index, 1);
       this.renderClients();
+      this.populateClientAndTechSelects();
+      this.renderDirectionKpis();
       this.showToast(`Client ${item.nomClient} supprimé du répertoire.`, "info");
     }
   },
@@ -2729,7 +2855,7 @@ const APP = {
 
     // Remplissage dynamique du filtre des pôles si pas déjà fait
     const filterPoleSelect = document.getElementById('filter-personnel-pole');
-    if (filterPoleSelect && filterPoleSelect.options.length <= 1) {
+    if (filterPoleSelect && (!filterPoleSelect.options || filterPoleSelect.options.length <= 1)) {
       const poles = [...new Set(SAMA_DATA.personnelCST.map(p => p.pole))].filter(Boolean).sort();
       poles.forEach(pole => {
         const opt = document.createElement('option');
@@ -3015,6 +3141,9 @@ const APP = {
 
     this.personnelCurrentPage = 1;
     this.renderPersonnel();
+    this.populateClientAndTechSelects();
+    this.renderTechnicians();
+    this.renderDirectionKpis();
     this.closeNewPersonnelModal();
     this.showToast(`Agent "${agent}" ajouté au pôle ${pole} avec succès !`, "success");
     document.getElementById('form-new-personnel')?.reset();
@@ -3055,6 +3184,9 @@ const APP = {
     }
 
     this.renderPersonnel();
+    this.populateClientAndTechSelects();
+    this.renderTechnicians();
+    this.renderDirectionKpis();
     this.closeEditPersonnelModal();
     this.showToast(`Fiche de l'agent "${agent}" mise à jour !`, "success");
   },
@@ -3068,6 +3200,9 @@ const APP = {
       }
       SAMA_DATA.personnelCST.splice(index, 1);
       this.renderPersonnel();
+      this.populateClientAndTechSelects();
+      this.renderTechnicians();
+      this.renderDirectionKpis();
       this.showToast(`Agent ${item.agent} supprimé du répertoire.`, "info");
     }
   },
@@ -3102,6 +3237,62 @@ const APP = {
 
   // ------------------------------------------------------------------------
   // ------------------------------------------------------------------------
+  // ------------------------------------------------------------------------
+  // AIDES ET CALCULS DES STATUTS & DÉLAIS
+  // ------------------------------------------------------------------------
+  isEquipementClosed(e) {
+    if (!e) return false;
+    return e.statut === 'CLÔTURE' || e.statut === 'CLÔTURÉ' || (e.dateSortie && e.dateSortie !== '-' && e.dateSortie.trim() !== '');
+  },
+
+  isEquipementActive(e) {
+    return !this.isEquipementClosed(e);
+  },
+
+  getEquipmentDays(e) {
+    if (!e) return 0;
+    if (typeof e.joursAtelier === 'number' && !isNaN(e.joursAtelier) && e.joursAtelier > 0) return e.joursAtelier;
+    if (typeof e.nombreJoursAtelier === 'number' && !isNaN(e.nombreJoursAtelier) && e.nombreJoursAtelier > 0) return e.nombreJoursAtelier;
+    if (typeof e.joursAtelier === 'string' && !isNaN(parseInt(e.joursAtelier, 10))) return parseInt(e.joursAtelier, 10);
+    if (typeof e.nombreJoursAtelier === 'string' && !isNaN(parseInt(e.nombreJoursAtelier, 10))) return parseInt(e.nombreJoursAtelier, 10);
+    if (e.dateEntree && e.dateEntree !== '-') {
+      if (this.isEquipementClosed(e) && e.dateSortie && e.dateSortie !== '-') {
+        return this.calculateDays(e.dateEntree, e.dateSortie);
+      }
+      return this.calculateDaysFromToday(e.dateEntree);
+    }
+    return 0;
+  },
+
+  deleteEquipementAtelier(codeEquipement) {
+    const idx = (SAMA_DATA.equipementsAtelier || []).findIndex(e => e.codeEquipement === codeEquipement);
+    if (idx === -1) return;
+    const eq = SAMA_DATA.equipementsAtelier[idx];
+    if (confirm(`Confirmez-vous la suppression définitive du dossier d'atelier pour l'équipement "${eq.codeEquipement} (${eq.description})"?`)) {
+      if (window.supabaseSync && typeof window.supabaseSync.syncDeleteEquipementAtelier === 'function') {
+        window.supabaseSync.syncDeleteEquipementAtelier(codeEquipement);
+      }
+      SAMA_DATA.equipementsAtelier.splice(idx, 1);
+      this.renderEquipementTable();
+      this.renderDashboardKPIs();
+      this.renderCriticiteTable();
+      this.renderRedAlerts();
+      this.renderEntityAvailability();
+      this.renderTop5List();
+      this.renderBlocages4Axes();
+      this.renderTechnicians();
+      if (window.SAMA_CHARTS && typeof window.SAMA_CHARTS.initAllDashboardCharts === 'function') {
+        window.SAMA_CHARTS.initAllDashboardCharts();
+      }
+      this.showToast(`Équipement ${codeEquipement} supprimé de l'atelier.`, "info");
+    }
+  },
+
+  renderDirectionKpis() {
+    this.renderDashboardKPIs();
+  },
+
+  // ------------------------------------------------------------------------
   // CALCUL ET RENDU DYNAMIQUE DES KPIS & METRIQUES (SYNCHRONISÉ SUPABASE)
   // ------------------------------------------------------------------------
   renderDashboardKPIs() {
@@ -3113,7 +3304,7 @@ const APP = {
     const personnel = (window.SAMA_DATA && window.SAMA_DATA.personnelCST) || [];
 
     const totalParc = parc.length || 2883;
-    const inAtelier = atelier.filter(e => e.statut !== 'CLÔTURÉ').length;
+    const inAtelier = atelier.filter(e => this.isEquipementActive(e)).length;
     const totalSites = sites.length || 483;
     const totalClients = clients.length || 608;
     const totalCatalogue = catalogue.length || 449;
@@ -3147,9 +3338,9 @@ const APP = {
     }).length || 124;
 
     const countPreventif = 43;
-    const countRedAlerts = atelier.filter(e => e.statut !== 'CLÔTURÉ' && (e.joursAtelier > 15 || e.situation === 'En attente pièces')).length;
-    const countFRBDelay = atelier.filter(e => e.statut !== 'CLÔTURÉ' && (e.joursAtelier > 2 || e.situation === 'Devis à envoyer')).length;
-    const totalValeurBloquee = atelier.filter(e => e.statut !== 'CLÔTURÉ').reduce((acc, e) => acc + (parseFloat(e.montantFRB) || 0), 0);
+    const countRedAlerts = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 15 || (e.situation || '').includes('attente pièces'))).length;
+    const countFRBDelay = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 2 || (e.situation || '').includes('Devis'))).length;
+    const totalValeurBloquee = atelier.filter(e => this.isEquipementActive(e)).reduce((acc, e) => acc + (parseFloat(e.montantFRB) || 0), 0);
 
     const setElem = (id, val) => {
       const el = document.getElementById(id);
@@ -3252,7 +3443,7 @@ const APP = {
       const taux = (97.0 + ((idx * 5) % 30) * 0.1).toFixed(1);
       
       const assignedCount = parc.filter(p => (p.technicienReferent || '').toLowerCase().includes(name.toLowerCase().split(' ').pop())).length || Math.round(parc.length / personnel.length) || 120;
-      const backlog = atelier.filter(e => (e.respTechnique || '').toLowerCase().includes(name.toLowerCase()) && e.statut !== 'CLÔTURÉ').length;
+      const backlog = atelier.filter(e => (e.respTechnique || e.responsableTechnique || '').toLowerCase().includes(name.toLowerCase()) && this.isEquipementActive(e)).length;
 
       return `
         <div class="tech-card">
@@ -3323,9 +3514,9 @@ const APP = {
     ];
 
     tbody.innerHTML = axesConfig.map(cfg => {
-      const matching = atelier.filter(e => e.statut !== 'CLÔTURÉ' && cfg.filter(e));
+      const matching = atelier.filter(e => this.isEquipementActive(e) && cfg.filter(e));
       const count = matching.length;
-      const days = count > 0 ? `${Math.round(matching.reduce((acc, m) => acc + (m.joursAtelier || 0), 0) / count)} j` : '0 j';
+      const days = count > 0 ? `${Math.round(matching.reduce((acc, m) => acc + this.getEquipmentDays(m), 0) / count)} j` : '0 j';
       const valeur = count > 0 ? `${matching.reduce((acc, m) => acc + (parseFloat(m.montantFRB) || 0), 0).toLocaleString('fr-FR')} FCFA` : '0 FCFA';
       const severite = count === 0 ? 'Faible (Nominal)' : count > 2 ? 'Élevée' : 'Moyenne';
       const severiteClass = count === 0 ? 'green' : count > 2 ? 'red' : 'amber';
@@ -3354,17 +3545,21 @@ const APP = {
 
     let rows = [];
     if (atelier.length > 0) {
-      rows = atelier.map(eq => ({
-        code: eq.codeEquipement,
-        nom: eq.description,
-        classe: (eq.priorite === 'Haute' || eq.priorite === 'Critique') ? 'Classe A (Critique)' : 'Classe B (Majeur)',
-        impact: eq.motif || 'Révision atelier',
-        spof: (eq.priorite === 'Critique' || eq.entite === 'IMAG-CHIRG') ? 'Oui (SPoF)' : 'Non',
-        jours: `${eq.joursAtelier || 0} jours`,
-        delaiFRB: eq.delaisFRB || (eq.dateFRB && eq.dateFRB !== '-' ? 'FRB Émis' : 'En attente'),
-        statutAlerte: eq.statut === 'CLÔTURÉ' ? 'Clôturé' : (eq.joursAtelier > 15 ? 'Alerte Rouge' : 'En traitement'),
-        statutClass: eq.statut === 'CLÔTURÉ' ? 'cours' : (eq.joursAtelier > 15 ? 'bloque' : 'cours')
-      }));
+      rows = atelier.map(eq => {
+        const isClosed = this.isEquipementClosed(eq);
+        const days = this.getEquipmentDays(eq);
+        return {
+          code: eq.codeEquipement,
+          nom: eq.description,
+          classe: (eq.priorite === 'Haute' || eq.priorite === 'Critique') ? 'Classe A (Critique)' : 'Classe B (Majeur)',
+          impact: eq.motif || 'Révision atelier',
+          spof: (eq.priorite === 'Critique' || eq.entite === 'IMAG-CHIRG') ? 'Oui (SPoF)' : 'Non',
+          jours: `${days} jours`,
+          delaiFRB: eq.delaisFRB || (eq.dateFRB && eq.dateFRB !== '-' ? 'FRB Émis' : 'En attente'),
+          statutAlerte: isClosed ? 'Clôturé' : (days > 15 ? 'Alerte Rouge' : 'En traitement'),
+          statutClass: isClosed ? 'cours' : (days > 15 ? 'bloque' : 'cours')
+        };
+      });
     } else {
       const criticals = parc.filter(p => (p.pole || '').includes('IMAG') || (p.categorie || '').includes('C3') || (p.nomEquipement || '').toLowerCase().includes('scanner') || (p.nomEquipement || '').toLowerCase().includes('irm') || (p.nomEquipement || '').toLowerCase().includes('arceau')).slice(0, 6);
       
@@ -3400,7 +3595,7 @@ const APP = {
     if (!container) return;
 
     const atelier = SAMA_DATA.equipementsAtelier || [];
-    const blocked = atelier.filter(e => e.statut !== 'CLÔTURÉ' && (e.joursAtelier > 15 || e.situation === 'En attente pièces'));
+    const blocked = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 15 || (e.situation || '').includes('attente pièces')));
 
     if (blocked.length === 0) {
       const parcCount = (SAMA_DATA.parcEquipementsTS || []).length || 2883;
@@ -3418,31 +3613,34 @@ const APP = {
       return;
     }
 
-    container.innerHTML = blocked.map(alt => `
-      <div class="red-alert-card">
-        <div class="alert-icon-box">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+    container.innerHTML = blocked.map(alt => {
+      const days = this.getEquipmentDays(alt);
+      return `
+        <div class="red-alert-card">
+          <div class="alert-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          </div>
+          <div class="alert-body">
+            <div class="alert-title-row">
+              <span class="alert-title">${alt.description} (${alt.codeEquipement})</span>
+              <span class="alert-duration-badge">${days} jours d'arrêt</span>
+            </div>
+            <div class="alert-description">
+              <strong>Client :</strong> ${alt.client} | <strong>Responsable :</strong> ${alt.respTechnique || alt.responsableTechnique || 'CST'}<br>
+              <strong>Motif de panne :</strong> ${alt.motifPanne || alt.motif} | <strong>Situation :</strong> ${alt.situation}
+            </div>
+            <div class="alert-action-row">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+              Actions requises : ${alt.actionsDecision || "Relance urgente du fournisseur & validation FRB"}
+            </div>
+          </div>
+          <button class="alert-btn-escalate" onclick="APP.showToast('Escalade déclenchée auprès de la direction pour ${alt.codeEquipement}', 'success')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            Escalader
+          </button>
         </div>
-        <div class="alert-body">
-          <div class="alert-title-row">
-            <span class="alert-title">${alt.description} (${alt.codeEquipement})</span>
-            <span class="alert-duration-badge">${alt.joursAtelier || 0} jours d'arrêt</span>
-          </div>
-          <div class="alert-description">
-            <strong>Client :</strong> ${alt.client} | <strong>Responsable :</strong> ${alt.respTechnique || 'CST'}<br>
-            <strong>Motif de panne :</strong> ${alt.motifPanne || alt.motif} | <strong>Situation :</strong> ${alt.situation}
-          </div>
-          <div class="alert-action-row">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-            Actions requises : ${alt.actionsDecision || "Relance urgente du fournisseur & validation FRB"}
-          </div>
-        </div>
-        <button class="alert-btn-escalate" onclick="APP.showToast('Escalade déclenchée auprès de la direction pour ${alt.codeEquipement}', 'success')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-          Escalader
-        </button>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   },
 
   renderEntityAvailability() {
@@ -3453,12 +3651,12 @@ const APP = {
     const atelier = SAMA_DATA.equipementsAtelier || [];
 
     const biomedParc = parc.filter(p => (p.pole || '').toUpperCase().includes('BIOMED'));
-    const biomedAtelier = atelier.filter(e => (e.entite || '').toUpperCase().includes('BIOMED') && e.statut !== 'CLÔTURÉ').length;
+    const biomedAtelier = atelier.filter(e => (e.entite || '').toUpperCase().includes('BIOMED') && this.isEquipementActive(e)).length;
     const biomedTotal = biomedParc.length || 1850;
     const biomedDispo = biomedTotal > 0 ? (((biomedTotal - biomedAtelier) / biomedTotal) * 100).toFixed(1) : '99.2';
 
     const imagParc = parc.filter(p => (p.pole || '').toUpperCase().includes('IMAG') || (p.pole || '').toUpperCase().includes('CHIRG'));
-    const imagAtelier = atelier.filter(e => ((e.entite || '').toUpperCase().includes('IMAG') || (e.entite || '').toUpperCase().includes('CHIRG')) && e.statut !== 'CLÔTURÉ').length;
+    const imagAtelier = atelier.filter(e => ((e.entite || '').toUpperCase().includes('IMAG') || (e.entite || '').toUpperCase().includes('CHIRG')) && this.isEquipementActive(e)).length;
     const imagTotal = imagParc.length || 1033;
     const imagDispo = imagTotal > 0 ? (((imagTotal - imagAtelier) / imagTotal) * 100).toFixed(1) : '98.4';
 
@@ -3490,7 +3688,7 @@ const APP = {
     if (!container) return;
 
     const atelier = SAMA_DATA.equipementsAtelier || [];
-    const activeAtelier = atelier.filter(e => e.statut !== 'CLÔTURÉ').sort((a, b) => (b.joursAtelier || 0) - (a.joursAtelier || 0));
+    const activeAtelier = atelier.filter(e => this.isEquipementActive(e)).sort((a, b) => this.getEquipmentDays(b) - this.getEquipmentDays(a));
 
     if (activeAtelier.length === 0) {
       container.innerHTML = `
@@ -3510,7 +3708,7 @@ const APP = {
           <div class="top5-title">${item.description} (${item.codeEquipement})</div>
           <div class="top5-sub">${item.client} • <em>${item.motifPanne || item.motif}</em></div>
         </div>
-        <div class="top5-badge">${item.joursAtelier || 0} jours d'arrêt</div>
+        <div class="top5-badge">${this.getEquipmentDays(item)} jours d'arrêt</div>
       </div>
     `).join('');
   },
