@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=3.1">
+  <link rel="stylesheet" href="css/style.css?v=3.2">
   
   <!-- Flatpickr Date & DateTime Picker CSS (Local with CDN fallback) -->
   <link rel="stylesheet" href="vendor/flatpickr/flatpickr.min.css">
@@ -216,66 +216,70 @@
   <div class="main-wrapper">
     <!-- Top Header Bar -->
     <header class="topbar">
-      <div class="topbar-left">
-        <!-- Bouton Hamburger Mobile -->
-        <button class="mobile-menu-btn" id="btn-mobile-menu" aria-label="Ouvrir le menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
+      <!-- Ligne 1 : Navigation, Titre & Statuts / Actions Rapides -->
+      <div class="topbar-main-row">
+        <div class="topbar-left">
+          <!-- Bouton Hamburger Mobile -->
+          <button class="mobile-menu-btn" id="btn-mobile-menu" aria-label="Ouvrir le menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
 
-        <!-- Bouton Collapse Desktop dans Topbar -->
-        <button class="desktop-sidebar-btn" id="btn-desktop-sidebar-toggle" title="Réduire / Agrandir le menu latéral">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="9" y1="3" x2="9" y2="21"></line>
-          </svg>
-        </button>
+          <!-- Bouton Collapse Desktop dans Topbar -->
+          <button class="desktop-sidebar-btn" id="btn-desktop-sidebar-toggle" title="Réduire / Agrandir le menu latéral">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+            </svg>
+          </button>
 
-        <div class="page-title-group">
-          <h1 id="current-page-title">Tableau de Bord Sama CST</h1>
-          <div class="page-breadcrumb">
-            <span>Technologies Services</span>
-            <span class="sep">/</span>
-            <span id="breadcrumb-sub" style="color: var(--ts-blue); font-weight: 600;">Supervision & KPIs</span>
+          <div class="page-title-group">
+            <h1 id="current-page-title">Tableau de Bord Sama CST</h1>
+            <div class="page-breadcrumb">
+              <span>Technologies Services</span>
+              <span class="sep">/</span>
+              <span id="breadcrumb-sub" style="color: var(--ts-blue); font-weight: 600;">Supervision & KPIs</span>
+            </div>
           </div>
+        </div>
+
+        <div class="topbar-actions-row">
+          <!-- Supabase Status Badge / Connexion -->
+          <div id="supabase-status-badge" class="supabase-status-pill" onclick="supabaseSync.openConfigModal()" title="Base de données Supabase PostgreSQL connectée et synchronisée en temps réel">
+            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#72C100; margin-right:6px; box-shadow:0 0 6px rgba(114,193,0,0.6);"></span>
+            <span class="supabase-status-text" style="color:#16243D; font-weight:600; font-size:12px;">Supabase Connecté</span>
+          </div>
+
+          <!-- Notification Bell -->
+          <button class="icon-btn" id="btn-notif-bell" title="Alertes actives" onclick="APP.switchDashboardTab('risques-dependances')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="badge-dot"></span>
+          </button>
+
+          <!-- Bouton Action Primaire (Desktop) -->
+          <button class="btn-primary btn-topbar-add" id="btn-add-equipment">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Nouvel Équipement</span>
+          </button>
         </div>
       </div>
 
-      <div class="topbar-right">
-        <!-- Supabase Status Badge / Connexion -->
-        <div id="supabase-status-badge" class="supabase-status-pill" onclick="supabaseSync.openConfigModal()" title="Base de données Supabase PostgreSQL connectée et synchronisée en temps réel">
-          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#72C100; margin-right:6px; box-shadow:0 0 6px rgba(114,193,0,0.6);"></span>
-          <span style="color:#16243D; font-weight:600; font-size:12px;">Supabase Connecté</span>
-        </div>
-
-        <!-- Recherche globale -->
+      <!-- Ligne 2 : Recherche globale & Filtre Entité -->
+      <div class="topbar-search-row">
         <div class="search-box">
           <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <input type="text" id="global-search-input" placeholder="Rechercher équipement, client...">
           <span class="search-shortcut">⌘K</span>
         </div>
 
-        <!-- Filtre Entité Global -->
         <select class="global-filter-select" id="global-entity-filter">
           <option value="all">🏢 Toutes les Entités</option>
           <option value="BIOMED">BIOMED</option>
           <option value="IMAG-CHIRG">IMAG-CHIRG</option>
         </select>
-
-        <!-- Notification Bell -->
-        <button class="icon-btn" title="Alertes actives" onclick="APP.switchDashboardTab('risques-dependances')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-          <span class="badge-dot"></span>
-        </button>
-
-        <!-- Bouton Action Primaire -->
-        <button class="btn-primary" id="btn-add-equipment">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          <span>Nouvel Équipement</span>
-        </button>
       </div>
     </header>
 
