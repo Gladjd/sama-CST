@@ -2817,6 +2817,11 @@ body {
   border-color: #EF4444;
 }
 
+/* Mobile Bottom Navigation Bar (Hidden on desktop & large screens) */
+.mobile-bottom-nav {
+  display: none;
+}
+
 /* ==========================================================================
    RESPONSIVE DESIGN SYSTEM (Multi-Breakpoint Fluid Modern Adaptation)
    ========================================================================== */
@@ -3050,9 +3055,9 @@ body {
     padding: 0 6px !important;
   }
 
-  /* Content area fluid padding */
+  /* Content area fluid padding (76px bottom for bottom nav bar clearance) */
   .content-area {
-    padding: 12px 10px 40px 10px !important;
+    padding: 12px 10px 76px 10px !important;
   }
 
   /* Dashboard Subnav Horizontal Swipe Bar */
@@ -3389,6 +3394,72 @@ body {
 
   .mockup-preview-card {
     padding: 12px !important;
+  }
+
+  /* Native Mobile Bottom Navigation Bar */
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 60px !important;
+    background: #FFFFFF !important;
+    border-top: 1px solid var(--border-light) !important;
+    box-shadow: 0 -3px 14px rgba(22, 36, 61, 0.09) !important;
+    align-items: stretch !important;
+    justify-content: space-around !important;
+    z-index: 450 !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+
+  .mob-nav-item {
+    flex: 1 1 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    background: transparent !important;
+    border: none !important;
+    color: #64748B !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    padding: 6px 2px !important;
+    transition: color 0.15s ease, transform 0.15s ease !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .mob-nav-item:active {
+    transform: scale(0.92);
+  }
+
+  .mob-nav-item .mob-nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+  }
+
+  .mob-nav-item svg {
+    stroke: #64748B;
+    transition: stroke 0.15s ease, transform 0.15s ease;
+  }
+
+  .mob-nav-item.active {
+    color: var(--ts-blue) !important;
+    font-weight: 800 !important;
+  }
+
+  .mob-nav-item.active svg {
+    stroke: var(--ts-blue) !important;
+    transform: translateY(-1px);
+  }
+
+  .mob-nav-item.active span {
+    color: var(--ts-blue) !important;
   }
 }
 

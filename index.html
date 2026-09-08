@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=3.2">
+  <link rel="stylesheet" href="css/style.css?v=3.4">
   
   <!-- Flatpickr Date & DateTime Picker CSS (Local with CDN fallback) -->
   <link rel="stylesheet" href="vendor/flatpickr/flatpickr.min.css">
@@ -220,8 +220,8 @@
       <div class="topbar-main-row">
         <div class="topbar-left">
           <!-- Bouton Hamburger Mobile -->
-          <button class="mobile-menu-btn" id="btn-mobile-menu" aria-label="Ouvrir le menu">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <button class="mobile-menu-btn" id="btn-mobile-menu" onclick="APP.toggleMobileMenu()" aria-label="Ouvrir le menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
               <line x1="3" y1="12" x2="21" y2="12"></line>
               <line x1="3" y1="6" x2="21" y2="6"></line>
               <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -1552,6 +1552,46 @@
       </section>
 
     </main>
+
+    <!-- ======================================================================
+         BARRE DE NAVIGATION INFÉRIEURE MOBILE (iOS / Android Native Style)
+         ====================================================================== -->
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Navigation principale mobile">
+      <button type="button" class="mob-nav-item active" data-target="dashboard" onclick="APP.switchModule('dashboard')">
+        <div class="mob-nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </div>
+        <span>Dashboard</span>
+      </button>
+
+      <button type="button" class="mob-nav-item" data-target="atelier-equipements" onclick="APP.switchModule('atelier-equipements')">
+        <div class="mob-nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+        </div>
+        <span>Atelier</span>
+      </button>
+
+      <button type="button" class="mob-nav-item" data-target="base-ts" onclick="APP.switchModule('base-ts')">
+        <div class="mob-nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        </div>
+        <span>Base TS</span>
+      </button>
+
+      <button type="button" class="mob-nav-item" data-target="clients" onclick="APP.switchModule('clients')">
+        <div class="mob-nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <span>Clients</span>
+      </button>
+
+      <button type="button" class="mob-nav-item" id="mob-nav-menu-toggle" onclick="APP.toggleMobileMenu()">
+        <div class="mob-nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </div>
+        <span>Menu</span>
+      </button>
+    </nav>
   </div>
 </div>
 
@@ -2693,12 +2733,12 @@
 </script>
 
 <!-- Application, Auth & Sync Scripts -->
-<script src="js/utils.js?v=3.0"></script>
-<script src="js/data.js?v=3.0"></script>
-<script src="js/supabase-config.js?v=3.0"></script>
-<script src="js/supabase-sync.js?v=3.0"></script>
-<script src="js/auth.js?v=3.0"></script>
-<script src="js/charts.js?v=3.0"></script>
-<script src="js/app.js?v=3.0"></script>
+<script src="js/utils.js?v=3.4"></script>
+<script src="js/data.js?v=3.4"></script>
+<script src="js/supabase-config.js?v=3.4"></script>
+<script src="js/supabase-sync.js?v=3.4"></script>
+<script src="js/auth.js?v=3.4"></script>
+<script src="js/charts.js?v=3.4"></script>
+<script src="js/app.js?v=3.4"></script>
 </body>
 </html>

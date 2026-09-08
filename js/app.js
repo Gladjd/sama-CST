@@ -627,6 +627,18 @@ const APP = {
       }
     });
 
+    // Mettre à jour l'élément actif dans la barre inférieure mobile
+    document.querySelectorAll('.mobile-bottom-nav .mob-nav-item').forEach(item => {
+      if (item.getAttribute('data-target') === moduleId) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+
+    // Fermer le tiroir mobile si ouvert
+    this.closeMobileMenu();
+
     // Masquer toutes les sections
     document.querySelectorAll('.module-container').forEach(mod => mod.style.display = 'none');
     
@@ -4496,6 +4508,24 @@ const APP = {
       if (statutSelect) statutSelect.value = 'DEPENDANT';
       if (situationSelect && situationSelect.value === 'Clôturé') situationSelect.value = 'En traitement';
       if (etatSortieSelect && etatSortieSelect.value === 'Fonctionnel') etatSortieSelect.value = 'Non fonctionnel';
+    }
+  },
+
+  toggleMobileMenu() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('modal-overlay');
+    if (!sidebar) return;
+    const isOpen = sidebar.classList.toggle('mobile-open');
+    if (overlay) {
+      if (isOpen) {
+        overlay.classList.add('active');
+        overlay.setAttribute('data-mobile-menu', 'true');
+        document.body.style.overflow = 'hidden';
+      } else {
+        overlay.classList.remove('active');
+        overlay.removeAttribute('data-mobile-menu');
+        document.body.style.overflow = '';
+      }
     }
   },
 
