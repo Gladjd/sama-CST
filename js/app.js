@@ -1976,27 +1976,9 @@ const APP = {
   createAtelierFromParc(code) {
     const eq = (SAMA_DATA.parcEquipementsTS || []).find(e => e.codeEquipement === code);
     if (!eq) return;
-    this.openNewEquipmentModal();
-    
-    setTimeout(() => {
-      const codeInput = document.getElementById('form-code');
-      const descInput = document.getElementById('form-desc');
-      const clientSelect = document.getElementById('form-client');
-      const serialInput = document.getElementById('form-serial');
-      const fournInput = document.getElementById('form-fournisseur');
-      const modeleInput = document.getElementById('form-modele');
-      const entiteSelect = document.getElementById('form-entite');
-      const techSelect = document.getElementById('form-tech');
 
-      if (codeInput) codeInput.value = eq.codeEquipement;
-      if (descInput) descInput.value = eq.designation;
-      if (clientSelect) clientSelect.value = eq.client;
-      if (serialInput) serialInput.value = eq.numSerie;
-      if (fournInput) fournInput.value = eq.fournisseur;
-      if (modeleInput) modeleInput.value = eq.modele;
-      if (entiteSelect) entiteSelect.value = eq.entite;
-      if (techSelect) techSelect.value = eq.technicienReferent || 'Ousmane Fall';
-    }, 50);
+    this.openNewEquipmentModal(eq);
+    this.showToast(`Équipement ${eq.codeEquipement} (${eq.client}) pré-rempli pour entrée atelier !`, "info");
   },
 
   exportBaseEquipementsCSV() {
@@ -2316,21 +2298,15 @@ const APP = {
     if (!eq) return;
 
     this.switchModule('atelier-equipements');
-    this.openNewEquipmentModal();
-
-    // Pré-remplir le formulaire atelier
     const codeGen = `EQ-${eq.modele.replace(/[^a-zA-Z0-9]/g, '').substring(0, 6).toUpperCase()}-${Math.floor(10 + Math.random() * 90)}`;
-    const codeEl = document.getElementById('form-code');
-    const descEl = document.getElementById('form-desc');
-    const fourEl = document.getElementById('form-fournisseur');
-    const modEl = document.getElementById('form-modele');
-    const entEl = document.getElementById('form-entite');
-
-    if (codeEl) codeEl.value = codeGen;
-    if (descEl) descEl.value = eq.designation;
-    if (fourEl) fourEl.value = eq.fournisseur;
-    if (modEl) modEl.value = eq.modele;
-    if (entEl) entEl.value = eq.entite;
+    
+    this.openNewEquipmentModal({
+      codeEquipement: codeGen,
+      designation: eq.designation,
+      fournisseur: eq.fournisseur,
+      modele: eq.modele,
+      entite: eq.entite
+    });
 
     this.showToast(`Modèle "${eq.modele}" pré-rempli dans le formulaire d'entrée atelier !`, "info");
   },
@@ -3528,15 +3504,133 @@ const APP = {
   // ------------------------------------------------------------------------
   // MODAL NOUVEL ÉQUIPEMENT & EXPORT
   // ------------------------------------------------------------------------
-  openNewEquipmentModal() {
+  populateClientAndTechSelects(selectedClient = '', selectedTech = '') {
+    const clientSelect = document.getElementById('form-client');
+    const techSelect = document.getElementById('form-tech');
+
+    // 1. Clients
+    if (clientSelect) {
+      const clientMap = new Map();
+
+      // Clients from clients table
+      (SAMA_DATA.clients || []).forEach(c => {
+        const nom = (c.nomClient || c.client || '').trim();
+        if (nom && nom !== '-') {
+          clientMap.set(nom.toLowerCase(), nom);
+        }
+      });
+
+      // Clients from sites table
+      (SAMA_DATA.sitesTS || []).forEach(s => {
+        const nom = (s.nomClient || s.nom_client || '').trim();
+        if (nom && nom !== '-') {
+          clientMap.set(nom.toLowerCase(), nom);
+        }
+      });
+
+      // Clients from parc table
+      (SAMA_DATA.parcEquipementsTS || []).forEach(p => {
+        const nom = (p.client || p.site || '').trim();
+        if (nom && nom !== '-') {
+          clientMap.set(nom.toLowerCase(), nom);
+        }
+      });
+
+      // If selectedClient exists, ensure it is added
+      if (selectedClient && selectedClient.trim() !== '') {
+        const trimClient = selectedClient.trim();
+        clientMap.set(trimClient.toLowerCase(), trimClient);
+      }
+
+      const sortedClients = Array.from(clientMap.values()).sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
+
+      clientSelect.innerHTML = `<option value="">-- Sélectionner un client (${sortedClients.length} disponibles) --</option>` +
+        sortedClients.map(c => `<option value="${c.replace(/"/g, '&quot;')}">${c}</option>`).join('');
+
+      if (selectedClient && selectedClient.trim() !== '') {
+        const match = sortedClients.find(c => c.toLowerCase() === selectedClient.trim().toLowerCase()) || selectedClient.trim();
+        clientSelect.value = match;
+      }
+    }
+
+    // 2. Techniciens
+    if (techSelect) {
+      const techMap = new Map();
+
+      (SAMA_DATA.personnelCST || []).forEach(p => {
+        const nom = (p.nomAgent || p.agent || p.nom || '').trim();
+        const pole = p.pole || 'CST';
+        if (nom && nom !== '-') {
+          techMap.set(nom.toLowerCase(), { nom, pole });
+        }
+      });
+
+      if (selectedTech && selectedTech.trim() !== '') {
+        const trimTech = selectedTech.trim();
+        if (!techMap.has(trimTech.toLowerCase())) {
+          techMap.set(trimTech.toLowerCase(), { nom: trimTech, pole: 'Technicien Référent' });
+        }
+      }
+
+      const sortedTechs = Array.from(techMap.values()).sort((a, b) => a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' }));
+
+      techSelect.innerHTML = `<option value="">-- Sélectionner un responsable technique --</option>` +
+        sortedTechs.map(t => `<option value="${t.nom.replace(/"/g, '&quot;')}">${t.nom} (${t.pole})</option>`).join('');
+
+      if (selectedTech && selectedTech.trim() !== '') {
+        const match = sortedTechs.find(t => t.nom.toLowerCase() === selectedTech.trim().toLowerCase()) || { nom: selectedTech.trim() };
+        techSelect.value = match.nom;
+      }
+    }
+  },
+
+  openNewEquipmentModal(prefillData = null) {
     const modal = document.getElementById('modal-new-equipment');
     const overlay = document.getElementById('modal-overlay');
     const statutSelect = document.getElementById('form-statut');
+    const situationSelect = document.getElementById('form-situation');
+    const etatSortieSelect = document.getElementById('form-etat-sortie');
 
     this.initDatePickers();
     this.setPickerValue('form-date-entree', new Date().toISOString().split('T')[0]);
     this.setPickerValue('form-date-sortie', '');
     if (statutSelect) statutSelect.value = 'DEPENDANT';
+    if (situationSelect) situationSelect.value = 'En traitement';
+    if (etatSortieSelect) etatSortieSelect.value = 'Non fonctionnel';
+
+    const clientToSelect = prefillData ? (prefillData.client || prefillData.site || '') : '';
+    const techToSelect = prefillData ? (prefillData.technicienReferent || prefillData.respTechnique || '') : '';
+
+    this.populateClientAndTechSelects(clientToSelect, techToSelect);
+
+    const codeInput = document.getElementById('form-code');
+    const descInput = document.getElementById('form-desc');
+    const serialInput = document.getElementById('form-serial');
+    const fournInput = document.getElementById('form-fournisseur');
+    const modeleInput = document.getElementById('form-modele');
+    const entiteSelect = document.getElementById('form-entite');
+    const motifInput = document.getElementById('form-motif');
+
+    if (prefillData) {
+      if (codeInput) codeInput.value = prefillData.codeEquipement || prefillData.code || '';
+      if (descInput) descInput.value = prefillData.designation || prefillData.nomEquipement || prefillData.description || '';
+      if (serialInput) serialInput.value = prefillData.numSerie || prefillData.numeroSerie || '';
+      if (fournInput) fournInput.value = prefillData.fournisseur || '';
+      if (modeleInput) modeleInput.value = prefillData.modele || '';
+      if (entiteSelect && (prefillData.entite || prefillData.pole)) {
+        entiteSelect.value = prefillData.entite || prefillData.pole;
+      }
+      if (motifInput) {
+        motifInput.value = prefillData.motifPanne || prefillData.motif || "Entrée atelier pour diagnostic et révision";
+      }
+    } else {
+      if (codeInput) codeInput.value = '';
+      if (descInput) descInput.value = '';
+      if (serialInput) serialInput.value = '';
+      if (fournInput) fournInput.value = '';
+      if (modeleInput) modeleInput.value = '';
+      if (motifInput) motifInput.value = '';
+    }
 
     if (modal && overlay) {
       overlay.classList.add('active');
