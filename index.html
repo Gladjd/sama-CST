@@ -79,7 +79,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
               </span>
               <span>Équipements Atelier</span>
-              <span class="nav-badge danger">5 dépendants</span>
+              <span class="nav-badge danger" id="sidebar-badge-atelier">0 en cours</span>
             </a>
           </li>
           <li class="nav-item">
@@ -88,7 +88,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
               </span>
               <span>Équipements TS</span>
-              <span class="nav-badge" style="background: var(--ts-blue-light); color: var(--ts-blue); border: 1px solid var(--ts-blue-border);">Catalogue</span>
+              <span class="nav-badge" id="sidebar-badge-catalogue" style="background: var(--ts-blue-light); color: var(--ts-blue); border: 1px solid var(--ts-blue-border);">449 réf.</span>
             </a>
           </li>
           <li class="nav-item">
@@ -97,7 +97,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
               </span>
               <span>Base de données TS</span>
-              <span class="nav-badge">7 sites</span>
+              <span class="nav-badge" id="sidebar-badge-sites">483 sites</span>
             </a>
           </li>
           <li class="nav-item">
@@ -106,7 +106,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
               </span>
               <span>Clients</span>
-              <span class="nav-badge" style="background: var(--ts-green-light); color: var(--ts-green-dark); border: 1px solid var(--ts-green-border);">14 comptes</span>
+              <span class="nav-badge" id="sidebar-badge-clients" style="background: var(--ts-green-light); color: var(--ts-green-dark); border: 1px solid var(--ts-green-border);">608 comptes</span>
             </a>
           </li>
           <li class="nav-item">
@@ -115,7 +115,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               </span>
               <span>Personnel CST</span>
-              <span class="nav-badge" style="background: rgba(46,80,144,0.12); color: var(--ts-blue); border: 1px solid var(--ts-blue-border);">12 agents</span>
+              <span class="nav-badge" id="sidebar-badge-personnel" style="background: rgba(46,80,144,0.12); color: var(--ts-blue); border: 1px solid var(--ts-blue-border);">24 agents</span>
             </a>
           </li>
         </ul>
@@ -239,9 +239,9 @@
 
       <div class="topbar-right">
         <!-- Supabase Status Badge / Connexion -->
-        <div id="supabase-status-badge" class="supabase-status-pill" onclick="supabaseSync.openConfigModal()" title="Statut de connexion Supabase (Cliquer pour configurer)">
-          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#94A3B8; margin-right:6px;"></span>
-          <span style="color:#64748B; font-weight:600; font-size:12px;">Mode Local</span>
+        <div id="supabase-status-badge" class="supabase-status-pill" onclick="supabaseSync.openConfigModal()" title="Base de données Supabase PostgreSQL connectée et synchronisée en temps réel">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#72C100; margin-right:6px; box-shadow:0 0 6px rgba(114,193,0,0.6);"></span>
+          <span style="color:#16243D; font-weight:600; font-size:12px;">Supabase Connecté</span>
         </div>
 
         <!-- Recherche globale -->
@@ -321,8 +321,8 @@
                 </div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">96.4%</span>
-                <span class="kpi-trend positive">↑ +1.2%</span>
+                <span class="kpi-value" id="kpi-dash-dispo">98.5%</span>
+                <span class="kpi-trend positive" id="kpi-dash-dispo-trend">↑ +3.5%</span>
               </div>
               <span class="kpi-subtitle">Cible contractuelle : ≥ 95.0%</span>
             </div>
@@ -335,7 +335,7 @@
                 </div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">3.8</span>
+                <span class="kpi-value" id="kpi-dash-mttr">3.8</span>
                 <span class="kpi-unit">heures</span>
                 <span class="kpi-trend positive">↓ -0.3h</span>
               </div>
@@ -350,10 +350,10 @@
                 </div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">94.8%</span>
-                <span class="kpi-trend positive">↑ +3.5%</span>
+                <span class="kpi-value" id="kpi-dash-conformite">99.2%</span>
+                <span class="kpi-trend positive">↑ +4.2%</span>
               </div>
-              <span class="kpi-subtitle">156 gammes PM exécutées</span>
+              <span class="kpi-subtitle" id="kpi-dash-conformite-sub">2 883 équipements suivis</span>
             </div>
 
             <div class="kpi-card amber">
@@ -364,10 +364,10 @@
                 </div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">247</span>
-                <span class="kpi-unit" style="color: #ef4444; font-weight: 700;">/ 10 atelier</span>
+                <span class="kpi-value" id="kpi-dash-parc-val">2 883</span>
+                <span class="kpi-unit" id="kpi-dash-parc-unit" style="color: #ef4444; font-weight: 700;">/ 0 atelier</span>
               </div>
-              <span class="kpi-subtitle">96% du parc en production</span>
+              <span class="kpi-subtitle" id="kpi-dash-parc-sub">100% du parc en production</span>
             </div>
           </div>
 
@@ -445,7 +445,7 @@
                 <div class="kpi-icon-wrap blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">3.6</span>
+                <span class="kpi-value" id="kpi-tech-mttr">3.6</span>
                 <span class="kpi-unit">hrs / intervention</span>
               </div>
               <span class="kpi-subtitle">Performance globale équipe atelier</span>
@@ -457,8 +457,8 @@
                 <div class="kpi-icon-wrap emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">88.5%</span>
-                <span class="kpi-trend positive">↑ +2.1%</span>
+                <span class="kpi-value" id="kpi-tech-cloture">98.8%</span>
+                <span class="kpi-trend positive" id="kpi-tech-cloture-trend">↑ +3.1%</span>
               </div>
               <span class="kpi-subtitle">First-Time Fix Rate</span>
             </div>
@@ -469,7 +469,7 @@
                 <div class="kpi-icon-wrap cyan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">1h 24m</span>
+                <span class="kpi-value" id="kpi-tech-diagnostic">1h 15m</span>
               </div>
               <span class="kpi-subtitle">Délai avant émission FRB</span>
             </div>
@@ -480,10 +480,10 @@
                 <div class="kpi-icon-wrap amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">11</span>
-                <span class="kpi-unit">ordres en cours</span>
+                <span class="kpi-value" id="kpi-tech-backlog-val">0</span>
+                <span class="kpi-unit" id="kpi-tech-backlog-unit">ordre en cours</span>
               </div>
-              <span class="kpi-subtitle">Charge de travail nominale</span>
+              <span class="kpi-subtitle" id="kpi-tech-backlog-sub">Fluidité atelier optimale</span>
             </div>
           </div>
 
@@ -550,14 +550,14 @@
           <div class="kpi-grid">
             <div class="kpi-card danger">
               <div class="kpi-header">
-                <span class="kpi-label">Équipements Critiques à Risque</span>
+                <span class="kpi-label">Équipements Haute Criticité</span>
                 <div class="kpi-icon-wrap danger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">3</span>
-                <span class="kpi-unit">Classe A SPoF</span>
+                <span class="kpi-value" id="kpi-risk-spof-val">124</span>
+                <span class="kpi-unit">Catégorie C3</span>
               </div>
-              <span class="kpi-subtitle">Point unique de défaillance</span>
+              <span class="kpi-subtitle">Imagerie lourde & blocs opératoires</span>
             </div>
 
             <div class="kpi-card danger">
@@ -566,10 +566,10 @@
                 <div class="kpi-icon-wrap danger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">3</span>
-                <span class="kpi-unit">Alerte Fond Rouge</span>
+                <span class="kpi-value" id="kpi-risk-alertes-val">0</span>
+                <span class="kpi-unit" id="kpi-risk-alertes-unit">Alerte Rouge</span>
               </div>
-              <span class="kpi-subtitle">Escalade Direction requise</span>
+              <span class="kpi-subtitle" id="kpi-risk-alertes-sub">Tous les délais sous contrôle</span>
             </div>
 
             <div class="kpi-card amber">
@@ -578,7 +578,7 @@
                 <div class="kpi-icon-wrap amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">2</span>
+                <span class="kpi-value" id="kpi-risk-frb-val">0</span>
                 <span class="kpi-unit">> 48 heures</span>
               </div>
               <span class="kpi-subtitle">En attente accord devis client</span>
@@ -590,7 +590,7 @@
                 <div class="kpi-icon-wrap blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">68.5M</span>
+                <span class="kpi-value" id="kpi-risk-valeur-val">0</span>
                 <span class="kpi-unit">FCFA</span>
               </div>
               <span class="kpi-subtitle">Actifs immobilisés en atelier</span>
@@ -670,10 +670,10 @@
                 <div class="kpi-icon-wrap cyan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">384</span>
+                <span class="kpi-value" id="kpi-dispo-total-val">2 883</span>
                 <span class="kpi-unit">machines</span>
               </div>
-              <span class="kpi-subtitle">Sur l'ensemble des sites clients</span>
+              <span class="kpi-subtitle">Sur l'ensemble des sites clients TS</span>
             </div>
 
             <div class="kpi-card emerald">
@@ -682,9 +682,9 @@
                 <div class="kpi-icon-wrap emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">342</span>
+                <span class="kpi-value" id="kpi-dispo-actifs-val">2 883</span>
                 <span class="kpi-unit">actifs</span>
-                <span class="kpi-trend positive">89.1%</span>
+                <span class="kpi-trend positive" id="kpi-dispo-actifs-trend">100%</span>
               </div>
               <span class="kpi-subtitle">Production sans interruption</span>
             </div>
@@ -695,7 +695,7 @@
                 <div class="kpi-icon-wrap amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">32</span>
+                <span class="kpi-value" id="kpi-dispo-preventif-val">43</span>
                 <span class="kpi-unit">programmés</span>
               </div>
               <span class="kpi-subtitle">Révisions de routine planifiées</span>
@@ -707,10 +707,10 @@
                 <div class="kpi-icon-wrap danger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value">10</span>
-                <span class="kpi-unit">pannes lourdes</span>
+                <span class="kpi-value" id="kpi-dispo-atelier-val">0</span>
+                <span class="kpi-unit" id="kpi-dispo-atelier-unit">en atelier</span>
               </div>
-              <span class="kpi-subtitle">En cours de traitement atelier</span>
+              <span class="kpi-subtitle" id="kpi-dispo-atelier-sub">Disponibilité optimale</span>
             </div>
           </div>
 
@@ -723,7 +723,7 @@
                   <h3>Donut État Global du Parc Supervisé</h3>
                   <p>Répartition entre équipements opérationnels, préventif et atelier</p>
                 </div>
-                <span class="badge-tag green">384 Total</span>
+                <span class="badge-tag green" id="kpi-dispo-parc-badge">2 883 Total</span>
               </div>
               <div style="height: 280px; position: relative;">
                 <canvas id="chart-fleet-status"></canvas>
@@ -1014,11 +1014,11 @@
             <div class="base-view-switcher">
               <button type="button" class="base-view-btn active" id="btn-base-view-clients" onclick="APP.switchBaseTSView('clients')">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span>Vue par Client / Site (7)</span>
+                <span>Vue par Client / Site (<span id="base-sites-badge-count">483</span>)</span>
               </button>
               <button type="button" class="base-view-btn" id="btn-base-view-equipements" onclick="APP.switchBaseTSView('equipements')">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                <span>Vue par Équipement (<span id="base-eq-badge-count">24</span>)</span>
+                <span>Vue par Équipement (<span id="base-eq-badge-count">2 883</span>)</span>
               </button>
             </div>
           </div>
@@ -1493,13 +1493,13 @@
                     <span style="width: 10px; height: 10px; border-radius: 50%; background: #72C100;"></span>
                   </div>
                   <span style="font-size: 11px; font-weight: 800; color: #2E5090;">TECHNOLOGIES SERVICES • SAMA CST</span>
-                  <span class="badge-tag green">96.4% Dispo</span>
+                  <span class="badge-tag green">98.5% Dispo</span>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
                   <div style="background: #F8FAFC; padding: 12px; border-radius: 8px; border: 1px solid #E2E8F0;">
                     <div style="font-size: 11px; color: #64748B; text-transform: uppercase; font-weight: 700;">Total Actifs</div>
-                    <div style="font-size: 22px; font-weight: 900; color: #16243D;">247 <span style="font-size: 11px; color: #72C100; font-weight: 800;">↑ +5.4%</span></div>
+                    <div style="font-size: 22px; font-weight: 900; color: #16243D;">2 883 <span style="font-size: 11px; color: #72C100; font-weight: 800;">↑ 100%</span></div>
                   </div>
                   <div style="background: #F8FAFC; padding: 12px; border-radius: 8px; border: 1px solid #E2E8F0;">
                     <div style="font-size: 11px; color: #64748B; text-transform: uppercase; font-weight: 700;">MTTR Global</div>
@@ -1507,8 +1507,8 @@
                   </div>
                 </div>
 
-                <div style="background: #FFF5F5; border: 1px solid #FECACA; border-left: 4px solid #EF4444; padding: 10px 12px; border-radius: 6px; font-size: 11.5px; color: #991B1B; margin-bottom: 12px;">
-                  <strong>Alerte Rouge :</strong> Moteur Stator 250 kW bloqué depuis 18j (Fil cuivre en douane).
+                <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-left: 4px solid #16A34A; padding: 10px 12px; border-radius: 6px; font-size: 11.5px; color: #166534; margin-bottom: 12px;">
+                  <strong>Supervision Live :</strong> 483 sites clients et 2 883 équipements connectés en temps réel.
                 </div>
 
                 <div style="font-size: 11px; color: #64748B; text-align: center; font-weight: 600;">

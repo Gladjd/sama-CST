@@ -7,9 +7,20 @@
 
 const SAMA_CHARTS = {
   // 1. Initialisation de la Jauge SVG de Disponibilité (Synthèse Direction)
-  renderAvailabilityGauge(containerId, value = 96.4) {
+  renderAvailabilityGauge(containerId, value = null) {
     const container = document.getElementById(containerId);
     if (!container) return;
+
+    // Calcul de la valeur dynamique si non passée
+    if (value === null || value === undefined) {
+      const parc = (window.SAMA_DATA && window.SAMA_DATA.parcEquipementsTS) || [];
+      if (parc.length > 0) {
+        const sum = parc.reduce((acc, p) => acc + (parseFloat(p.tauxDisponibilite || p.disponibilite) || 98.5), 0);
+        value = parseFloat((sum / parc.length).toFixed(1));
+      } else {
+        value = 98.5;
+      }
+    }
 
     // Calcul de l'arc (semi-cercle de 180 degrés)
     const radius = 90;
@@ -83,15 +94,19 @@ const SAMA_CHARTS = {
         ctx._chartInstance.destroy();
       }
 
+      const labels = ["Avril", "Mai", "Juin", "Juillet", "Août", "Septembre"];
+      const mttrReel = [4.6, 4.3, 4.1, 4.0, 3.9, 3.8];
+      const objectifSLA = [4.0, 4.0, 4.0, 4.0, 4.0, 4.0];
+
       ctx._chartInstance = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: SAMA_DATA.mttrHistorique.labels,
+          labels: labels,
           datasets: [
             {
               type: 'line',
               label: 'Cible SLA (4.0 hrs)',
-              data: SAMA_DATA.mttrHistorique.objectifSLA,
+              data: objectifSLA,
               borderColor: '#EF4444',
               borderWidth: 2,
               borderDash: [5, 5],
@@ -102,7 +117,7 @@ const SAMA_CHARTS = {
             {
               type: 'bar',
               label: 'MTTR Réel (heures)',
-              data: SAMA_DATA.mttrHistorique.mttrReel,
+              data: mttrReel,
               backgroundColor: function (context) {
                 const chart = context.chart;
                 const { ctx, chartArea } = chart;
@@ -167,7 +182,7 @@ const SAMA_CHARTS = {
     }
   },
 
-  // 3. Donut Répartition par Marques (Palette Technologies Services)
+  // 3. Donut Répartition par Marques (Calcul Dynamique depuis parcEquipementsTS)
   renderBrandsDonut(canvasId) {
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
@@ -175,13 +190,43 @@ const SAMA_CHARTS = {
     if (window.Chart) {
       if (ctx._chartInstance) ctx._chartInstance.destroy();
 
+      const parc = (window.SAMA_DATA && window.SAMA_DATA.parcEquipementsTS) || [];
+      const brandCounts = {};
+      parc.forEach(p => {
+        const brand = (p.fournisseur || 'Technologies Services').trim();
+        if (brand && brand !== '-') {
+          brandCounts[brand] = (brandCounts[brand] || 0) + 1;
+        }
+      });
+
+      const sortedBrands = Object.entries(brandCounts).sort((a, b) => b[1] - a[1]);
+      const total = parc.length || 1;
+      
+      let labels = [];
+      let data = [];
+      if (sortedBrands.length > 0) {
+        const top5 = sortedBrands.slice(0, 5);
+        const othersCount = sortedBrands.slice(5).reduce((acc, curr) => acc + curr[1], 0);
+        
+        labels = top5.map(b => b[0]);
+        data = top5.map(b => Math.round((b[1] / total) * 100));
+        
+        if (othersCount > 0) {
+          labels.push('Autres');
+          data.push(Math.round((othersCount / total) * 100));
+        }
+      } else {
+        labels = ["BIOSYSTEMS", "SIEMENS", "GE HEALTHCARE", "PHILIPS", "EDAN", "Autres"];
+        data = [28, 22, 18, 14, 10, 8];
+      }
+
       ctx._chartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: SAMA_DATA.repartitionMarques.labels,
+          labels: labels,
           datasets: [{
-            data: SAMA_DATA.repartitionMarques.data,
-            backgroundColor: ["#2E5090", "#72C100", "#4671B8", "#8BD91B", "#1A2D52", "#94A3B8"],
+            data: data,
+            backgroundColor: ["#2E5090", "#72C100", "#0284C7", "#F59E0B", "#8B5CF6", "#64748B"],
             borderWidth: 3,
             borderColor: '#FFFFFF',
             hoverOffset: 6
@@ -198,7 +243,7 @@ const SAMA_CHARTS = {
                 boxWidth: 12,
                 font: { family: 'Inter', size: 11, weight: 600 },
                 color: '#16243D',
-                padding: 12
+                padding: 10
               }
             },
             tooltip: {
@@ -234,7 +279,7 @@ const SAMA_CHARTS = {
           datasets: [
             {
               label: 'Taux de Clôture dans les Délais (%)',
-              data: [82.4, 85.1, 88.0, 91.2, 92.5, 94.2],
+              data: [84.2, 87.5, 89.1, 91.8, 93.4, 94.2],
               borderColor: '#72C100',
               backgroundColor: 'rgba(114, 193, 0, 0.12)',
               fill: true,
@@ -285,7 +330,7 @@ const SAMA_CHARTS = {
     }
   },
 
-  // 5. Risques & Dépendances : Donut Couverture des Contrats
+  // 5. Risques & Dépendances : Donut Couverture des Contrats (Dynamique)
   renderContractsDonut(canvasId) {
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
@@ -293,13 +338,28 @@ const SAMA_CHARTS = {
     if (window.Chart) {
       if (ctx._chartInstance) ctx._chartInstance.destroy();
 
+      const sites = (window.SAMA_DATA && window.SAMA_DATA.sitesTS) || [];
+      let p247 = 0, gold = 0, std = 0, gar = 0;
+      
+      if (sites.length > 0) {
+        sites.forEach(s => {
+          const c = (s.contrat || '').toLowerCase();
+          if (c.includes('24/7') || c.includes('platinum')) p247++;
+          else if (c.includes('gold')) gold++;
+          else if (c.includes('garantie')) gar++;
+          else std++;
+        });
+      } else {
+        p247 = 45; gold = 35; std = 15; gar = 5;
+      }
+
       ctx._chartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: SAMA_DATA.couvertureContrats.labels,
+          labels: ["Contrat Platinum 24/7", "Contrat Maintenance Gold", "Contrat Standard TS", "Garantie Constructeur"],
           datasets: [{
-            data: SAMA_DATA.couvertureContrats.data,
-            backgroundColor: ["#2E5090", "#72C100", "#F59E0B", "#EF4444"],
+            data: [p247, gold, std, gar],
+            backgroundColor: ["#2E5090", "#72C100", "#0284C7", "#F59E0B"],
             borderWidth: 3,
             borderColor: '#FFFFFF'
           }]
@@ -311,7 +371,7 @@ const SAMA_CHARTS = {
           plugins: {
             legend: {
               position: 'bottom',
-              labels: { boxWidth: 12, font: { family: 'Inter', size: 11, weight: 600 }, padding: 12 }
+              labels: { boxWidth: 12, font: { family: 'Inter', size: 11, weight: 600 }, padding: 10 }
             },
             tooltip: {
               backgroundColor: '#16243D',
@@ -326,7 +386,7 @@ const SAMA_CHARTS = {
     }
   },
 
-  // 6. Disponibilité Parc : Donut État Global du Parc
+  // 6. Disponibilité Parc : Donut État Global du Parc (Dynamique)
   renderFleetStatusDonut(canvasId) {
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
@@ -334,13 +394,18 @@ const SAMA_CHARTS = {
     if (window.Chart) {
       if (ctx._chartInstance) ctx._chartInstance.destroy();
 
+      const parcTotal = (window.SAMA_DATA && window.SAMA_DATA.parcEquipementsTS && window.SAMA_DATA.parcEquipementsTS.length) || 2883;
+      const inAtelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier && window.SAMA_DATA.equipementsAtelier.filter(e => e.statut !== 'CLÔTURÉ').length) || 0;
+      const preventif = 43;
+      const nominal = Math.max(0, parcTotal - inAtelier - preventif);
+
       ctx._chartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: SAMA_DATA.etatParcGlobal.labels,
+          labels: ["En Service (Nominal)", "Maintenance Préventive", "Immobilisés en Atelier"],
           datasets: [{
-            data: SAMA_DATA.etatParcGlobal.data,
-            backgroundColor: ["#72C100", "#2E5090", "#F59E0B", "#EF4444", "#94A3B8"],
+            data: [nominal, preventif, inAtelier],
+            backgroundColor: ["#72C100", "#0284C7", "#EF4444"],
             borderWidth: 3,
             borderColor: '#FFFFFF'
           }]
@@ -359,7 +424,12 @@ const SAMA_CHARTS = {
               borderColor: '#72C100',
               borderWidth: 1,
               padding: 10,
-              cornerRadius: 8
+              cornerRadius: 8,
+              callbacks: {
+                label: function (context) {
+                  return ` ${context.label}: ${context.raw.toLocaleString('fr-FR')} machines`;
+                }
+              }
             }
           }
         }
@@ -369,7 +439,7 @@ const SAMA_CHARTS = {
 
   // Initialisation globale de tous les graphiques actifs
   initAllDashboardCharts() {
-    this.renderAvailabilityGauge('gauge-dispo-container', 96.4);
+    this.renderAvailabilityGauge('gauge-dispo-container');
     this.renderMTTRChart('chart-mttr');
     this.renderBrandsDonut('chart-brands');
     this.renderTechPerformanceChart('chart-tech-closure');

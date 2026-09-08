@@ -19,18 +19,22 @@ window.supabaseSync = {
       return false;
     }
 
-    if (typeof supabase === 'undefined' && typeof window.supabase === 'undefined') {
+    const createClient = (typeof supabase !== 'undefined' && supabase && typeof supabase.createClient === 'function') 
+      ? supabase.createClient 
+      : (window.supabase && typeof window.supabase.createClient === 'function' ? window.supabase.createClient : null);
+
+    if (!createClient) {
       console.warn('⚠️ La librairie @supabase/supabase-js n\'est pas chargée. Mode local actif.');
+      this.isConnected = false;
       this.updateStatusBadge();
       return false;
     }
 
     try {
-      const createClient = (typeof supabase !== 'undefined' && supabase.createClient) ? supabase.createClient : window.supabase.createClient;
       this.client = createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
       
       // Test de connexion rapide
-      const { data, error } = await this.client.from('clients').select('count', { count: 'exact', head: true });
+      const { data, error } = await this.client.from('clients').select('id').limit(1);
       if (error) {
         console.warn('⚠️ Impossible de se connecter à Supabase:', error.message);
         this.isConnected = false;
