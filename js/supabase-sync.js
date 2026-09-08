@@ -351,7 +351,7 @@ window.supabaseSync = {
     }
   },
 
-  // Abonnement Realtime Supabase
+  // Abonnement Realtime Supabase (Optimisé avec Debounce)
   setupRealtimeSubscription() {
     if (!this.isConnected || !this.client) return;
 
@@ -360,11 +360,17 @@ window.supabaseSync = {
         this.client.removeChannel(this.realtimeChannel);
       }
 
+      if (!this._debouncedRealtimeSync) {
+        this._debouncedRealtimeSync = (window.SamaUtils && window.SamaUtils.debounce)
+          ? window.SamaUtils.debounce(() => this.loadAllDataFromSupabase(), 600)
+          : () => this.loadAllDataFromSupabase();
+      }
+
       this.realtimeChannel = this.client
         .channel('sama-cst-realtime')
         .on('postgres_changes', { event: '*', schema: 'public' }, payload => {
           console.log('⚡ Modification Supabase Realtime détectée:', payload.eventType, payload.table);
-          this.loadAllDataFromSupabase();
+          this._debouncedRealtimeSync();
         })
         .subscribe();
     } catch (err) {

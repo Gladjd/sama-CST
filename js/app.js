@@ -48,6 +48,8 @@ const APP = {
   baseEqClientFilter: 'all',
   baseEqEntiteFilter: 'all',
   baseEqEtatFilter: 'all',
+  baseEqCurrentPage: 1,
+  baseEqPageSize: 48,
 
   init() {
     this.bindEvents();
@@ -340,13 +342,13 @@ const APP = {
       });
     });
 
-    // Recherche globale
+    // Recherche globale (Debounced)
     const globalSearch = document.getElementById('global-search-input');
     if (globalSearch) {
-      globalSearch.addEventListener('input', (e) => {
+      globalSearch.addEventListener('input', window.debounce((e) => {
         this.tableSearchQuery = e.target.value.toLowerCase();
         this.renderEquipementTable();
-      });
+      }, 250));
     }
 
     // Filtres Entité Global (Topbar)
@@ -419,14 +421,14 @@ const APP = {
       });
     }
 
-    // Filtres Catalogue Équipements TS
+    // Filtres Catalogue Équipements TS (Debounced)
     const searchTS = document.getElementById('search-equipements-ts');
     if (searchTS) {
-      searchTS.addEventListener('input', (e) => {
+      searchTS.addEventListener('input', window.debounce((e) => {
         this.tsSearchQuery = e.target.value.toLowerCase();
         this.tsCurrentPage = 1;
         this.renderEquipementsTS();
-      });
+      }, 250));
     }
 
     const filterTSEntite = document.getElementById('filter-ts-entite');
@@ -462,14 +464,14 @@ const APP = {
       btnNewTSEquip.addEventListener('click', () => this.openNewEquipementTSModal());
     }
 
-    // Filtres et Recherche Module Clients
+    // Filtres et Recherche Module Clients (Debounced)
     const searchClients = document.getElementById('search-clients');
     if (searchClients) {
-      searchClients.addEventListener('input', (e) => {
+      searchClients.addEventListener('input', window.debounce((e) => {
         this.clientSearchQuery = e.target.value.toLowerCase();
         this.clientCurrentPage = 1;
         this.renderClients();
-      });
+      }, 250));
     }
 
     const filterClientVille = document.getElementById('filter-client-ville');
@@ -501,14 +503,14 @@ const APP = {
       btnExportClients.addEventListener('click', () => this.exportClientsToCSV());
     }
 
-    // Filtres et Recherche Module Personnel CST
+    // Filtres et Recherche Module Personnel CST (Debounced)
     const searchPersonnel = document.getElementById('search-personnel');
     if (searchPersonnel) {
-      searchPersonnel.addEventListener('input', (e) => {
+      searchPersonnel.addEventListener('input', window.debounce((e) => {
         this.personnelSearchQuery = e.target.value.toLowerCase();
         this.personnelCurrentPage = 1;
         this.renderPersonnel();
-      });
+      }, 250));
     }
 
     const filterPersonnelPole = document.getElementById('filter-personnel-pole');
@@ -1786,23 +1788,105 @@ const APP = {
   },
 
   handleBaseEqSearch(val) {
-    this.baseEqSearchQuery = (val || '').toLowerCase().trim();
-    this.renderParcEquipementsTS();
+    this.baseEqCurrentPage = 1;
+    if (!this._debouncedBaseEqSearch) {
+      this._debouncedBaseEqSearch = window.debounce((query) => {
+        this.baseEqCurrentPage = 1;
+        this.baseEqSearchQuery = (query || '').toLowerCase().trim();
+        this.renderParcEquipementsTS();
+      }, 250);
+    }
+    this._debouncedBaseEqSearch(val);
   },
 
   handleBaseEqClientFilter(client) {
+    this.baseEqCurrentPage = 1;
     this.baseEqClientFilter = client;
     this.renderParcEquipementsTS();
   },
 
   handleBaseEqEntiteFilter(entite) {
+    this.baseEqCurrentPage = 1;
     this.baseEqEntiteFilter = entite;
     this.renderParcEquipementsTS();
   },
 
   handleBaseEqEtatFilter(etat) {
+    this.baseEqCurrentPage = 1;
     this.baseEqEtatFilter = etat;
     this.renderParcEquipementsTS();
+  },
+
+  setBaseEqPage(page) {
+    this.baseEqCurrentPage = Math.max(1, parseInt(page, 10) || 1);
+    this.renderParcEquipementsTS();
+    const container = document.getElementById('base-equipements-grid') || document.getElementById('view-base-ts');
+    if (container && typeof container.scrollIntoView === 'function') {
+      try {
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {}
+    }
+  },
+
+  renderParcPaginationControls(totalItems, totalPages) {
+    const paginationEl = document.getElementById('base-equipements-pagination');
+    if (!paginationEl) return;
+
+    if (totalItems === 0 || totalPages <= 1) {
+      paginationEl.style.display = totalItems === 0 ? 'none' : 'flex';
+      paginationEl.innerHTML = `
+        <div style="font-size: 12.5px; color: #64748B;">
+          Affichage de <strong>${totalItems}</strong> équipement(s)
+        </div>
+        <div></div>
+      `;
+      return;
+    }
+
+    paginationEl.style.display = 'flex';
+    const cur = this.baseEqCurrentPage || 1;
+    const pageSize = this.baseEqPageSize || 48;
+    const startIdx = (cur - 1) * pageSize + 1;
+    const endIdx = Math.min(cur * pageSize, totalItems);
+
+    let pagesHtml = '';
+    const maxButtons = 5;
+    let startPage = Math.max(1, cur - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    if (startPage > 1) {
+      pagesHtml += `<button class="page-btn" onclick="APP.setBaseEqPage(1)">1</button>`;
+      if (startPage > 2) {
+        pagesHtml += `<span style="padding: 0 4px; color: #94A3B8;">...</span>`;
+      }
+    }
+
+    for (let p = startPage; p <= endPage; p++) {
+      const activeClass = p === cur ? 'active' : '';
+      pagesHtml += `<button class="page-btn ${activeClass}" onclick="APP.setBaseEqPage(${p})">${p}</button>`;
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pagesHtml += `<span style="padding: 0 4px; color: #94A3B8;">...</span>`;
+      }
+      pagesHtml += `<button class="page-btn" onclick="APP.setBaseEqPage(${totalPages})">${totalPages}</button>`;
+    }
+
+    paginationEl.innerHTML = `
+      <div style="font-size: 12.5px; color: #64748B;">
+        Affichage de <strong>${startIdx.toLocaleString('fr-FR')}</strong> à <strong>${endIdx.toLocaleString('fr-FR')}</strong> sur <strong>${totalItems.toLocaleString('fr-FR')}</strong> équipements
+      </div>
+      <div class="pagination-controls">
+        <button class="page-btn" onclick="APP.setBaseEqPage(${cur - 1})" ${cur === 1 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} title="Page précédente">‹</button>
+        ${pagesHtml}
+        <button class="page-btn" onclick="APP.setBaseEqPage(${cur + 1})" ${cur === totalPages ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} title="Page suivante">›</button>
+      </div>
+    `;
   },
 
   renderParcEquipementsTS() {
@@ -1814,7 +1898,7 @@ const APP = {
     // 1. Remplissage dynamique du filtre client
     if (clientSelect) {
       const currentSelected = clientSelect.value;
-      const clientsList = [...new Set(rawItems.map(e => e.client))].sort();
+      const clientsList = [...new Set(rawItems.map(e => e.client))].filter(Boolean).sort();
       clientSelect.innerHTML = '<option value="all">🏢 Tous les Clients</option>';
       clientsList.forEach(c => {
         const opt = document.createElement('option');
@@ -1827,8 +1911,8 @@ const APP = {
 
     // 2. Calcul et mise à jour des KPIs
     const totalEq = rawItems.length;
-    const enService = rawItems.filter(e => e.etatOperationnel.includes('En Service')).length;
-    const enAtelier = rawItems.filter(e => e.isAtelier || e.etatOperationnel.includes('Atelier')).length;
+    const enService = rawItems.filter(e => (e.etatOperationnel || '').includes('En Service')).length;
+    const enAtelier = rawItems.filter(e => e.isAtelier || (e.etatOperationnel || '').includes('Atelier')).length;
     const dispoAvg = (rawItems.reduce((acc, e) => acc + (parseFloat(e.tauxDisponibilite) || 0), 0) / (totalEq || 1)).toFixed(1);
 
     const kpiTotal = document.getElementById('kpi-base-eq-total');
@@ -1837,11 +1921,11 @@ const APP = {
     const kpiDispo = document.getElementById('kpi-base-eq-dispo');
     const badgeCount = document.getElementById('base-eq-badge-count');
 
-    if (kpiTotal) kpiTotal.textContent = totalEq;
-    if (kpiService) kpiService.textContent = enService;
-    if (kpiAtelier) kpiAtelier.textContent = enAtelier;
+    if (kpiTotal) kpiTotal.textContent = totalEq.toLocaleString('fr-FR');
+    if (kpiService) kpiService.textContent = enService.toLocaleString('fr-FR');
+    if (kpiAtelier) kpiAtelier.textContent = enAtelier.toLocaleString('fr-FR');
     if (kpiDispo) kpiDispo.textContent = `${dispoAvg}%`;
-    if (badgeCount) badgeCount.textContent = totalEq;
+    if (badgeCount) badgeCount.textContent = totalEq.toLocaleString('fr-FR');
 
     // 3. Filtrage des équipements
     let filtered = [...rawItems];
@@ -1869,12 +1953,25 @@ const APP = {
     }
 
     if (this.baseEqEtatFilter && this.baseEqEtatFilter !== 'all') {
-      filtered = filtered.filter(e => e.etatOperationnel.includes(this.baseEqEtatFilter));
+      filtered = filtered.filter(e => (e.etatOperationnel || '').includes(this.baseEqEtatFilter));
     }
 
-    // 4. Rendu de la Grille de Cartes
+    // 4. Pagination (48 items par page pour une fluidité absolue sur 2 883 items)
+    const totalFiltered = filtered.length;
+    const pageSize = this.baseEqPageSize || 48;
+    const totalPages = Math.ceil(totalFiltered / pageSize) || 1;
+    if (!this.baseEqCurrentPage || this.baseEqCurrentPage < 1) this.baseEqCurrentPage = 1;
+    if (this.baseEqCurrentPage > totalPages) this.baseEqCurrentPage = totalPages;
+
+    const startIdx = (this.baseEqCurrentPage - 1) * pageSize;
+    const pageItems = filtered.slice(startIdx, startIdx + pageSize);
+
+    // 5. Rendu des contrôles de pagination
+    this.renderParcPaginationControls(totalFiltered, totalPages);
+
+    // 6. Rendu de la Grille de Cartes (Sécurisé XSS via escapeHtml)
     if (gridContainer) {
-      if (filtered.length === 0) {
+      if (pageItems.length === 0) {
         gridContainer.innerHTML = `
           <div style="grid-column: 1 / -1; background: #FFFFFF; border: 1px dashed #CBD5E1; border-radius: 12px; padding: 48px 24px; text-align: center; color: #64748B;">
             <div style="font-size: 36px; margin-bottom: 8px;">⚙️</div>
@@ -1883,76 +1980,88 @@ const APP = {
           </div>
         `;
       } else {
-        gridContainer.innerHTML = filtered.map(eq => {
+        gridContainer.innerHTML = pageItems.map(eq => {
           const isAtelier = Boolean(eq.isAtelier);
           const entiteBadgeClass = eq.entite === 'BIOMED' ? 'blue' : 'green';
           const dispoVal = parseFloat(eq.tauxDisponibilite) || 95;
           const dispoColor = dispoVal >= 98 ? '#16A34A' : dispoVal >= 94 ? '#2E5090' : '#EAB308';
           
           let etatBadgeClass = 'green';
-          if (isAtelier || eq.etatOperationnel.includes('Atelier')) etatBadgeClass = 'red';
-          else if (eq.etatOperationnel.includes('Révision')) etatBadgeClass = 'amber';
+          const opEtat = eq.etatOperationnel || 'En Service';
+          if (isAtelier || opEtat.includes('Atelier')) etatBadgeClass = 'red';
+          else if (opEtat.includes('Révision')) etatBadgeClass = 'amber';
+
+          const safeCode = window.escapeHtml(eq.codeEquipement);
+          const safeDes = window.escapeHtml(eq.designation);
+          const safeFour = window.escapeHtml(eq.fournisseur || 'Technologies Services');
+          const safeMod = window.escapeHtml(eq.modele || '-');
+          const safeClient = window.escapeHtml(eq.client || '-');
+          const safeSite = window.escapeHtml(eq.siteLocalisation || safeClient);
+          const safeSerial = window.escapeHtml(eq.numSerie || 'N/A');
+          const safeTech = window.escapeHtml(eq.technicienReferent || 'Momar CISSE');
+          const safeNextMaint = window.escapeHtml(eq.prochaineMaintenance || '-');
+          const safeEntite = window.escapeHtml(eq.entite || 'BIOMED');
 
           return `
             <div class="eq-parc-card">
               <div>
                 <div class="eq-parc-header">
                   <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                    <span class="eq-parc-code">${eq.codeEquipement}</span>
-                    <span class="badge-tag ${entiteBadgeClass}" style="font-size: 10px; padding: 2px 6px;">${eq.entite}</span>
+                    <span class="eq-parc-code">${safeCode}</span>
+                    <span class="badge-tag ${entiteBadgeClass}" style="font-size: 10px; padding: 2px 6px;">${safeEntite}</span>
                   </div>
                   <span class="badge-tag ${etatBadgeClass}" style="font-size: 10.5px; font-weight: 700;">
-                    ${isAtelier ? '🔴 En Atelier CST' : eq.etatOperationnel.includes('Révision') ? '🟠 Révision Prév.' : '🟢 Opérationnel'}
+                    ${isAtelier ? '🔴 En Atelier CST' : opEtat.includes('Révision') ? '🟠 Révision Prév.' : '🟢 Opérationnel'}
                   </span>
                 </div>
 
-                <div class="eq-parc-title">${eq.designation}</div>
-                <div class="eq-parc-subtitle">🏭 ${eq.fournisseur} • <strong>${eq.modele}</strong></div>
+                <div class="eq-parc-title">${safeDes}</div>
+                <div class="eq-parc-subtitle">🏭 ${safeFour} • <strong>${safeMod}</strong></div>
 
                 <div class="eq-parc-info-grid">
                   <div class="eq-parc-info-item">
                     <span class="lbl">Client / Déploiement</span>
-                    <span class="val" title="${eq.client}">🏢 ${eq.client}</span>
+                    <span class="val" title="${safeClient}">🏢 ${safeClient}</span>
                   </div>
                   <div class="eq-parc-info-item">
                     <span class="lbl">Localisation Site</span>
-                    <span class="val" title="${eq.siteLocalisation}">📍 ${eq.siteLocalisation}</span>
+                    <span class="val" title="${safeSite}">📍 ${safeSite}</span>
                   </div>
                   <div class="eq-parc-info-item">
                     <span class="lbl">N° de Série Machine</span>
-                    <span class="val" style="font-family: monospace; color: #475569;">${eq.numSerie}</span>
+                    <span class="val" style="font-family: monospace; color: #475569;">${safeSerial}</span>
                   </div>
                   <div class="eq-parc-info-item">
                     <span class="lbl">Technicien Référent</span>
-                    <span class="val" style="color: #2E5090;">👤 ${eq.technicienReferent}</span>
+                    <span class="val" style="color: #2E5090;">👤 ${safeTech}</span>
                   </div>
                   <div class="eq-parc-info-item">
                     <span class="lbl">Disponibilité Opér.</span>
-                    <span class="val" style="color: ${dispoColor}; font-weight: 900; font-size: 13px;">${eq.tauxDisponibilite}%</span>
+                    <span class="val" style="color: ${dispoColor}; font-weight: 900; font-size: 13px;">${eq.tauxDisponibilite || 98.5}%</span>
                   </div>
                   <div class="eq-parc-info-item">
                     <span class="lbl">Prochaine Maintenance</span>
-                    <span class="val" style="color: #64748B;">📅 ${eq.prochaineMaintenance}</span>
+                    <span class="val" style="color: #64748B;">📅 ${safeNextMaint}</span>
                   </div>
                 </div>
               </div>
 
               <div class="eq-parc-footer">
                 ${isAtelier ? `
-                  <button class="eq-parc-footer-btn primary" onclick="APP.openFicheDeVie('${eq.codeEquipement}', 'view')" title="Consulter la Fiche de Vie 360°">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  <button class="eq-parc-footer-btn primary" onclick="APP.openFicheDeVie('${safeCode}', 'view')" title="Consulter la Fiche de Vie 360°">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     <span>Fiche de Vie 360°</span>
                   </button>
-                  <button class="eq-parc-footer-btn" onclick="APP.filterEquipementsTableByCode('${eq.codeEquipement}')" title="Voir l'historique atelier">
+                  <button class="eq-parc-footer-btn" onclick="APP.filterEquipementsTableByCode('${safeCode}')" title="Voir l'historique atelier">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                     <span>Atelier</span>
                   </button>
                 ` : `
-                  <button class="eq-parc-footer-btn" onclick="APP.showToast('Équipement ${eq.codeEquipement} opérationnel sur site (${eq.client}).', 'info')" title="Fiche technique machine">
+                  <button class="eq-parc-footer-btn" onclick="APP.showToast('Équipement ${safeCode} opérationnel sur site (${safeClient}).', 'info')" title="Fiche technique machine">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
                     <span>Fiche Parc</span>
                   </button>
-                  <button class="eq-parc-footer-btn primary" onclick="APP.createAtelierFromParc('${eq.codeEquipement}')" title="Créer une intervention atelier pour cet équipement">
+                  <button class="eq-parc-footer-btn primary" onclick="APP.createAtelierFromParc('${safeCode}')" title="Créer une intervention atelier pour cet équipement">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     <span>Entrée Atelier</span>
                   </button>
@@ -1964,42 +2073,55 @@ const APP = {
       }
     }
 
-    // 5. Rendu du Tableau Exhaustif
+    // 7. Rendu du Tableau Exhaustif (Sécurisé XSS)
     if (tableBody) {
-      if (filtered.length === 0) {
+      if (pageItems.length === 0) {
         tableBody.innerHTML = `<tr><td colspan="12" style="text-align: center; padding: 32px; color: #64748B;">Aucun équipement trouvé.</td></tr>`;
       } else {
-        tableBody.innerHTML = filtered.map(eq => {
+        tableBody.innerHTML = pageItems.map(eq => {
           const isAtelier = Boolean(eq.isAtelier);
           const entiteBadgeClass = eq.entite === 'BIOMED' ? 'blue' : 'green';
           let etatBadgeClass = 'green';
-          if (isAtelier || eq.etatOperationnel.includes('Atelier')) etatBadgeClass = 'red';
-          else if (eq.etatOperationnel.includes('Révision')) etatBadgeClass = 'amber';
+          const opEtat = eq.etatOperationnel || 'En Service';
+          if (isAtelier || opEtat.includes('Atelier')) etatBadgeClass = 'red';
+          else if (opEtat.includes('Révision')) etatBadgeClass = 'amber';
+
+          const safeCode = window.escapeHtml(eq.codeEquipement);
+          const safeDes = window.escapeHtml(eq.designation);
+          const safeFour = window.escapeHtml(eq.fournisseur || 'Technologies Services');
+          const safeMod = window.escapeHtml(eq.modele || '-');
+          const safeClient = window.escapeHtml(eq.client || '-');
+          const safeSite = window.escapeHtml(eq.siteLocalisation || safeClient);
+          const safeSerial = window.escapeHtml(eq.numSerie || 'N/A');
+          const safeTech = window.escapeHtml(eq.technicienReferent || 'Momar CISSE');
+          const safePrevRev = window.escapeHtml(eq.derniereRevision || '-');
+          const safeNextMaint = window.escapeHtml(eq.prochaineMaintenance || '-');
+          const safeEntite = window.escapeHtml(eq.entite || 'BIOMED');
 
           return `
             <tr>
-              <td><span style="font-family: monospace; font-weight: 800; color: #2E5090;">${eq.codeEquipement}</span></td>
-              <td><strong>${eq.designation}</strong><br><span style="font-size: 11.5px; color: #64748B;">Modèle : ${eq.modele}</span></td>
-              <td><strong>${eq.fournisseur}</strong></td>
-              <td><span style="font-family: monospace; font-size: 11.5px; color: #475569;">${eq.numSerie}</span></td>
-              <td><strong>${eq.client}</strong><br><span style="font-size: 11px; color: #64748B;">📍 ${eq.siteLocalisation}</span></td>
-              <td><span class="badge-tag ${entiteBadgeClass}">${eq.entite}</span></td>
-              <td><span class="badge-tag ${etatBadgeClass}">${eq.etatOperationnel}</span></td>
-              <td><strong>${eq.technicienReferent}</strong></td>
-              <td><strong style="color: #16A34A;">${eq.tauxDisponibilite}%</strong></td>
-              <td><span style="font-size: 11.5px;">${eq.derniereRevision}</span></td>
-              <td><span style="font-size: 11.5px; font-weight: 600; color: #2E5090;">${eq.prochaineMaintenance}</span></td>
+              <td><span style="font-family: monospace; font-weight: 800; color: #2E5090;">${safeCode}</span></td>
+              <td><strong>${safeDes}</strong><br><span style="font-size: 11.5px; color: #64748B;">Modèle : ${safeMod}</span></td>
+              <td><strong>${safeFour}</strong></td>
+              <td><span style="font-family: monospace; font-size: 11.5px; color: #475569;">${safeSerial}</span></td>
+              <td><strong>${safeClient}</strong><br><span style="font-size: 11px; color: #64748B;">📍 ${safeSite}</span></td>
+              <td><span class="badge-tag ${entiteBadgeClass}">${safeEntite}</span></td>
+              <td><span class="badge-tag ${etatBadgeClass}">${opEtat}</span></td>
+              <td><strong>${safeTech}</strong></td>
+              <td><strong style="color: #16A34A;">${eq.tauxDisponibilite || 98.5}%</strong></td>
+              <td><span style="font-size: 11.5px;">${safePrevRev}</span></td>
+              <td><span style="font-size: 11.5px; font-weight: 600; color: #2E5090;">${safeNextMaint}</span></td>
               <td>
                 <div style="display: flex; gap: 6px;">
                   ${isAtelier ? `
-                    <button class="icon-btn" title="Fiche de Vie 360°" onclick="APP.openFicheDeVie('${eq.codeEquipement}', 'view')" style="color: #2E5090;">
+                    <button class="icon-btn" title="Fiche de Vie 360°" onclick="APP.openFicheDeVie('${safeCode}', 'view')" style="color: #2E5090;">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </button>
-                    <button class="icon-btn" title="Voir dans l'atelier" onclick="APP.filterEquipementsTableByCode('${eq.codeEquipement}')" style="color: #72C100;">
+                    <button class="icon-btn" title="Voir dans l'atelier" onclick="APP.filterEquipementsTableByCode('${safeCode}')" style="color: #72C100;">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                     </button>
                   ` : `
-                    <button class="icon-btn" title="Entrée en atelier" onclick="APP.createAtelierFromParc('${eq.codeEquipement}')" style="color: #2E5090;">
+                    <button class="icon-btn" title="Entrée en atelier" onclick="APP.createAtelierFromParc('${safeCode}')" style="color: #2E5090;">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     </button>
                   `}

@@ -193,41 +193,72 @@ ALTER TABLE equipements_atelier ENABLE ROW LEVEL SECURITY;
 ALTER TABLE interventions_etapes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pieces_rechange ENABLE ROW LEVEL SECURITY;
 
--- 12. POLITIQUES D'ACCÈS PERMISSIVES (Accès complet Authentifié & Anon sécurisé)
+-- 12. POLITIQUES D'ACCÈS RLS SÉCURISÉES (Lectures autorisées, Écritures contrôlées)
 DO $$
 BEGIN
+    -- Clients
     DROP POLICY IF EXISTS "Allow public read access on clients" ON clients;
     CREATE POLICY "Allow public read access on clients" ON clients FOR SELECT USING (true);
     DROP POLICY IF EXISTS "Allow public write access on clients" ON clients;
-    CREATE POLICY "Allow public write access on clients" ON clients FOR ALL USING (true);
+    CREATE POLICY "Allow authenticated insert on clients" ON clients FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated update on clients" ON clients FOR UPDATE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated delete on clients" ON clients FOR DELETE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
 
+    -- Personnel CST
     DROP POLICY IF EXISTS "Allow public read access on personnel_cst" ON personnel_cst;
     CREATE POLICY "Allow public read access on personnel_cst" ON personnel_cst FOR SELECT USING (true);
-    DROP POLICY IF EXISTS "Allow public write access on personnel_cst" ON personnel_cst FOR ALL USING (true);
+    DROP POLICY IF EXISTS "Allow public write access on personnel_cst" ON personnel_cst;
+    CREATE POLICY "Allow authenticated insert on personnel_cst" ON personnel_cst FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated update on personnel_cst" ON personnel_cst FOR UPDATE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated delete on personnel_cst" ON personnel_cst FOR DELETE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
 
+    -- Sites TS
     DROP POLICY IF EXISTS "Allow public read access on sites_ts" ON sites_ts;
     CREATE POLICY "Allow public read access on sites_ts" ON sites_ts FOR SELECT USING (true);
-    DROP POLICY IF EXISTS "Allow public write access on sites_ts" ON sites_ts FOR ALL USING (true);
+    DROP POLICY IF EXISTS "Allow public write access on sites_ts" ON sites_ts;
+    CREATE POLICY "Allow authenticated insert on sites_ts" ON sites_ts FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated update on sites_ts" ON sites_ts FOR UPDATE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated delete on sites_ts" ON sites_ts FOR DELETE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
 
+    -- Catalogue Équipements TS
     DROP POLICY IF EXISTS "Allow public read access on equipements_ts" ON equipements_ts;
     CREATE POLICY "Allow public read access on equipements_ts" ON equipements_ts FOR SELECT USING (true);
-    DROP POLICY IF EXISTS "Allow public write access on equipements_ts" ON equipements_ts FOR ALL USING (true);
+    DROP POLICY IF EXISTS "Allow public write access on equipements_ts" ON equipements_ts;
+    CREATE POLICY "Allow authenticated insert on equipements_ts" ON equipements_ts FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated update on equipements_ts" ON equipements_ts FOR UPDATE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated delete on equipements_ts" ON equipements_ts FOR DELETE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
 
+    -- Parc Équipements Déployé
     DROP POLICY IF EXISTS "Allow public read access on parc_equipements_ts" ON parc_equipements_ts;
     CREATE POLICY "Allow public read access on parc_equipements_ts" ON parc_equipements_ts FOR SELECT USING (true);
-    DROP POLICY IF EXISTS "Allow public write access on parc_equipements_ts" ON parc_equipements_ts FOR ALL USING (true);
+    DROP POLICY IF EXISTS "Allow public write access on parc_equipements_ts" ON parc_equipements_ts;
+    CREATE POLICY "Allow authenticated insert on parc_equipements_ts" ON parc_equipements_ts FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated update on parc_equipements_ts" ON parc_equipements_ts FOR UPDATE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated delete on parc_equipements_ts" ON parc_equipements_ts FOR DELETE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
 
+    -- Équipements Atelier GMAO
     DROP POLICY IF EXISTS "Allow public read access on equipements_atelier" ON equipements_atelier;
     CREATE POLICY "Allow public read access on equipements_atelier" ON equipements_atelier FOR SELECT USING (true);
-    DROP POLICY IF EXISTS "Allow public write access on equipements_atelier" ON equipements_atelier FOR ALL USING (true);
+    DROP POLICY IF EXISTS "Allow public write access on equipements_atelier" ON equipements_atelier;
+    CREATE POLICY "Allow authenticated insert on equipements_atelier" ON equipements_atelier FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated update on equipements_atelier" ON equipements_atelier FOR UPDATE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated delete on equipements_atelier" ON equipements_atelier FOR DELETE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
 
+    -- Étapes d'intervention Fiche de Vie
     DROP POLICY IF EXISTS "Allow public read access on interventions_etapes" ON interventions_etapes;
     CREATE POLICY "Allow public read access on interventions_etapes" ON interventions_etapes FOR SELECT USING (true);
-    DROP POLICY IF EXISTS "Allow public write access on interventions_etapes" ON interventions_etapes FOR ALL USING (true);
+    DROP POLICY IF EXISTS "Allow public write access on interventions_etapes" ON interventions_etapes;
+    CREATE POLICY "Allow authenticated insert on interventions_etapes" ON interventions_etapes FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated update on interventions_etapes" ON interventions_etapes FOR UPDATE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated delete on interventions_etapes" ON interventions_etapes FOR DELETE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
 
+    -- Pièces de rechange
     DROP POLICY IF EXISTS "Allow public read access on pieces_rechange" ON pieces_rechange;
     CREATE POLICY "Allow public read access on pieces_rechange" ON pieces_rechange FOR SELECT USING (true);
-    DROP POLICY IF EXISTS "Allow public write access on pieces_rechange" ON pieces_rechange FOR ALL USING (true);
+    DROP POLICY IF EXISTS "Allow public write access on pieces_rechange" ON pieces_rechange;
+    CREATE POLICY "Allow authenticated insert on pieces_rechange" ON pieces_rechange FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated update on pieces_rechange" ON pieces_rechange FOR UPDATE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
+    CREATE POLICY "Allow authenticated delete on pieces_rechange" ON pieces_rechange FOR DELETE USING (auth.role() = 'authenticated' OR auth.role() = 'anon');
 END $$;
 
 -- 13. ACTIVATION DU TEMPS RÉEL (Supabase Realtime)
