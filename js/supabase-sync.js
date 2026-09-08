@@ -135,44 +135,81 @@ window.supabaseSync = {
       }
 
       // 4. Sites TS
-      const { data: sitesData } = await this.client.from('sites_ts').select('*').order('created_at', { ascending: false });
+      const { data: sitesData } = await this.client
+        .from('sites_ts')
+        .select('*')
+        .order('parc_equipements', { ascending: false })
+        .range(0, 4999);
+        
       if (sitesData && sitesData.length > 0) {
         SAMA_DATA.sitesTS = sitesData.map(s => ({
-          id: s.site_code,
-          nomClient: s.nom_client,
-          secteur: s.secteur,
-          localisation: s.localisation,
-          responsableSite: s.responsable_site,
-          telephone: s.telephone,
-          email: s.email,
-          parcEquipements: s.parc_equipements || 0,
+          id: s.site_code || s.nom_site || s.id,
+          site_code: s.site_code,
+          siteCode: s.site_code,
+          nomClient: s.nom_client || s.client_nom || s.nom_site,
+          nom_client: s.nom_client || s.client_nom || s.nom_site,
+          secteur: s.secteur || 'Santé & Médical',
+          localisation: s.localisation || 'Dakar',
+          responsableSite: s.responsable_site || 'Direction Technique / Biomédicale',
+          responsable_site: s.responsable_site || 'Direction Technique / Biomédicale',
+          telephone: s.telephone || '+221 33 800 00 00',
+          email: s.email || 'contact@technologies-services.sn',
+          parcEquipements: s.parc_equipements || s.equipements_count || 0,
+          parc_equipements: s.parc_equipements || s.equipements_count || 0,
           equipementsEnAtelier: s.equipements_en_atelier || 0,
+          equipements_en_atelier: s.equipements_en_atelier || 0,
           slaHeures: s.sla_heures || 4,
-          tauxDisponibilite: parseFloat(s.taux_disponibilite) || 95.0,
-          technicienReferent: s.technicien_referent,
-          contrat: s.contrat,
+          sla_heures: s.sla_heures || 4,
+          tauxDisponibilite: parseFloat(s.taux_disponibilite) || 98.0,
+          taux_disponibilite: parseFloat(s.taux_disponibilite) || 98.0,
+          technicienReferent: s.technicien_referent || 'Momar CISSE',
+          technicien_referent: s.technicien_referent || 'Momar CISSE',
+          contrat: s.contrat || s.type_contrat || 'Contrat Maintenance Gold TS',
           statut: s.statut || 'Actif'
         }));
       }
 
       // 5. Parc Équipements Déployé
-      const { data: parcData } = await this.client.from('parc_equipements_ts').select('*').order('created_at', { ascending: false });
+      const { data: parcData } = await this.client
+        .from('parc_equipements_ts')
+        .select('*')
+        .order('code_machine', { ascending: true })
+        .range(0, 4999);
+        
       if (parcData && parcData.length > 0) {
-        SAMA_DATA.parcEquipementsTS = parcData.map(p => ({
-          codeEquipement: p.code_equipement,
-          nomEquipement: p.nom_equipement,
-          client: p.client,
-          site: p.site,
-          pole: p.pole,
-          numeroSerie: p.numero_serie,
-          modele: p.modele,
-          fournisseur: p.fournisseur,
-          statut: p.statut,
-          disponibilite: parseFloat(p.disponibilite) || 98.0,
-          contrat: p.contrat,
-          dateInstallation: p.date_installation,
-          technicienReferent: p.technicien_referent
-        }));
+        SAMA_DATA.parcEquipementsTS = parcData.map(p => {
+          const code = p.code_equipement || p.code_machine;
+          const des = p.designation || p.nom_equipement;
+          const pole = p.pole || 'BIOMED';
+          const numSerie = p.numero_serie || p.num_serie || 'N/A';
+          const client = p.client || p.client_nom || p.site;
+          const dispo = parseFloat(p.taux_disponibilite || p.disponibilite) || 98.5;
+          return {
+            id: p.id || code,
+            codeEquipement: code,
+            nomEquipement: des,
+            designation: des,
+            client: client,
+            site: p.site || client,
+            siteLocalisation: p.site || client,
+            pole: pole,
+            entite: pole,
+            numeroSerie: numSerie,
+            numSerie: numSerie,
+            modele: p.modele || '',
+            fournisseur: p.fournisseur || 'Technologies Services',
+            categorie: p.categorie || 'C1',
+            statut: p.statut || 'Actif',
+            etatOperationnel: p.etat_operationnel || '🟢 En Service (Nominal)',
+            isAtelier: Boolean(p.en_atelier),
+            disponibilite: dispo,
+            tauxDisponibilite: dispo,
+            contrat: p.contrat || 'Sous Contrat GMAO TS',
+            dateInstallation: p.date_installation || '2023-01-15',
+            technicienReferent: p.technicien_referent || 'Momar CISSE',
+            prochaineMaintenance: p.prochaine_maintenance || '15/11/2026'
+          };
+        });
       }
 
       // 6. Équipements Atelier & Interventions

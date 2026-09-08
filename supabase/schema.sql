@@ -39,23 +39,30 @@ CREATE TABLE IF NOT EXISTS personnel_cst (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. TABLE: SITES CLIENTS & CONTRATS TS (7 Sites Partenaires)
+-- 4. TABLE: SITES CLIENTS & CONTRATS TS (483 Sites Partenaires)
 CREATE TABLE IF NOT EXISTS sites_ts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    site_code VARCHAR(50) UNIQUE NOT NULL,
+    site_code VARCHAR(100) UNIQUE NOT NULL,
+    nom_site VARCHAR(255),
     nom_client VARCHAR(255) NOT NULL,
+    client_nom VARCHAR(255),
+    client_id UUID REFERENCES clients(id) ON DELETE SET NULL,
     secteur VARCHAR(100) NOT NULL,
     localisation VARCHAR(200) NOT NULL,
     responsable_site VARCHAR(150) NOT NULL,
     telephone VARCHAR(50) NOT NULL,
     email VARCHAR(150) NOT NULL,
     parc_equipements INTEGER DEFAULT 0,
+    equipements_count INTEGER DEFAULT 0,
     equipements_en_atelier INTEGER DEFAULT 0,
     sla_heures INTEGER DEFAULT 4,
+    sla_resolution VARCHAR(50) DEFAULT '4h max',
+    type_contrat VARCHAR(150),
+    contrat VARCHAR(150) NOT NULL,
     taux_disponibilite NUMERIC(5, 2) DEFAULT 95.00,
     technicien_referent VARCHAR(150) NOT NULL,
-    contrat VARCHAR(150) NOT NULL,
     statut VARCHAR(50) DEFAULT 'Actif',
+    derniere_visite DATE,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -74,22 +81,36 @@ CREATE TABLE IF NOT EXISTS equipements_ts (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 6. TABLE: PARC ÉQUIPEMENTS DÉPLOYÉ (24 Machines chez les Clients)
+-- 6. TABLE: PARC ÉQUIPEMENTS DÉPLOYÉ (2 883 Machines chez les Clients)
 CREATE TABLE IF NOT EXISTS parc_equipements_ts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    code_equipement VARCHAR(50) UNIQUE NOT NULL,
+    code_machine VARCHAR(100) UNIQUE,
+    code_equipement VARCHAR(100) UNIQUE NOT NULL,
     nom_equipement VARCHAR(255) NOT NULL,
+    designation VARCHAR(255),
     client VARCHAR(255) NOT NULL,
+    client_nom VARCHAR(255),
+    client_id UUID REFERENCES clients(id) ON DELETE SET NULL,
     site VARCHAR(200) NOT NULL,
+    marque_modele VARCHAR(255),
     pole VARCHAR(100) NOT NULL,
     numero_serie VARCHAR(100) NOT NULL,
+    num_serie VARCHAR(100),
     modele VARCHAR(200) NOT NULL,
     fournisseur VARCHAR(150) NOT NULL,
-    statut VARCHAR(50) NOT NULL,
+    statut VARCHAR(50) NOT NULL DEFAULT 'Actif',
+    etat_operationnel VARCHAR(100) DEFAULT 'En Service',
     disponibilite NUMERIC(5, 2) DEFAULT 98.00,
+    taux_disponibilite NUMERIC(5, 2) DEFAULT 98.00,
     contrat VARCHAR(150) NOT NULL,
     date_installation DATE,
     technicien_referent VARCHAR(150) NOT NULL,
+    categorie VARCHAR(50) DEFAULT 'C1',
+    en_atelier BOOLEAN DEFAULT FALSE,
+    garantie_debut DATE,
+    garantie_fin DATE,
+    derniere_maintenance DATE,
+    prochaine_maintenance DATE,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
