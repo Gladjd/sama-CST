@@ -55,8 +55,10 @@ const APP = {
       const savedAtelier = localStorage.getItem('sama_cst_equipements_atelier');
       if (savedAtelier) {
         const parsed = JSON.parse(savedAtelier);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          SAMA_DATA.equipementsAtelier = parsed;
+        if (Array.isArray(parsed)) {
+          // Filtrer les anciennes données d'exemples supprimées
+          const cleaned = parsed.filter(eq => !['EQ-AT-0001', 'EQ-AT-0002', 'EQ-AT-0003', 'EQ-AT-0004'].includes(eq.codeEquipement || eq.code_equipement));
+          SAMA_DATA.equipementsAtelier = cleaned;
         }
       }
     } catch (e) {

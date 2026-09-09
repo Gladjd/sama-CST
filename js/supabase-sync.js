@@ -72,12 +72,13 @@ window.supabaseSync = {
       while (hasMore) {
         let query = this.client
           .from(tableName)
-          .select('*')
-          .range(from, from + PAGE_SIZE - 1);
+          .select('*');
 
         if (orderBy) {
           query = query.order(orderBy, { ascending });
         }
+
+        query = query.range(from, from + PAGE_SIZE - 1);
 
         const { data, error } = await query;
         if (error) {
@@ -338,22 +339,15 @@ window.supabaseSync = {
           };
         });
 
-        // Persistance locale de secours
+        // Persistance locale
         try {
           localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
         } catch (e) {}
       } else {
-        // Fallback LocalStorage si Supabase est vide ou n'a pas encore de lignes atelier
+        // La base Supabase atelier est vide (0 équipement en atelier au démarrage propre)
+        SAMA_DATA.equipementsAtelier = [];
         try {
-          const cached = localStorage.getItem('sama_cst_equipements_atelier');
-          if (cached) {
-            const parsed = JSON.parse(cached);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              SAMA_DATA.equipementsAtelier = parsed;
-              // Synchroniser automatiquement vers Supabase
-              parsed.forEach(eq => this.syncSaveEquipementAtelier(eq));
-            }
-          }
+          localStorage.setItem('sama_cst_equipements_atelier', '[]');
         } catch (e) {}
       }
 
