@@ -36,6 +36,11 @@ const APP = {
   personnelSortDirection: 'asc',
   personnelCurrentPage: 1,
   personnelItemsPerPage: 10,
+  siteSearchQuery: '',
+  siteFilterSecteur: 'all',
+  siteCurrentPage: 1,
+  sitePageSize: 24,
+  currentSearchQuery: '',
   editingPersonnelIdx: null,
   currentFvCode: null,
   currentFvMode: 'view',
@@ -49,6 +54,7 @@ const APP = {
   baseEqEntiteFilter: 'all',
   baseEqEtatFilter: 'all',
   baseEqCurrentPage: 1,
+  baseEqPageSize: 48,
   init() {
     // 0. Restauration locale instantanée des équipements d'atelier
     try {
@@ -360,12 +366,15 @@ const APP = {
       });
     });
 
-    // Recherche globale unifiée et contextuelle (Debounced)
+    // Recherche globale unifiée et contextuelle
     const globalSearch = document.getElementById('global-search-input');
     if (globalSearch) {
-      globalSearch.addEventListener('input', window.debounce((e) => {
+      globalSearch.addEventListener('input', (e) => {
         this.handleGlobalSearch(e.target.value);
-      }, 250));
+      });
+      globalSearch.addEventListener('search', (e) => {
+        this.handleGlobalSearch(e.target.value);
+      });
     }
 
     // Raccourci clavier universel ⌘K / Ctrl+K
@@ -392,7 +401,14 @@ const APP = {
       });
     }
 
-    // Filtres Atelier
+    // Filtres et Recherche Atelier
+    const searchAtelier = document.getElementById('search-atelier-equipements');
+    if (searchAtelier) {
+      searchAtelier.addEventListener('input', (e) => {
+        this.handleAtelierSearch(e.target.value);
+      });
+    }
+
     if (filterEntiteSelect) {
       filterEntiteSelect.addEventListener('change', (e) => {
         this.filterEntite = e.target.value;
@@ -449,14 +465,12 @@ const APP = {
       });
     }
 
-    // Filtres Catalogue Équipements TS (Debounced)
+    // Filtres Catalogue Équipements TS
     const searchTS = document.getElementById('search-equipements-ts');
     if (searchTS) {
-      searchTS.addEventListener('input', window.debounce((e) => {
-        this.tsSearchQuery = e.target.value.toLowerCase();
-        this.tsCurrentPage = 1;
-        this.renderEquipementsTS();
-      }, 250));
+      searchTS.addEventListener('input', (e) => {
+        this.handleCatalogueSearch(e.target.value);
+      });
     }
 
     const filterTSEntite = document.getElementById('filter-ts-entite');
@@ -492,14 +506,34 @@ const APP = {
       btnNewTSEquip.addEventListener('click', () => this.openNewEquipementTSModal());
     }
 
-    // Filtres et Recherche Module Clients (Debounced)
+    // Base de Données TS : Recherche Parc & Sites
+    const searchBaseEq = document.getElementById('search-base-equipements');
+    if (searchBaseEq) {
+      searchBaseEq.addEventListener('input', (e) => {
+        this.handleBaseEqSearch(e.target.value);
+      });
+    }
+
+    const searchSites = document.getElementById('search-sites-ts');
+    if (searchSites) {
+      searchSites.addEventListener('input', (e) => {
+        this.handleSitesSearch(e.target.value);
+      });
+    }
+
+    const filterSiteSecteur = document.getElementById('filter-site-secteur');
+    if (filterSiteSecteur) {
+      filterSiteSecteur.addEventListener('change', (e) => {
+        this.handleSiteSecteurFilter(e.target.value);
+      });
+    }
+
+    // Filtres et Recherche Module Clients
     const searchClients = document.getElementById('search-clients');
     if (searchClients) {
-      searchClients.addEventListener('input', window.debounce((e) => {
-        this.clientSearchQuery = e.target.value.toLowerCase();
-        this.clientCurrentPage = 1;
-        this.renderClients();
-      }, 250));
+      searchClients.addEventListener('input', (e) => {
+        this.handleClientSearch(e.target.value);
+      });
     }
 
     const filterClientVille = document.getElementById('filter-client-ville');
@@ -531,14 +565,12 @@ const APP = {
       btnExportClients.addEventListener('click', () => this.exportClientsToCSV());
     }
 
-    // Filtres et Recherche Module Personnel CST (Debounced)
+    // Filtres et Recherche Module Personnel CST
     const searchPersonnel = document.getElementById('search-personnel');
     if (searchPersonnel) {
-      searchPersonnel.addEventListener('input', window.debounce((e) => {
-        this.personnelSearchQuery = e.target.value.toLowerCase();
-        this.personnelCurrentPage = 1;
-        this.renderPersonnel();
-      }, 250));
+      searchPersonnel.addEventListener('input', (e) => {
+        this.handlePersonnelSearch(e.target.value);
+      });
     }
 
     const filterPersonnelPole = document.getElementById('filter-personnel-pole');
@@ -575,59 +607,139 @@ const APP = {
 
     switch (this.currentModule) {
       case 'atelier-equipements':
-        this.tableSearchQuery = q;
-        this.renderEquipementTable();
+        this.handleAtelierSearch(query);
         break;
 
       case 'equipements-ts':
-        this.tsSearchQuery = q;
-        this.tsCurrentPage = 1;
-        const searchTSInput = document.getElementById('search-equipements-ts');
-        if (searchTSInput && searchTSInput.value !== query) searchTSInput.value = query;
-        this.renderEquipementsTS();
+        this.handleCatalogueSearch(query);
         break;
 
       case 'base-ts':
-        if (this.currentBaseTSTab === 'sites') {
-          this.siteSearchQuery = q;
-          this.renderSitesTS();
+        if (this.currentBaseTSView === 'clients') {
+          this.handleSitesSearch(query);
         } else {
-          this.baseEqSearchQuery = q;
-          this.baseEqCurrentPage = 1;
-          const searchParcInput = document.getElementById('search-base-equipements');
-          if (searchParcInput && searchParcInput.value !== query) searchParcInput.value = query;
-          this.renderParcEquipementsTS();
+          this.handleBaseEqSearch(query);
         }
         break;
 
       case 'clients':
-        this.clientSearchQuery = q;
-        this.clientCurrentPage = 1;
-        const searchClientInput = document.getElementById('search-clients');
-        if (searchClientInput && searchClientInput.value !== query) searchClientInput.value = query;
-        this.renderClients();
+        this.handleClientSearch(query);
         break;
 
       case 'personnel-cst':
-        this.personnelSearchQuery = q;
-        this.personnelCurrentPage = 1;
-        const searchPersonnelInput = document.getElementById('search-personnel');
-        if (searchPersonnelInput && searchPersonnelInput.value !== query) searchPersonnelInput.value = query;
-        this.renderPersonnel();
+        this.handlePersonnelSearch(query);
         break;
 
       case 'dashboard':
       default:
-        this.tableSearchQuery = q;
-        this.renderEquipementTable();
+        if (q.length > 0) {
+          this.switchModule('base-ts');
+          this.switchBaseTSView('equipements');
+          this.handleBaseEqSearch(query);
+        } else {
+          this.tableSearchQuery = '';
+          this.renderEquipementTable();
+        }
         break;
     }
+  },
+
+  handleAtelierSearch(val) {
+    this.currentPage = 1;
+    this.tableSearchQuery = (val || '').toLowerCase().trim();
+    const globalSearch = document.getElementById('global-search-input');
+    if (globalSearch && globalSearch.value !== val && this.currentModule === 'atelier-equipements') {
+      globalSearch.value = val || '';
+    }
+    const localInput = document.getElementById('search-atelier-equipements');
+    if (localInput && localInput.value !== val) {
+      localInput.value = val || '';
+    }
+    this.renderEquipementTable();
+  },
+
+  handleCatalogueSearch(val) {
+    this.tsCurrentPage = 1;
+    this.tsSearchQuery = (val || '').toLowerCase().trim();
+    const globalSearch = document.getElementById('global-search-input');
+    if (globalSearch && globalSearch.value !== val && this.currentModule === 'equipements-ts') {
+      globalSearch.value = val || '';
+    }
+    const localInput = document.getElementById('search-equipements-ts');
+    if (localInput && localInput.value !== val) {
+      localInput.value = val || '';
+    }
+    this.renderEquipementsTS();
+  },
+
+  handleBaseEqSearch(val) {
+    this.baseEqCurrentPage = 1;
+    this.baseEqSearchQuery = (val || '').toLowerCase().trim();
+    const globalSearch = document.getElementById('global-search-input');
+    if (globalSearch && globalSearch.value !== val && this.currentModule === 'base-ts' && this.currentBaseTSView === 'equipements') {
+      globalSearch.value = val || '';
+    }
+    const localInput = document.getElementById('search-base-equipements');
+    if (localInput && localInput.value !== val) {
+      localInput.value = val || '';
+    }
+    this.renderParcEquipementsTS();
+  },
+
+  handleSitesSearch(val) {
+    this.siteCurrentPage = 1;
+    this.siteSearchQuery = (val || '').toLowerCase().trim();
+    const globalSearch = document.getElementById('global-search-input');
+    if (globalSearch && globalSearch.value !== val && this.currentModule === 'base-ts' && this.currentBaseTSView === 'clients') {
+      globalSearch.value = val || '';
+    }
+    const localInput = document.getElementById('search-sites-ts');
+    if (localInput && localInput.value !== val) {
+      localInput.value = val || '';
+    }
+    this.renderSitesTS();
+  },
+
+  handleSiteSecteurFilter(val) {
+    this.siteCurrentPage = 1;
+    this.siteFilterSecteur = val;
+    this.renderSitesTS();
+  },
+
+  handleClientSearch(val) {
+    this.clientCurrentPage = 1;
+    this.clientSearchQuery = (val || '').toLowerCase().trim();
+    const globalSearch = document.getElementById('global-search-input');
+    if (globalSearch && globalSearch.value !== val && this.currentModule === 'clients') {
+      globalSearch.value = val || '';
+    }
+    const localInput = document.getElementById('search-clients');
+    if (localInput && localInput.value !== val) {
+      localInput.value = val || '';
+    }
+    this.renderClients();
+  },
+
+  handlePersonnelSearch(val) {
+    this.personnelCurrentPage = 1;
+    this.personnelSearchQuery = (val || '').toLowerCase().trim();
+    const globalSearch = document.getElementById('global-search-input');
+    if (globalSearch && globalSearch.value !== val && this.currentModule === 'personnel-cst') {
+      globalSearch.value = val || '';
+    }
+    const localInput = document.getElementById('search-personnel');
+    if (localInput && localInput.value !== val) {
+      localInput.value = val || '';
+    }
+    this.renderPersonnel();
   },
 
   // Changement de module principal (Dashboard, Atelier, Catalogue TS, Clients, Personnel CST, Base TS, Showcase)
   switchModule(moduleId) {
     this.currentModule = moduleId;
-    window.location.hash = moduleId;
+    if (typeof window !== 'undefined' && window.location) {
+      window.location.hash = moduleId;
+    }
     
     // Mettre à jour l'élément actif dans la sidebar
     document.querySelectorAll('.sidebar .nav-link').forEach(link => {
@@ -722,6 +834,24 @@ const APP = {
       if (titleEl) titleEl.textContent = "Showcase Produit Sama CST";
       if (breadcrumbSubEl) breadcrumbSubEl.textContent = "Présentation Haute Définition";
     }
+
+    // Synchroniser la barre de recherche globale avec le module actif
+    const globalSearchInput = document.getElementById('global-search-input');
+    if (globalSearchInput) {
+      if (moduleId === 'atelier-equipements') {
+        globalSearchInput.value = this.tableSearchQuery || '';
+      } else if (moduleId === 'equipements-ts') {
+        globalSearchInput.value = this.tsSearchQuery || '';
+      } else if (moduleId === 'clients') {
+        globalSearchInput.value = this.clientSearchQuery || '';
+      } else if (moduleId === 'personnel-cst') {
+        globalSearchInput.value = this.personnelSearchQuery || '';
+      } else if (moduleId === 'base-ts') {
+        globalSearchInput.value = (this.currentBaseTSView === 'clients' ? this.siteSearchQuery : this.baseEqSearchQuery) || '';
+      } else {
+        globalSearchInput.value = '';
+      }
+    }
   },
 
   // Changement de sous-page du tableau de bord (4 Pages)
@@ -768,10 +898,18 @@ const APP = {
         (item.description && String(item.description).toLowerCase().includes(q)) ||
         (item.numSerie && String(item.numSerie).toLowerCase().includes(q)) ||
         (item.client && String(item.client).toLowerCase().includes(q)) ||
+        (item.codeClient && String(item.codeClient).toLowerCase().includes(q)) ||
         (item.responsableReception && String(item.responsableReception).toLowerCase().includes(q)) ||
         (item.responsableTechnique && String(item.responsableTechnique).toLowerCase().includes(q)) ||
         (item.zoneActuelle && String(item.zoneActuelle).toLowerCase().includes(q)) ||
-        (item.motif && String(item.motif).toLowerCase().includes(q))
+        (item.motif && String(item.motif).toLowerCase().includes(q)) ||
+        (item.situation && String(item.situation).toLowerCase().includes(q)) ||
+        (item.statut && String(item.statut).toLowerCase().includes(q)) ||
+        (item.numDevisFrb && String(item.numDevisFrb).toLowerCase().includes(q)) ||
+        (item.diagnostic && String(item.diagnostic).toLowerCase().includes(q)) ||
+        (item.decision && String(item.decision).toLowerCase().includes(q)) ||
+        (item.entite && String(item.entite).toLowerCase().includes(q)) ||
+        (item.etatSortie && String(item.etatSortie).toLowerCase().includes(q))
       );
     }
 
@@ -1803,61 +1941,215 @@ const APP = {
     const container = document.getElementById('sites-ts-grid');
     if (!container) return;
 
-    container.innerHTML = SAMA_DATA.sitesTS.map(site => `
-      <div class="site-card">
-        <div>
-          <div class="site-header-row">
-            <div>
-              <div class="site-name">${site.nomClient}</div>
-              <div class="site-sector">${site.secteur} • ${site.localisation}</div>
+    // Remplissage dynamique du filtre secteur si pas encore fait
+    const selectSecteur = document.getElementById('filter-site-secteur');
+    if (selectSecteur && (!selectSecteur.options || selectSecteur.options.length <= 1)) {
+      const secteurs = [...new Set((SAMA_DATA.sitesTS || []).map(s => s.secteur))].filter(Boolean).sort();
+      secteurs.forEach(sec => {
+        const opt = document.createElement('option');
+        opt.value = sec;
+        opt.textContent = `🏢 ${sec}`;
+        selectSecteur.appendChild(opt);
+      });
+    }
+
+    let items = [...(SAMA_DATA.sitesTS || [])];
+
+    // 1. Filtrage par recherche
+    if (this.siteSearchQuery) {
+      const q = String(this.siteSearchQuery).toLowerCase().trim();
+      items = items.filter(s => 
+        (s.nomClient && String(s.nomClient).toLowerCase().includes(q)) ||
+        (s.site_code && String(s.site_code).toLowerCase().includes(q)) ||
+        (s.siteCode && String(s.siteCode).toLowerCase().includes(q)) ||
+        (s.secteur && String(s.secteur).toLowerCase().includes(q)) ||
+        (s.localisation && String(s.localisation).toLowerCase().includes(q)) ||
+        (s.responsableSite && String(s.responsableSite).toLowerCase().includes(q)) ||
+        (s.technicienReferent && String(s.technicienReferent).toLowerCase().includes(q)) ||
+        (s.contrat && String(s.contrat).toLowerCase().includes(q)) ||
+        (s.telephone && String(s.telephone).toLowerCase().includes(q)) ||
+        (s.email && String(s.email).toLowerCase().includes(q))
+      );
+    }
+
+    // 2. Filtre par secteur
+    if (this.siteFilterSecteur && this.siteFilterSecteur !== 'all') {
+      items = items.filter(s => s.secteur === this.siteFilterSecteur);
+    }
+
+    // 3. Mise à jour des compteurs
+    const countBadge = document.getElementById('base-sites-badge-count');
+    if (countBadge) {
+      countBadge.textContent = `${items.length.toLocaleString('fr-FR')}`;
+    }
+    const recCountEl = document.getElementById('sites-records-count');
+    if (recCountEl) {
+      recCountEl.textContent = `${items.length} site(s) trouvé(s) sur ${(SAMA_DATA.sitesTS || []).length}`;
+    }
+
+    // 4. Pagination
+    const totalItems = items.length;
+    const pageSize = this.sitePageSize || 24;
+    const totalPages = Math.ceil(totalItems / pageSize) || 1;
+    if (!this.siteCurrentPage || this.siteCurrentPage < 1) this.siteCurrentPage = 1;
+    if (this.siteCurrentPage > totalPages) this.siteCurrentPage = totalPages;
+
+    const startIdx = (this.siteCurrentPage - 1) * pageSize;
+    const pageItems = items.slice(startIdx, startIdx + pageSize);
+
+    this.renderSitesPaginationControls(totalItems, totalPages);
+
+    // 5. Rendu HTML
+    if (pageItems.length === 0) {
+      container.innerHTML = `
+        <div style="grid-column: 1 / -1; background: #FFFFFF; border: 1px dashed #CBD5E1; border-radius: 12px; padding: 48px 24px; text-align: center; color: #64748B;">
+          <div style="font-size: 36px; margin-bottom: 8px;">🏢</div>
+          <div style="font-size: 16px; font-weight: 800; color: #1E293B;">Aucun site trouvé</div>
+          <div style="font-size: 13px; margin-top: 4px;">Modifiez vos termes de recherche ou réinitialisez les filtres.</div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = pageItems.map(site => {
+      const safeNom = window.escapeHtml(site.nomClient);
+      const safeSecteur = window.escapeHtml(site.secteur || '-');
+      const safeLoc = window.escapeHtml(site.localisation || 'Dakar');
+      const safeResp = window.escapeHtml(site.responsableSite || 'Direction Technique');
+      const safeTel = window.escapeHtml(site.telephone || '-');
+      const safeTech = window.escapeHtml(site.technicienReferent || 'Momar CISSE');
+      const safeStatut = window.escapeHtml(site.statut || 'Actif');
+      const dispoVal = parseFloat(site.tauxDisponibilite) || 98.0;
+
+      return `
+        <div class="site-card">
+          <div>
+            <div class="site-header-row">
+              <div>
+                <div class="site-name">${safeNom}</div>
+                <div class="site-sector">${safeSecteur} • ${safeLoc}</div>
+              </div>
+              <span class="badge-tag green">${safeStatut}</span>
             </div>
-            <span class="badge-tag green">${site.statut}</span>
+
+            <div class="site-info-list">
+              <div class="site-info-item">
+                <span class="lbl">Responsable de Site :</span>
+                <span class="val">${safeResp}</span>
+              </div>
+              <div class="site-info-item">
+                <span class="lbl">Téléphone & Contact :</span>
+                <span class="val">${safeTel}</span>
+              </div>
+              <div class="site-info-item">
+                <span class="lbl">Parc sous contrat :</span>
+                <span class="val" style="color: #2E5090; font-weight: 800;">${site.parcEquipements || 0} équipements</span>
+              </div>
+              <div class="site-info-item">
+                <span class="lbl">En Atelier actuellement :</span>
+                <span class="val" style="color: #EF4444;">${site.equipementsEnAtelier || 0} en cours</span>
+              </div>
+              <div class="site-info-item">
+                <span class="lbl">SLA Garanti :</span>
+                <span class="val"><span class="badge-tag blue">${site.slaHeures || 4}h max</span></span>
+              </div>
+              <div class="site-info-item">
+                <span class="lbl">Taux de Disponibilité :</span>
+                <span class="val" style="color: #4A8000; font-size: 14px; font-weight: 800;">${dispoVal}%</span>
+              </div>
+              <div class="site-info-item">
+                <span class="lbl">Technicien Référent TS :</span>
+                <span class="val"><strong>${safeTech}</strong></span>
+              </div>
+            </div>
           </div>
 
-          <div class="site-info-list">
-            <div class="site-info-item">
-              <span class="lbl">Responsable de Site :</span>
-              <span class="val">${site.responsableSite}</span>
-            </div>
-            <div class="site-info-item">
-              <span class="lbl">Téléphone & Contact :</span>
-              <span class="val">${site.telephone}</span>
-            </div>
-            <div class="site-info-item">
-              <span class="lbl">Parc sous contrat :</span>
-              <span class="val" style="color: #2E5090; font-weight: 800;">${site.parcEquipements} équipements</span>
-            </div>
-            <div class="site-info-item">
-              <span class="lbl">En Atelier actuellement :</span>
-              <span class="val" style="color: #EF4444;">${site.equipementsEnAtelier} en cours</span>
-            </div>
-            <div class="site-info-item">
-              <span class="lbl">SLA Garanti :</span>
-              <span class="val"><span class="badge-tag blue">${site.slaHeures}h max</span></span>
-            </div>
-            <div class="site-info-item">
-              <span class="lbl">Taux de Disponibilité :</span>
-              <span class="val" style="color: #4A8000; font-size: 14px; font-weight: 800;">${site.tauxDisponibilite}%</span>
-            </div>
-            <div class="site-info-item">
-              <span class="lbl">Technicien Référent TS :</span>
-              <span class="val"><strong>${site.technicienReferent}</strong></span>
-            </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
+            <button class="site-footer-btn" onclick="APP.filterParcByClient('${safeNom}')" style="margin-top: 0; padding: 7px 10px; font-size: 11.5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+              Parc (${site.parcEquipements || 0})
+            </button>
+            <button class="site-footer-btn" onclick="APP.filterByClient('${safeNom}')" style="margin-top: 0; padding: 7px 10px; font-size: 11.5px; background: #EEF2FF; color: #2E5090; border: 1px solid #C7D2FE;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              Atelier (${site.equipementsEnAtelier || 0})
+            </button>
           </div>
         </div>
+      `;
+    }).join('');
+  },
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
-          <button class="site-footer-btn" onclick="APP.filterParcByClient('${site.nomClient}')" style="margin-top: 0; padding: 7px 10px; font-size: 11.5px;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            Parc (${site.parcEquipements || 0})
-          </button>
-          <button class="site-footer-btn" onclick="APP.filterByClient('${site.nomClient}')" style="margin-top: 0; padding: 7px 10px; font-size: 11.5px; background: #EEF2FF; color: #2E5090; border: 1px solid #C7D2FE;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            Atelier (${site.equipementsEnAtelier || 0})
-          </button>
+  setSitesPage(page) {
+    this.siteCurrentPage = Math.max(1, parseInt(page, 10) || 1);
+    this.renderSitesTS();
+    const container = document.getElementById('sites-ts-grid') || document.getElementById('base-ts-view-clients');
+    if (container && typeof container.scrollIntoView === 'function') {
+      try {
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {}
+    }
+  },
+
+  renderSitesPaginationControls(totalItems, totalPages) {
+    const paginationEl = document.getElementById('sites-ts-pagination');
+    if (!paginationEl) return;
+
+    if (totalItems === 0 || totalPages <= 1) {
+      paginationEl.style.display = totalItems === 0 ? 'none' : 'flex';
+      paginationEl.innerHTML = `
+        <div style="font-size: 12.5px; color: #64748B;">
+          Affichage de <strong>${totalItems}</strong> site(s)
         </div>
+        <div></div>
+      `;
+      return;
+    }
+
+    paginationEl.style.display = 'flex';
+    const cur = this.siteCurrentPage || 1;
+    const pageSize = this.sitePageSize || 24;
+    const startIdx = (cur - 1) * pageSize + 1;
+    const endIdx = Math.min(cur * pageSize, totalItems);
+
+    let pagesHtml = '';
+    const maxButtons = 5;
+    let startPage = Math.max(1, cur - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    if (startPage > 1) {
+      pagesHtml += `<button class="page-btn" onclick="APP.setSitesPage(1)">1</button>`;
+      if (startPage > 2) {
+        pagesHtml += `<span style="padding: 0 4px; color: #94A3B8;">...</span>`;
+      }
+    }
+
+    for (let p = startPage; p <= endPage; p++) {
+      const activeClass = p === cur ? 'active' : '';
+      pagesHtml += `<button class="page-btn ${activeClass}" onclick="APP.setSitesPage(${p})">${p}</button>`;
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pagesHtml += `<span style="padding: 0 4px; color: #94A3B8;">...</span>`;
+      }
+      pagesHtml += `<button class="page-btn" onclick="APP.setSitesPage(${totalPages})">${totalPages}</button>`;
+    }
+
+    paginationEl.innerHTML = `
+      <div style="font-size: 12.5px; color: #64748B; font-weight: 500;">
+        Affichage de <strong>${startIdx.toLocaleString('fr-FR')}</strong> à <strong>${endIdx.toLocaleString('fr-FR')}</strong> sur <strong>${totalItems.toLocaleString('fr-FR')}</strong> sites
       </div>
-    `).join('');
+      <div class="pagination-controls">
+        <button class="page-btn" onclick="APP.setSitesPage(${cur - 1})" ${cur === 1 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} title="Page précédente">‹</button>
+        <span class="pagination-pages-desktop">${pagesHtml}</span>
+        <span class="pagination-pages-mobile" style="display:none; font-size:12px; font-weight:700; color:var(--ts-blue); padding:0 8px;">Page ${cur} / ${totalPages}</span>
+        <button class="page-btn" onclick="APP.setSitesPage(${cur + 1})" ${cur === totalPages ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} title="Page suivante">›</button>
+      </div>
+    `;
   },
 
   filterParcByClient(clientNom) {
@@ -1888,12 +2180,16 @@ const APP = {
       btnEquips?.classList.remove('active');
       if (viewClients) viewClients.style.display = 'block';
       if (viewEquips) viewEquips.style.display = 'none';
+      const globalSearch = document.getElementById('global-search-input');
+      if (globalSearch) globalSearch.value = this.siteSearchQuery || '';
       this.renderSitesTS();
     } else {
       btnEquips?.classList.add('active');
       btnClients?.classList.remove('active');
       if (viewClients) viewClients.style.display = 'none';
       if (viewEquips) viewEquips.style.display = 'block';
+      const globalSearch = document.getElementById('global-search-input');
+      if (globalSearch) globalSearch.value = this.baseEqSearchQuery || '';
       this.renderParcEquipementsTS();
     }
   },
@@ -1916,18 +2212,6 @@ const APP = {
       if (gridEl) gridEl.style.display = 'none';
       if (tableEl) tableEl.style.display = 'block';
     }
-  },
-
-  handleBaseEqSearch(val) {
-    this.baseEqCurrentPage = 1;
-    if (!this._debouncedBaseEqSearch) {
-      this._debouncedBaseEqSearch = window.debounce((query) => {
-        this.baseEqCurrentPage = 1;
-        this.baseEqSearchQuery = (query || '').toLowerCase().trim();
-        this.renderParcEquipementsTS();
-      }, 250);
-    }
-    this._debouncedBaseEqSearch(val);
   },
 
   handleBaseEqClientFilter(client) {
@@ -2027,16 +2311,13 @@ const APP = {
     const tableBody = document.getElementById('base-equipements-table-body');
     const clientSelect = document.getElementById('filter-base-eq-client');
 
-    // 1. Remplissage dynamique du filtre client
-    if (clientSelect) {
-      const currentSelected = clientSelect.value;
+    // 1. Remplissage dynamique du filtre client (si pas encore rempli)
+    if (clientSelect && (!clientSelect.options || clientSelect.options.length <= 1)) {
       const clientsList = [...new Set(rawItems.map(e => e.client))].filter(Boolean).sort();
-      clientSelect.innerHTML = '<option value="all">🏢 Tous les Clients</option>';
       clientsList.forEach(c => {
         const opt = document.createElement('option');
         opt.value = c;
         opt.textContent = c;
-        if (c === currentSelected) opt.selected = true;
         clientSelect.appendChild(opt);
       });
     }
@@ -2063,16 +2344,25 @@ const APP = {
     let filtered = [...rawItems];
 
     if (this.baseEqSearchQuery) {
-      const q = this.baseEqSearchQuery;
+      const q = String(this.baseEqSearchQuery).toLowerCase().trim();
       filtered = filtered.filter(e => 
-        (e.codeEquipement && e.codeEquipement.toLowerCase().includes(q)) ||
-        (e.designation && e.designation.toLowerCase().includes(q)) ||
-        (e.client && e.client.toLowerCase().includes(q)) ||
-        (e.fournisseur && e.fournisseur.toLowerCase().includes(q)) ||
-        (e.modele && e.modele.toLowerCase().includes(q)) ||
-        (e.numSerie && e.numSerie.toLowerCase().includes(q)) ||
-        (e.siteLocalisation && e.siteLocalisation.toLowerCase().includes(q)) ||
-        (e.technicienReferent && e.technicienReferent.toLowerCase().includes(q))
+        (e.codeEquipement && String(e.codeEquipement).toLowerCase().includes(q)) ||
+        (e.code_machine && String(e.code_machine).toLowerCase().includes(q)) ||
+        (e.designation && String(e.designation).toLowerCase().includes(q)) ||
+        (e.nomEquipement && String(e.nomEquipement).toLowerCase().includes(q)) ||
+        (e.client && String(e.client).toLowerCase().includes(q)) ||
+        (e.site && String(e.site).toLowerCase().includes(q)) ||
+        (e.siteLocalisation && String(e.siteLocalisation).toLowerCase().includes(q)) ||
+        (e.fournisseur && String(e.fournisseur).toLowerCase().includes(q)) ||
+        (e.modele && String(e.modele).toLowerCase().includes(q)) ||
+        (e.numSerie && String(e.numSerie).toLowerCase().includes(q)) ||
+        (e.numeroSerie && String(e.numeroSerie).toLowerCase().includes(q)) ||
+        (e.categorie && String(e.categorie).toLowerCase().includes(q)) ||
+        (e.entite && String(e.entite).toLowerCase().includes(q)) ||
+        (e.pole && String(e.pole).toLowerCase().includes(q)) ||
+        (e.technicienReferent && String(e.technicienReferent).toLowerCase().includes(q)) ||
+        (e.etatOperationnel && String(e.etatOperationnel).toLowerCase().includes(q)) ||
+        (e.contrat && String(e.contrat).toLowerCase().includes(q))
       );
     }
 
@@ -2081,7 +2371,7 @@ const APP = {
     }
 
     if (this.baseEqEntiteFilter && this.baseEqEntiteFilter !== 'all') {
-      filtered = filtered.filter(e => e.entite === this.baseEqEntiteFilter);
+      filtered = filtered.filter(e => e.entite === this.baseEqEntiteFilter || e.pole === this.baseEqEntiteFilter);
     }
 
     if (this.baseEqEtatFilter && this.baseEqEtatFilter !== 'all') {
@@ -2338,11 +2628,11 @@ const APP = {
     const tbody = document.getElementById('table-equipements-ts-body');
     if (!tbody || !SAMA_DATA.equipementsTS) return;
 
-    // Remplissage dynamique des filtres Fournisseur & Catégorie
+    // Remplissage dynamique des filtres Fournisseur & Catégorie (seulement si pas déjà peuplé pour garder les performances)
     const selectFournisseur = document.getElementById('filter-ts-fournisseur');
-    if (selectFournisseur) {
+    if (selectFournisseur && (!selectFournisseur.options || selectFournisseur.options.length <= 1)) {
       const currentSelectedF = selectFournisseur.value;
-      const fournisseurs = [...new Set(SAMA_DATA.equipementsTS.map(e => e.fournisseur))].sort();
+      const fournisseurs = [...new Set(SAMA_DATA.equipementsTS.map(e => e.fournisseur))].filter(Boolean).sort();
       selectFournisseur.innerHTML = '<option value="all">🏭 Tous les Fournisseurs</option>';
       fournisseurs.forEach(f => {
         const opt = document.createElement('option');
@@ -2354,9 +2644,9 @@ const APP = {
     }
 
     const selectCategorie = document.getElementById('filter-ts-categorie');
-    if (selectCategorie) {
+    if (selectCategorie && (!selectCategorie.options || selectCategorie.options.length <= 1)) {
       const currentSelectedC = selectCategorie.value;
-      const categories = [...new Set(SAMA_DATA.equipementsTS.map(e => e.categorie))].sort();
+      const categories = [...new Set(SAMA_DATA.equipementsTS.map(e => e.categorie))].filter(Boolean).sort();
       selectCategorie.innerHTML = '<option value="all">📂 Toutes les Catégories</option>';
       categories.forEach(c => {
         const opt = document.createElement('option');
@@ -2371,13 +2661,16 @@ const APP = {
 
     // Recherche
     if (this.tsSearchQuery) {
-      const q = this.tsSearchQuery.toLowerCase().trim();
+      const q = String(this.tsSearchQuery).toLowerCase().trim();
       items = items.filter(e => 
-        (e.fournisseur && e.fournisseur.toLowerCase().includes(q)) ||
-        (e.designation && e.designation.toLowerCase().includes(q)) ||
-        (e.modele && e.modele.toLowerCase().includes(q)) ||
-        (e.categorie && e.categorie.toLowerCase().includes(q)) ||
-        (e.entite && e.entite.toLowerCase().includes(q))
+        (e.codeTS && String(e.codeTS).toLowerCase().includes(q)) ||
+        (e.code && String(e.code).toLowerCase().includes(q)) ||
+        (e.fournisseur && String(e.fournisseur).toLowerCase().includes(q)) ||
+        (e.designation && String(e.designation).toLowerCase().includes(q)) ||
+        (e.modele && String(e.modele).toLowerCase().includes(q)) ||
+        (e.categorie && String(e.categorie).toLowerCase().includes(q)) ||
+        (e.entite && String(e.entite).toLowerCase().includes(q)) ||
+        (e.pole && String(e.pole).toLowerCase().includes(q))
       );
     }
 
@@ -2652,9 +2945,9 @@ const APP = {
     const tbody = document.getElementById('table-clients-body');
     if (!tbody || !SAMA_DATA.clients) return;
 
-    // Remplissage dynamique des filtres Ville & Pays
+    // Remplissage dynamique des filtres Ville & Pays (seulement si pas déjà peuplé pour garder les performances)
     const selectVille = document.getElementById('filter-client-ville');
-    if (selectVille) {
+    if (selectVille && (!selectVille.options || selectVille.options.length <= 1)) {
       const currentSelectedV = selectVille.value;
       const villes = [...new Set(SAMA_DATA.clients.map(c => c.villeClient))].filter(Boolean).sort();
       selectVille.innerHTML = '<option value="all">📍 Toutes les Villes</option>';
@@ -2668,7 +2961,7 @@ const APP = {
     }
 
     const selectPays = document.getElementById('filter-client-pays');
-    if (selectPays) {
+    if (selectPays && (!selectPays.options || selectPays.options.length <= 1)) {
       const currentSelectedP = selectPays.value;
       const pays = [...new Set(SAMA_DATA.clients.map(c => c.paysClient))].filter(Boolean).sort();
       selectPays.innerHTML = '<option value="all">🌍 Tous les Pays</option>';
@@ -2685,17 +2978,24 @@ const APP = {
 
     // Recherche
     if (this.clientSearchQuery) {
-      const q = this.clientSearchQuery.toLowerCase().trim();
+      const q = String(this.clientSearchQuery).toLowerCase().trim();
       items = items.filter(c => 
-        (c.client && c.client.toLowerCase().includes(q)) ||
-        (c.adresseClient && c.adresseClient.toLowerCase().includes(q)) ||
-        (c.villeClient && c.villeClient.toLowerCase().includes(q)) ||
-        (c.paysClient && c.paysClient.toLowerCase().includes(q)) ||
-        (c.codePostal && c.codePostal.toLowerCase().includes(q)) ||
-        (c.nomClient && c.nomClient.toLowerCase().includes(q)) ||
-        (c.telephoneClient && c.telephoneClient.toLowerCase().includes(q)) ||
-        (c.mailClient && c.mailClient.toLowerCase().includes(q)) ||
-        (c.rcNinea && c.rcNinea.toLowerCase().includes(q))
+        (c.codeClient && String(c.codeClient).toLowerCase().includes(q)) ||
+        (c.code && String(c.code).toLowerCase().includes(q)) ||
+        (c.client && String(c.client).toLowerCase().includes(q)) ||
+        (c.nomClient && String(c.nomClient).toLowerCase().includes(q)) ||
+        (c.contactPrincipal && String(c.contactPrincipal).toLowerCase().includes(q)) ||
+        (c.adresseClient && String(c.adresseClient).toLowerCase().includes(q)) ||
+        (c.villeClient && String(c.villeClient).toLowerCase().includes(q)) ||
+        (c.paysClient && String(c.paysClient).toLowerCase().includes(q)) ||
+        (c.codePostal && String(c.codePostal).toLowerCase().includes(q)) ||
+        (c.telephoneClient && String(c.telephoneClient).toLowerCase().includes(q)) ||
+        (c.mailClient && String(c.mailClient).toLowerCase().includes(q)) ||
+        (c.rcNinea && String(c.rcNinea).toLowerCase().includes(q)) ||
+        (c.rc && String(c.rc).toLowerCase().includes(q)) ||
+        (c.ninea && String(c.ninea).toLowerCase().includes(q)) ||
+        (c.secteur && String(c.secteur).toLowerCase().includes(q)) ||
+        (c.secteurActivite && String(c.secteurActivite).toLowerCase().includes(q))
       );
     }
 
@@ -3127,13 +3427,22 @@ const APP = {
     let items = [...SAMA_DATA.personnelCST];
 
     if (this.personnelSearchQuery) {
-      const q = this.personnelSearchQuery;
+      const q = String(this.personnelSearchQuery).toLowerCase().trim();
       items = items.filter(p => 
-        (p.agent && p.agent.toLowerCase().includes(q)) ||
-        (p.email && p.email.toLowerCase().includes(q)) ||
-        (p.pole && p.pole.toLowerCase().includes(q)) ||
-        (p.specialite && p.specialite.toLowerCase().includes(q)) ||
-        (p.telephone && p.telephone.toLowerCase().includes(q))
+        (p.codeAgent && String(p.codeAgent).toLowerCase().includes(q)) ||
+        (p.code && String(p.code).toLowerCase().includes(q)) ||
+        (p.agent && String(p.agent).toLowerCase().includes(q)) ||
+        (p.nom && String(p.nom).toLowerCase().includes(q)) ||
+        (p.prenom && String(p.prenom).toLowerCase().includes(q)) ||
+        (p.nomAgent && String(p.nomAgent).toLowerCase().includes(q)) ||
+        (p.fonction && String(p.fonction).toLowerCase().includes(q)) ||
+        (p.email && String(p.email).toLowerCase().includes(q)) ||
+        (p.mail && String(p.mail).toLowerCase().includes(q)) ||
+        (p.pole && String(p.pole).toLowerCase().includes(q)) ||
+        (p.specialite && String(p.specialite).toLowerCase().includes(q)) ||
+        (p.telephone && String(p.telephone).toLowerCase().includes(q)) ||
+        (p.tel && String(p.tel).toLowerCase().includes(q)) ||
+        (p.statut && String(p.statut).toLowerCase().includes(q))
       );
     }
 
@@ -4546,7 +4855,9 @@ const APP = {
       overlay.removeAttribute('data-mobile-menu');
       overlay.style.zIndex = '';
     }
-    document.body.style.overflow = '';
+    if (document.body) {
+      document.body.style.overflow = '';
+    }
   },
 
   toggleMobileMenu(e) {

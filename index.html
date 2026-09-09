@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=3.6">
+  <link rel="stylesheet" href="css/style.css?v=3.7">
   
   <!-- Flatpickr Date & DateTime Picker CSS (Local with CDN fallback) -->
   <link rel="stylesheet" href="vendor/flatpickr/flatpickr.min.css">
@@ -271,7 +271,7 @@
       <div class="topbar-search-row">
         <div class="search-box">
           <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="global-search-input" placeholder="Rechercher équipement, client...">
+          <input type="text" id="global-search-input" placeholder="Rechercher équipement, client, modèle, pôle..." oninput="APP.handleGlobalSearch(this.value)">
           <span class="search-shortcut">⌘K</span>
         </div>
 
@@ -765,6 +765,12 @@
         <!-- Table Toolbar -->
         <div class="table-toolbar">
           <div class="filter-pills-group">
+            <!-- Recherche rapide atelier -->
+            <div class="search-box" style="width: 260px;">
+              <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="search-atelier-equipements" class="search-input" placeholder="Rechercher code, client, panne..." oninput="APP.handleAtelierSearch(this.value)">
+            </div>
+
             <!-- Filtre Entité -->
             <select class="filter-select" id="filter-entite">
               <option value="all">🏢 Toutes les Entités</option>
@@ -923,7 +929,7 @@
             <!-- Recherche rapide -->
             <div class="search-box" style="width: 260px;">
               <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <input type="text" id="search-equipements-ts" class="search-input" placeholder="Rechercher fournisseur, modèle...">
+              <input type="text" id="search-equipements-ts" class="search-input" placeholder="Rechercher fournisseur, modèle, code..." oninput="APP.handleCatalogueSearch(this.value)">
             </div>
 
             <!-- Filtre Entité -->
@@ -1054,7 +1060,27 @@
 
         <!-- 1. SOUS-VUE PAR CLIENT / SITE -->
         <div id="base-ts-view-clients">
+          <!-- Table Toolbar pour Sites Clients -->
+          <div class="table-toolbar" style="margin-bottom: 16px;">
+            <div class="filter-pills-group">
+              <div class="search-box" style="width: 280px;">
+                <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="search-sites-ts" class="search-input" placeholder="Rechercher site, client, ville, technicien..." oninput="APP.handleSitesSearch(this.value)">
+              </div>
+
+              <!-- Filtre par Secteur -->
+              <select id="filter-site-secteur" class="form-select" style="font-size: 12px; padding: 6px 10px; width: 220px;" onchange="APP.handleSiteSecteurFilter(this.value)">
+                <option value="all">🏢 Tous les Secteurs</option>
+              </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span id="sites-records-count" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">483 site(s) répertorié(s)</span>
+            </div>
+          </div>
+
           <div class="sites-grid" id="sites-ts-grid"></div>
+          <div class="pagination-bar" id="sites-ts-pagination" style="margin-top: 16px; display: none;"></div>
         </div>
 
         <!-- 2. SOUS-VUE PAR ÉQUIPEMENT -->
@@ -1235,7 +1261,7 @@
             <!-- Recherche rapide -->
             <div class="search-box" style="width: 280px;">
               <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <input type="text" id="search-clients" class="search-input" placeholder="Rechercher client, ville, téléphone, NINEA...">
+              <input type="text" id="search-clients" class="search-input" placeholder="Rechercher client, ville, téléphone, NINEA..." oninput="APP.handleClientSearch(this.value)">
             </div>
 
             <!-- Filtre Ville -->
@@ -1394,7 +1420,7 @@
             <!-- Recherche rapide -->
             <div class="search-box" style="width: 280px;">
               <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <input type="text" id="search-personnel" class="search-input" placeholder="Rechercher agent, email, pôle...">
+              <input type="text" id="search-personnel" class="search-input" placeholder="Rechercher agent, email, pôle..." oninput="APP.handlePersonnelSearch(this.value)">
             </div>
 
             <!-- Filtre Pôle -->
@@ -2733,12 +2759,12 @@
 </script>
 
 <!-- Application, Auth & Sync Scripts -->
-<script src="js/utils.js?v=3.6"></script>
-<script src="js/data.js?v=3.6"></script>
-<script src="js/supabase-config.js?v=3.6"></script>
-<script src="js/supabase-sync.js?v=3.6"></script>
-<script src="js/auth.js?v=3.6"></script>
-<script src="js/charts.js?v=3.6"></script>
-<script src="js/app.js?v=3.6"></script>
+<script src="js/utils.js?v=3.7"></script>
+<script src="js/data.js?v=3.7"></script>
+<script src="js/supabase-config.js?v=3.7"></script>
+<script src="js/supabase-sync.js?v=3.7"></script>
+<script src="js/auth.js?v=3.7"></script>
+<script src="js/charts.js?v=3.7"></script>
+<script src="js/app.js?v=3.7"></script>
 </body>
 </html>
