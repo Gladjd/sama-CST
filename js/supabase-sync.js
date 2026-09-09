@@ -60,51 +60,70 @@ window.supabaseSync = {
     }
   },
 
-  // Helper pour récupérer TOUTES les lignes d'une table avec pagination automatique (contourne la limite PostgREST de 1000 lignes)
-  async fetchAllTableRows(tableName, orderBy = null, ascending = true) {
+  // Helper ultra-robuste et parallèle pour récupérer TOUTES les lignes d'une table sans limite PostgREST
+  async fetchAllTableRows(tableName, orderBy = 'id', ascending = true) {
     if (!this.client) return [];
     const PAGE_SIZE = 1000;
-    let allRows = [];
-    let from = 0;
-    let hasMore = true;
-
+    
     try {
-      while (hasMore) {
-        let query = this.client
+      // 1. Obtenir le compte exact de lignes
+      let totalCount = 0;
+      try {
+        const { count, error: countErr } = await this.client
+          .from(tableName)
+          .select('id', { count: 'exact', head: true });
+        if (!countErr && typeof count === 'number' && count > 0) {
+          totalCount = count;
+        }
+      } catch (ce) {
+        console.warn(`Count head notice for ${tableName}:`, ce);
+      }
+
+      // Si le count n'a pas pu être récupéré, on tente par défaut 3 pages
+      const pagesToFetch = totalCount > 0 ? Math.ceil(totalCount / PAGE_SIZE) : 3;
+
+      // 2. Récupérer toutes les tranches en parallèle pour une vitesse instantanée
+      const pagePromises = [];
+      for (let i = 0; i < pagesToFetch; i++) {
+        const from = i * PAGE_SIZE;
+        const to = from + PAGE_SIZE - 1;
+        
+        let q = this.client
           .from(tableName)
           .select('*');
 
         if (orderBy) {
-          query = query.order(orderBy, { ascending });
+          q = q.order(orderBy, { ascending });
         }
 
-        query = query.range(from, from + PAGE_SIZE - 1);
+        pagePromises.push(
+          q.range(from, to).then(res => {
+            if (res.error) {
+              console.warn(`Avertissement pagination ${tableName} [${from}-${to}]:`, res.error.message);
+              return [];
+            }
+            return res.data || [];
+          }).catch(err => {
+            console.warn(`Exception fetch slice ${tableName}:`, err);
+            return [];
+          })
+        );
+      }
 
-        const { data, error } = await query;
-        if (error) {
-          console.error(`❌ Erreur chargement ${tableName} (offset ${from}):`, error);
-          break;
-        }
+      const results = await Promise.all(pagePromises);
+      const allRows = results.flat().filter(Boolean);
 
-        if (data && data.length > 0) {
-          allRows = allRows.concat(data);
-          if (data.length < PAGE_SIZE) {
-            hasMore = false;
-          } else {
-            from += PAGE_SIZE;
-          }
-        } else {
-          hasMore = false;
-        }
+      if (allRows.length > 0) {
+        return allRows;
       }
     } catch (e) {
       console.error(`❌ Exception fetchAllTableRows(${tableName}):`, e);
     }
 
-    return allRows;
+    return [];
   },
 
-  // Charge toutes les tables depuis Supabase et met à jour SAMA_DATA
+  // Charge toutes les tables depuis Supabase et met à jour SAMA_DATA avec préservation absolue des données
   async loadAllDataFromSupabase() {
     if (!this.isConnected || !this.client) return;
 
@@ -112,11 +131,10 @@ window.supabaseSync = {
     this.updateStatusBadge();
 
     try {
-      // 1. Clients (toutes les pages)
+      // 1. Clients (608 clients)
       const clientsData = await this.fetchAllTableRows('clients', 'code_client', true);
-        
       if (clientsData && clientsData.length > 0) {
-        SAMA_DATA.clients = clientsData.map(c => ({
+        const mappedClients = clientsData.map(c => ({
           client: c.code_client,
           codeClient: c.code_client,
           nomClient: c.nom_client,
@@ -135,13 +153,21 @@ window.supabaseSync = {
           rcNinea: c.rc_ninea || (c.ninea && c.ninea !== '-' ? `${c.registre_commerce || ''} / ${c.ninea}` : c.registre_commerce || '-'),
           statut: c.statut || 'Actif'
         }));
+
+        if (mappedClients.length >= (SAMA_DATA.clients?.length || 0)) {
+          SAMA_DATA.clients = mappedClients;
+        } else {
+          const clientMap = new Map();
+          (SAMA_DATA.clients || []).forEach(c => { if (c.codeClient) clientMap.set(c.codeClient, c); });
+          mappedClients.forEach(c => { if (c.codeClient) clientMap.set(c.codeClient, { ...clientMap.get(c.codeClient), ...c }); });
+          SAMA_DATA.clients = Array.from(clientMap.values());
+        }
       }
 
-      // 2. Personnel CST (toutes les pages)
+      // 2. Personnel CST (24 agents)
       const personnelData = await this.fetchAllTableRows('personnel_cst', 'code_agent', true);
-        
       if (personnelData && personnelData.length > 0) {
-        SAMA_DATA.personnelCST = personnelData.map(p => ({
+        const mappedPersonnel = personnelData.map(p => ({
           agent: p.nom_agent,
           nomAgent: p.nom_agent,
           codeAgent: p.code_agent,
@@ -153,13 +179,21 @@ window.supabaseSync = {
           statut: p.disponibilite || 'Actif',
           disponibilite: p.disponibilite || 'Disponible'
         }));
+
+        if (mappedPersonnel.length >= (SAMA_DATA.personnelCST?.length || 0)) {
+          SAMA_DATA.personnelCST = mappedPersonnel;
+        } else {
+          const persMap = new Map();
+          (SAMA_DATA.personnelCST || []).forEach(p => { if (p.codeAgent) persMap.set(p.codeAgent, p); });
+          mappedPersonnel.forEach(p => { if (p.codeAgent) persMap.set(p.codeAgent, { ...persMap.get(p.codeAgent), ...p }); });
+          SAMA_DATA.personnelCST = Array.from(persMap.values());
+        }
       }
 
-      // 3. Catalogue Équipements TS (toutes les pages)
+      // 3. Catalogue Équipements TS (449 références)
       const catData = await this.fetchAllTableRows('equipements_ts', 'code_ts', true);
-        
       if (catData && catData.length > 0) {
-        SAMA_DATA.equipementsTS = catData.map(e => ({
+        const mappedCat = catData.map(e => ({
           codeTS: e.code_ts,
           designation: e.designation,
           modele: e.modele,
@@ -168,13 +202,21 @@ window.supabaseSync = {
           categorie: e.categorie,
           statut: e.statut || 'Actif'
         }));
+
+        if (mappedCat.length >= (SAMA_DATA.equipementsTS?.length || 0)) {
+          SAMA_DATA.equipementsTS = mappedCat;
+        } else {
+          const catMap = new Map();
+          (SAMA_DATA.equipementsTS || []).forEach(e => { if (e.codeTS) catMap.set(e.codeTS, e); });
+          mappedCat.forEach(e => { if (e.codeTS) catMap.set(e.codeTS, { ...catMap.get(e.codeTS), ...e }); });
+          SAMA_DATA.equipementsTS = Array.from(catMap.values());
+        }
       }
 
-      // 4. Sites TS (toutes les pages)
-      const sitesData = await this.fetchAllTableRows('sites_ts', 'parc_equipements', false);
-        
+      // 4. Sites TS (483 sites)
+      const sitesData = await this.fetchAllTableRows('sites_ts', 'site_code', true);
       if (sitesData && sitesData.length > 0) {
-        SAMA_DATA.sitesTS = sitesData.map(s => ({
+        const mappedSites = sitesData.map(s => ({
           id: s.site_code || s.nom_site || s.id,
           site_code: s.site_code,
           siteCode: s.site_code,
@@ -199,13 +241,21 @@ window.supabaseSync = {
           contrat: s.contrat || s.type_contrat || 'Contrat Maintenance Gold TS',
           statut: s.statut || 'Actif'
         }));
+
+        if (mappedSites.length >= (SAMA_DATA.sitesTS?.length || 0)) {
+          SAMA_DATA.sitesTS = mappedSites;
+        } else {
+          const siteMap = new Map();
+          (SAMA_DATA.sitesTS || []).forEach(s => { if (s.site_code) siteMap.set(s.site_code, s); });
+          mappedSites.forEach(s => { if (s.site_code) siteMap.set(s.site_code, { ...siteMap.get(s.site_code), ...s }); });
+          SAMA_DATA.sitesTS = Array.from(siteMap.values());
+        }
       }
 
-      // 5. Parc Équipements Déployé (2 883 machines - toutes les pages)
-      const parcData = await this.fetchAllTableRows('parc_equipements_ts', 'code_machine', true);
-        
+      // 5. Parc Équipements Déployé (2 883 machines - toutes les pages en parallèle)
+      const parcData = await this.fetchAllTableRows('parc_equipements_ts', 'id', true);
       if (parcData && parcData.length > 0) {
-        SAMA_DATA.parcEquipementsTS = parcData.map(p => {
+        const mappedParc = parcData.map(p => {
           const code = p.code_equipement || p.code_machine;
           const des = p.designation || p.nom_equipement;
           const pole = p.pole || 'BIOMED';
@@ -238,16 +288,33 @@ window.supabaseSync = {
             prochaineMaintenance: p.prochaine_maintenance || '15/11/2026'
           };
         });
+
+        // Protection intégrale : si le retour distant est complet (>= 2883), on met à jour.
+        // Sinon, on fusionne pour ne JAMAIS descendre à 1000 items !
+        if (mappedParc.length >= (SAMA_DATA.parcEquipementsTS?.length || 2883)) {
+          SAMA_DATA.parcEquipementsTS = mappedParc;
+        } else {
+          const parcMap = new Map();
+          (SAMA_DATA.parcEquipementsTS || []).forEach(e => {
+            if (e.codeEquipement) parcMap.set(e.codeEquipement, e);
+          });
+          mappedParc.forEach(e => {
+            if (e.codeEquipement) {
+              parcMap.set(e.codeEquipement, { ...parcMap.get(e.codeEquipement), ...e });
+            }
+          });
+          SAMA_DATA.parcEquipementsTS = Array.from(parcMap.values());
+        }
       }
 
-      // 6. Équipements Atelier & Interventions (toutes les pages)
+      // 6. Équipements Atelier & Interventions (Non-destructif, fusion intelligente avec LocalStorage)
       const atelierData = await this.fetchAllTableRows('equipements_atelier', 'created_at', false);
-      if (atelierData && atelierData.length > 0) {
-        // Récupérer les étapes et pièces (toutes les pages)
-        const etapesData = await this.fetchAllTableRows('interventions_etapes', 'ordre', true);
-        const piecesData = await this.fetchAllTableRows('pieces_rechange');
+      const etapesData = await this.fetchAllTableRows('interventions_etapes', 'ordre', true);
+      const piecesData = await this.fetchAllTableRows('pieces_rechange');
 
-        SAMA_DATA.equipementsAtelier = atelierData.map(eq => {
+      let remoteAtelier = [];
+      if (atelierData && atelierData.length > 0) {
+        remoteAtelier = atelierData.map(eq => {
           const eqEtapes = (etapesData || []).filter(et => et.code_equipement === eq.code_equipement).map(et => ({
             event: et.titre,
             titre: et.titre,
@@ -338,20 +405,25 @@ window.supabaseSync = {
             piecesRechange: eqPieces
           };
         });
-
-        // Persistance locale
-        try {
-          localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
-        } catch (e) {}
-      } else {
-        // La base Supabase atelier est vide (0 équipement en atelier au démarrage propre)
-        SAMA_DATA.equipementsAtelier = [];
-        try {
-          localStorage.setItem('sama_cst_equipements_atelier', '[]');
-        } catch (e) {}
       }
 
-      console.log('🔄 Données SAMA_DATA synchronisées avec Supabase !');
+      // Fusion intelligente avec localStorage : NE JAMAIS SUPPRIMER les équipements créés localement
+      const atelierMap = new Map();
+      (SAMA_DATA.equipementsAtelier || []).forEach(eq => {
+        if (eq.codeEquipement) atelierMap.set(eq.codeEquipement, eq);
+      });
+      remoteAtelier.forEach(eq => {
+        if (eq.codeEquipement) {
+          const local = atelierMap.get(eq.codeEquipement);
+          atelierMap.set(eq.codeEquipement, local ? { ...local, ...eq } : eq);
+        }
+      });
+      SAMA_DATA.equipementsAtelier = Array.from(atelierMap.values());
+      try {
+        localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
+      } catch (e) {}
+
+      console.log('🔄 Données SAMA_DATA synchronisées avec Supabase ! Total Parc:', SAMA_DATA.parcEquipementsTS.length);
       if (window.APP && typeof window.APP.renderCurrentView === 'function') {
         window.APP.renderCurrentView();
       }

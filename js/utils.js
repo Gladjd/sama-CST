@@ -87,12 +87,22 @@ window.SamaUtils = {
    * @param {string} input 
    * @returns {string}
    */
-  sanitizeText(input) {
-    if (typeof input !== 'string') return '';
-    return input.trim().replace(/[\x00-\x1F\x7F]/g, '');
+  /**
+   * Nettoie une chaîne pour une recherche insensible à la casse et aux accents
+   * @param {string} str
+   * @returns {string}
+   */
+  cleanSearchStr(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
   }
 };
 
-// Raccourci global direct
+// Raccourcis globaux directs
 window.escapeHtml = window.SamaUtils.escapeHtml;
 window.debounce = window.SamaUtils.debounce;
+window.cleanSearchStr = window.SamaUtils.cleanSearchStr;

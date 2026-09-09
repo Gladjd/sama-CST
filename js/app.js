@@ -61,10 +61,8 @@ const APP = {
       const savedAtelier = localStorage.getItem('sama_cst_equipements_atelier');
       if (savedAtelier) {
         const parsed = JSON.parse(savedAtelier);
-        if (Array.isArray(parsed)) {
-          // Filtrer les anciennes données d'exemples supprimées
-          const cleaned = parsed.filter(eq => !['EQ-AT-0001', 'EQ-AT-0002', 'EQ-AT-0003', 'EQ-AT-0004'].includes(eq.codeEquipement || eq.code_equipement));
-          SAMA_DATA.equipementsAtelier = cleaned;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          SAMA_DATA.equipementsAtelier = parsed;
         }
       }
     } catch (e) {
@@ -890,27 +888,19 @@ const APP = {
 
     let items = [...SAMA_DATA.equipementsAtelier];
 
-    // 1. Filtrage Recherche plein texte
-    if (this.tableSearchQuery) {
-      const q = String(this.tableSearchQuery).toLowerCase().trim();
-      items = items.filter(item => 
-        (item.codeEquipement && String(item.codeEquipement).toLowerCase().includes(q)) ||
-        (item.description && String(item.description).toLowerCase().includes(q)) ||
-        (item.numSerie && String(item.numSerie).toLowerCase().includes(q)) ||
-        (item.client && String(item.client).toLowerCase().includes(q)) ||
-        (item.codeClient && String(item.codeClient).toLowerCase().includes(q)) ||
-        (item.responsableReception && String(item.responsableReception).toLowerCase().includes(q)) ||
-        (item.responsableTechnique && String(item.responsableTechnique).toLowerCase().includes(q)) ||
-        (item.zoneActuelle && String(item.zoneActuelle).toLowerCase().includes(q)) ||
-        (item.motif && String(item.motif).toLowerCase().includes(q)) ||
-        (item.situation && String(item.situation).toLowerCase().includes(q)) ||
-        (item.statut && String(item.statut).toLowerCase().includes(q)) ||
-        (item.numDevisFrb && String(item.numDevisFrb).toLowerCase().includes(q)) ||
-        (item.diagnostic && String(item.diagnostic).toLowerCase().includes(q)) ||
-        (item.decision && String(item.decision).toLowerCase().includes(q)) ||
-        (item.entite && String(item.entite).toLowerCase().includes(q)) ||
-        (item.etatSortie && String(item.etatSortie).toLowerCase().includes(q))
-      );
+    // Sync avec la valeur réelle dans l'input DOM
+    const searchInput = document.getElementById('search-atelier-equipements');
+    if (searchInput && searchInput.value !== undefined) {
+      this.tableSearchQuery = searchInput.value;
+    }
+
+    // 1. Filtrage Recherche plein texte (insensible à la casse et aux accents)
+    if (this.tableSearchQuery && this.tableSearchQuery.trim() !== '') {
+      const q = (window.cleanSearchStr ? window.cleanSearchStr(this.tableSearchQuery) : String(this.tableSearchQuery).toLowerCase().trim());
+      items = items.filter(item => {
+        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${item.codeEquipement} ${item.description} ${item.numSerie} ${item.client} ${item.codeClient} ${item.responsableReception} ${item.responsableTechnique} ${item.zoneActuelle} ${item.motif} ${item.situation} ${item.statut} ${item.numDevisFrb} ${item.diagnostic} ${item.decision} ${item.entite} ${item.etatSortie}`) : '');
+        return text.includes(q);
+      });
     }
 
     // 2. Filtre Entité
@@ -1955,21 +1945,19 @@ const APP = {
 
     let items = [...(SAMA_DATA.sitesTS || [])];
 
-    // 1. Filtrage par recherche
-    if (this.siteSearchQuery) {
-      const q = String(this.siteSearchQuery).toLowerCase().trim();
-      items = items.filter(s => 
-        (s.nomClient && String(s.nomClient).toLowerCase().includes(q)) ||
-        (s.site_code && String(s.site_code).toLowerCase().includes(q)) ||
-        (s.siteCode && String(s.siteCode).toLowerCase().includes(q)) ||
-        (s.secteur && String(s.secteur).toLowerCase().includes(q)) ||
-        (s.localisation && String(s.localisation).toLowerCase().includes(q)) ||
-        (s.responsableSite && String(s.responsableSite).toLowerCase().includes(q)) ||
-        (s.technicienReferent && String(s.technicienReferent).toLowerCase().includes(q)) ||
-        (s.contrat && String(s.contrat).toLowerCase().includes(q)) ||
-        (s.telephone && String(s.telephone).toLowerCase().includes(q)) ||
-        (s.email && String(s.email).toLowerCase().includes(q))
-      );
+    // Sync avec l'input DOM
+    const searchInput = document.getElementById('search-sites-ts');
+    if (searchInput && searchInput.value !== undefined) {
+      this.siteSearchQuery = searchInput.value;
+    }
+
+    // 1. Filtrage par recherche (insensible à la casse et aux accents)
+    if (this.siteSearchQuery && this.siteSearchQuery.trim() !== '') {
+      const q = (window.cleanSearchStr ? window.cleanSearchStr(this.siteSearchQuery) : String(this.siteSearchQuery).toLowerCase().trim());
+      items = items.filter(s => {
+        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${s.nomClient} ${s.site_code} ${s.siteCode} ${s.secteur} ${s.localisation} ${s.responsableSite} ${s.technicienReferent} ${s.contrat} ${s.telephone} ${s.email}`) : '');
+        return text.includes(q);
+      });
     }
 
     // 2. Filtre par secteur
@@ -2343,27 +2331,18 @@ const APP = {
     // 3. Filtrage des équipements
     let filtered = [...rawItems];
 
-    if (this.baseEqSearchQuery) {
-      const q = String(this.baseEqSearchQuery).toLowerCase().trim();
-      filtered = filtered.filter(e => 
-        (e.codeEquipement && String(e.codeEquipement).toLowerCase().includes(q)) ||
-        (e.code_machine && String(e.code_machine).toLowerCase().includes(q)) ||
-        (e.designation && String(e.designation).toLowerCase().includes(q)) ||
-        (e.nomEquipement && String(e.nomEquipement).toLowerCase().includes(q)) ||
-        (e.client && String(e.client).toLowerCase().includes(q)) ||
-        (e.site && String(e.site).toLowerCase().includes(q)) ||
-        (e.siteLocalisation && String(e.siteLocalisation).toLowerCase().includes(q)) ||
-        (e.fournisseur && String(e.fournisseur).toLowerCase().includes(q)) ||
-        (e.modele && String(e.modele).toLowerCase().includes(q)) ||
-        (e.numSerie && String(e.numSerie).toLowerCase().includes(q)) ||
-        (e.numeroSerie && String(e.numeroSerie).toLowerCase().includes(q)) ||
-        (e.categorie && String(e.categorie).toLowerCase().includes(q)) ||
-        (e.entite && String(e.entite).toLowerCase().includes(q)) ||
-        (e.pole && String(e.pole).toLowerCase().includes(q)) ||
-        (e.technicienReferent && String(e.technicienReferent).toLowerCase().includes(q)) ||
-        (e.etatOperationnel && String(e.etatOperationnel).toLowerCase().includes(q)) ||
-        (e.contrat && String(e.contrat).toLowerCase().includes(q))
-      );
+    // Sync avec l'input DOM
+    const searchInput = document.getElementById('search-base-equipements');
+    if (searchInput && searchInput.value !== undefined) {
+      this.baseEqSearchQuery = searchInput.value;
+    }
+
+    if (this.baseEqSearchQuery && this.baseEqSearchQuery.trim() !== '') {
+      const q = (window.cleanSearchStr ? window.cleanSearchStr(this.baseEqSearchQuery) : String(this.baseEqSearchQuery).toLowerCase().trim());
+      filtered = filtered.filter(e => {
+        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${e.codeEquipement} ${e.code_machine} ${e.designation} ${e.nomEquipement} ${e.client} ${e.site} ${e.siteLocalisation} ${e.fournisseur} ${e.modele} ${e.numSerie} ${e.numeroSerie} ${e.categorie} ${e.entite} ${e.pole} ${e.technicienReferent} ${e.etatOperationnel} ${e.contrat}`) : '');
+        return text.includes(q);
+      });
     }
 
     if (this.baseEqClientFilter && this.baseEqClientFilter !== 'all') {
@@ -2659,19 +2638,19 @@ const APP = {
 
     let items = [...SAMA_DATA.equipementsTS];
 
-    // Recherche
-    if (this.tsSearchQuery) {
-      const q = String(this.tsSearchQuery).toLowerCase().trim();
-      items = items.filter(e => 
-        (e.codeTS && String(e.codeTS).toLowerCase().includes(q)) ||
-        (e.code && String(e.code).toLowerCase().includes(q)) ||
-        (e.fournisseur && String(e.fournisseur).toLowerCase().includes(q)) ||
-        (e.designation && String(e.designation).toLowerCase().includes(q)) ||
-        (e.modele && String(e.modele).toLowerCase().includes(q)) ||
-        (e.categorie && String(e.categorie).toLowerCase().includes(q)) ||
-        (e.entite && String(e.entite).toLowerCase().includes(q)) ||
-        (e.pole && String(e.pole).toLowerCase().includes(q))
-      );
+    // Sync avec l'input DOM
+    const searchInput = document.getElementById('search-equipements-ts');
+    if (searchInput && searchInput.value !== undefined) {
+      this.tsSearchQuery = searchInput.value;
+    }
+
+    // Recherche (insensible à la casse et aux accents)
+    if (this.tsSearchQuery && this.tsSearchQuery.trim() !== '') {
+      const q = (window.cleanSearchStr ? window.cleanSearchStr(this.tsSearchQuery) : String(this.tsSearchQuery).toLowerCase().trim());
+      items = items.filter(e => {
+        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${e.codeTS} ${e.code} ${e.fournisseur} ${e.designation} ${e.modele} ${e.categorie} ${e.entite} ${e.pole}`) : '');
+        return text.includes(q);
+      });
     }
 
     // Filtre Entite
@@ -2976,27 +2955,19 @@ const APP = {
 
     let items = [...SAMA_DATA.clients];
 
-    // Recherche
-    if (this.clientSearchQuery) {
-      const q = String(this.clientSearchQuery).toLowerCase().trim();
-      items = items.filter(c => 
-        (c.codeClient && String(c.codeClient).toLowerCase().includes(q)) ||
-        (c.code && String(c.code).toLowerCase().includes(q)) ||
-        (c.client && String(c.client).toLowerCase().includes(q)) ||
-        (c.nomClient && String(c.nomClient).toLowerCase().includes(q)) ||
-        (c.contactPrincipal && String(c.contactPrincipal).toLowerCase().includes(q)) ||
-        (c.adresseClient && String(c.adresseClient).toLowerCase().includes(q)) ||
-        (c.villeClient && String(c.villeClient).toLowerCase().includes(q)) ||
-        (c.paysClient && String(c.paysClient).toLowerCase().includes(q)) ||
-        (c.codePostal && String(c.codePostal).toLowerCase().includes(q)) ||
-        (c.telephoneClient && String(c.telephoneClient).toLowerCase().includes(q)) ||
-        (c.mailClient && String(c.mailClient).toLowerCase().includes(q)) ||
-        (c.rcNinea && String(c.rcNinea).toLowerCase().includes(q)) ||
-        (c.rc && String(c.rc).toLowerCase().includes(q)) ||
-        (c.ninea && String(c.ninea).toLowerCase().includes(q)) ||
-        (c.secteur && String(c.secteur).toLowerCase().includes(q)) ||
-        (c.secteurActivite && String(c.secteurActivite).toLowerCase().includes(q))
-      );
+    // Sync avec l'input DOM
+    const searchInput = document.getElementById('search-clients');
+    if (searchInput && searchInput.value !== undefined) {
+      this.clientSearchQuery = searchInput.value;
+    }
+
+    // Recherche (insensible à la casse et aux accents)
+    if (this.clientSearchQuery && this.clientSearchQuery.trim() !== '') {
+      const q = (window.cleanSearchStr ? window.cleanSearchStr(this.clientSearchQuery) : String(this.clientSearchQuery).toLowerCase().trim());
+      items = items.filter(c => {
+        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${c.codeClient} ${c.code} ${c.client} ${c.nomClient} ${c.contactPrincipal} ${c.adresseClient} ${c.villeClient} ${c.paysClient} ${c.codePostal} ${c.telephoneClient} ${c.mailClient} ${c.rcNinea} ${c.rc} ${c.ninea} ${c.secteur} ${c.secteurActivite}`) : '');
+        return text.includes(q);
+      });
     }
 
     // Filtre Ville
@@ -3426,24 +3397,18 @@ const APP = {
     // Filtrage
     let items = [...SAMA_DATA.personnelCST];
 
-    if (this.personnelSearchQuery) {
-      const q = String(this.personnelSearchQuery).toLowerCase().trim();
-      items = items.filter(p => 
-        (p.codeAgent && String(p.codeAgent).toLowerCase().includes(q)) ||
-        (p.code && String(p.code).toLowerCase().includes(q)) ||
-        (p.agent && String(p.agent).toLowerCase().includes(q)) ||
-        (p.nom && String(p.nom).toLowerCase().includes(q)) ||
-        (p.prenom && String(p.prenom).toLowerCase().includes(q)) ||
-        (p.nomAgent && String(p.nomAgent).toLowerCase().includes(q)) ||
-        (p.fonction && String(p.fonction).toLowerCase().includes(q)) ||
-        (p.email && String(p.email).toLowerCase().includes(q)) ||
-        (p.mail && String(p.mail).toLowerCase().includes(q)) ||
-        (p.pole && String(p.pole).toLowerCase().includes(q)) ||
-        (p.specialite && String(p.specialite).toLowerCase().includes(q)) ||
-        (p.telephone && String(p.telephone).toLowerCase().includes(q)) ||
-        (p.tel && String(p.tel).toLowerCase().includes(q)) ||
-        (p.statut && String(p.statut).toLowerCase().includes(q))
-      );
+    // Sync avec l'input DOM
+    const searchInput = document.getElementById('search-personnel');
+    if (searchInput && searchInput.value !== undefined) {
+      this.personnelSearchQuery = searchInput.value;
+    }
+
+    if (this.personnelSearchQuery && this.personnelSearchQuery.trim() !== '') {
+      const q = (window.cleanSearchStr ? window.cleanSearchStr(this.personnelSearchQuery) : String(this.personnelSearchQuery).toLowerCase().trim());
+      items = items.filter(p => {
+        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${p.codeAgent} ${p.code} ${p.agent} ${p.nom} ${p.prenom} ${p.nomAgent} ${p.fonction} ${p.email} ${p.mail} ${p.pole} ${p.specialite} ${p.telephone} ${p.tel} ${p.statut}`) : '');
+        return text.includes(q);
+      });
     }
 
     if (this.personnelFilterPole !== 'all') {
