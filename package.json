@@ -4,6 +4,7 @@
   "description": "Sama CST — Plateforme GMAO et Supervision Opérationnelle pour Technologies Services",
   "private": true,
   "scripts": {
+    "build": "echo 'Build ready'",
     "start": "npx -y serve . -l 3000",
     "dev": "npx -y serve . -l 3000"
   },
