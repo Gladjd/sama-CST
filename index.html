@@ -173,38 +173,14 @@
         </div>
       </div>
 
-      <div class="popover-section-title">Changer de Compte (1 Clic)</div>
-      <div class="popover-demo-grid">
-        <div class="demo-chip-btn" onclick="AUTH.switchDemoProfile('superviseur')">
-          <span>👑 Glad MOUKOUIRI</span>
-          <span class="demo-chip-badge" style="color:#72C100;">Superviseur</span>
-        </div>
-        <div class="demo-chip-btn" onclick="AUTH.switchDemoProfile('biomed')">
-          <span>🩺 Ousmane Fall</span>
-          <span class="demo-chip-badge" style="color:#2E5090;">Biomed</span>
-        </div>
-        <div class="demo-chip-btn" onclick="AUTH.switchDemoProfile('imagerie')">
-          <span>🔬 Moussa Diakhaté</span>
-          <span class="demo-chip-badge" style="color:#8B5CF6;">Imagerie</span>
-        </div>
-        <div class="demo-chip-btn" onclick="AUTH.switchDemoProfile('admin')">
-          <span>⚡ Admin GMAO</span>
-          <span class="demo-chip-badge" style="color:#F59E0B;">Admin</span>
-        </div>
-        <div class="demo-chip-btn" onclick="AUTH.switchDemoProfile('client')">
-          <span>🏥 Dr. Cheikh Diop</span>
-          <span class="demo-chip-badge" style="color:#0EA5E9;">Client HPD</span>
-        </div>
-      </div>
-
-      <div class="popover-section-title" style="margin-top:12px;">Actions Compte</div>
+      <div class="popover-section-title">Espace Utilisateur</div>
       <button class="popover-btn-item" onclick="AUTH.openProfileModal()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         <span>Modifier mon profil</span>
       </button>
       <button class="popover-btn-item" onclick="AUTH.openLoginModal('login')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
-        <span>Portail Connexion / Démo</span>
+        <span>Se connecter / S'inscrire</span>
       </button>
       <button class="popover-btn-item danger" onclick="AUTH.logout()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -2580,13 +2556,9 @@
       <button class="modal-auth-close" onclick="AUTH.continueAsGuest()" title="Fermer ou continuer en mode invité">&times;</button>
     </div>
 
-    <!-- Segmented Control Navigation -->
+    <!-- Segmented Control Navigation (Connexion & Inscription) -->
     <div class="auth-segmented-nav">
-      <button id="btn-tab-demo" class="auth-tab-btn active" onclick="AUTH.switchAuthTab('demo')">
-        <span>⚡</span>
-        <span>Accès Démo 1-Clic</span>
-      </button>
-      <button id="btn-tab-login" class="auth-tab-btn" onclick="AUTH.switchAuthTab('login')">
+      <button id="btn-tab-login" class="auth-tab-btn active" onclick="AUTH.switchAuthTab('login')">
         <span>🔑</span>
         <span>Connexion</span>
       </button>
@@ -2596,91 +2568,8 @@
       </button>
     </div>
 
-    <!-- Contenu Onglet 1: Démo 1-Clic -->
-    <div id="auth-tab-content-demo" style="padding: 22px;">
-      <p style="font-size: 13px; color: #475569; margin: 0 0 16px 0; line-height: 1.45;">
-        Choisissez votre profil pour accéder directement à l'espace de travail avec les privilèges et attributions correspondants :
-      </p>
-      
-      <div class="auth-demo-grid">
-        <!-- 1. Superviseur Glad MOUKOUIRI -->
-        <div class="auth-demo-card" data-profile-key="superviseur" onclick="AUTH.switchDemoProfile('superviseur')">
-          <div class="auth-demo-avatar" style="background: linear-gradient(135deg, #72C100 0%, #4B7A00 100%);">GM</div>
-          <div class="auth-demo-info">
-            <div class="auth-demo-name">
-              <span>Glad MOUKOUIRI</span>
-              <span class="badge-tag green" style="font-size: 10px; padding: 2px 8px;">Superviseur</span>
-            </div>
-            <div class="auth-demo-desc">Direction Technique • Vue 360°, validation des devis FRB & KPIs</div>
-          </div>
-          <span class="auth-demo-arrow">&rarr;</span>
-        </div>
-
-        <!-- 2. Biomed Ousmane Fall -->
-        <div class="auth-demo-card" data-profile-key="biomed" onclick="AUTH.switchDemoProfile('biomed')">
-          <div class="auth-demo-avatar" style="background: linear-gradient(135deg, #2E5090 0%, #16243D 100%);">OF</div>
-          <div class="auth-demo-info">
-            <div class="auth-demo-name">
-              <span>Ousmane Fall</span>
-              <span class="badge-tag blue" style="font-size: 10px; padding: 2px 8px;">Biomed</span>
-            </div>
-            <div class="auth-demo-desc">Ingénieur Biomédical • Respirateurs, moniteurs & autoclaves</div>
-          </div>
-          <span class="auth-demo-arrow">&rarr;</span>
-        </div>
-
-        <!-- 3. Imagerie Moussa Diakhaté -->
-        <div class="auth-demo-card" data-profile-key="imagerie" onclick="AUTH.switchDemoProfile('imagerie')">
-          <div class="auth-demo-avatar" style="background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);">MD</div>
-          <div class="auth-demo-info">
-            <div class="auth-demo-name">
-              <span>Moussa Diakhaté</span>
-              <span class="badge-tag purple" style="font-size: 10px; padding: 2px 8px;">Imagerie</span>
-            </div>
-            <div class="auth-demo-desc">Ingénieur Imagerie & Bloc • Scanners, IRM & tables radio</div>
-          </div>
-          <span class="auth-demo-arrow">&rarr;</span>
-        </div>
-
-        <!-- 4. Admin Administration TS -->
-        <div class="auth-demo-card" data-profile-key="admin" onclick="AUTH.switchDemoProfile('admin')">
-          <div class="auth-demo-avatar" style="background: linear-gradient(135deg, #F59E0B 0%, #B45309 100%);">AD</div>
-          <div class="auth-demo-info">
-            <div class="auth-demo-name">
-              <span>Administration TS</span>
-              <span class="badge-tag amber" style="font-size: 10px; padding: 2px 8px;">Admin</span>
-            </div>
-            <div class="auth-demo-desc">Administrateur GMAO • Référentiels clients, agents & imports</div>
-          </div>
-          <span class="auth-demo-arrow">&rarr;</span>
-        </div>
-
-        <!-- 5. Client Dr. Cheikh Tidiane Diop -->
-        <div class="auth-demo-card" data-profile-key="client" onclick="AUTH.switchDemoProfile('client')">
-          <div class="auth-demo-avatar" style="background: linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%);">CD</div>
-          <div class="auth-demo-info">
-            <div class="auth-demo-name">
-              <span>Dr. Cheikh Tidiane Diop</span>
-              <span class="badge-tag cyan" style="font-size: 10px; padding: 2px 8px;">Client HPD</span>
-            </div>
-            <div class="auth-demo-desc">Hôpital Principal de Dakar • Suivi du parc sous contrat & SLA</div>
-          </div>
-          <span class="auth-demo-arrow">&rarr;</span>
-        </div>
-      </div>
-
-      <!-- Guest Exploration Banner -->
-      <div class="auth-guest-banner">
-        <div>
-          <div style="font-weight: 700; font-size: 12.5px; color: #1E293B;">Vous souhaitez explorer la plateforme ?</div>
-          <div style="font-size: 11.5px; color: #64748B;">Accédez librement au tableau de bord en mode consultation.</div>
-        </div>
-        <button class="auth-guest-btn" onclick="AUTH.continueAsGuest()">Mode Consultation</button>
-      </div>
-    </div>
-
-    <!-- Contenu Onglet 2: Connexion classique -->
-    <div id="auth-tab-content-login" style="padding: 22px; display: none;">
+    <!-- Contenu Onglet 1: Connexion classique -->
+    <div id="auth-tab-content-login" style="padding: 22px; display: block;">
       <form onsubmit="AUTH.handleLoginForm(event)">
         <div class="form-group" style="margin-bottom: 16px;">
           <label style="font-size: 12.5px; font-weight: 700; color: #1E293B; display: block; margin-bottom: 6px;">Adresse Email Professionnelle</label>
@@ -2692,7 +2581,7 @@
           </div>
         </div>
 
-        <div class="form-group" style="margin-bottom: 18px;">
+        <div class="form-group" style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <label style="font-size: 12.5px; font-weight: 700; color: #1E293B; margin: 0;">Mot de Passe</label>
             <span style="font-size: 11.5px; color: var(--ts-blue); cursor: pointer;" onclick="APP.showToast('Contactez l\'administrateur GMAO pour réinitialiser vos identifiants.', 'info')">Mot de passe oublié ?</span>
@@ -2708,16 +2597,6 @@
           </div>
         </div>
 
-        <!-- Remplissage rapide démo -->
-        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 10px 14px; margin-bottom: 18px;">
-          <div style="font-size: 11px; font-weight: 700; color: #64748B; margin-bottom: 6px;">💡 Remplissage rapide pour test :</div>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button type="button" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;" onclick="AUTH.fillLoginCredentials('g.moukouiri@technologies-services.sn')">👑 Glad MOUKOUIRI</button>
-            <button type="button" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;" onclick="AUTH.fillLoginCredentials('o.fall@technologies-services.sn')">🩺 Ousmane Fall</button>
-            <button type="button" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;" onclick="AUTH.fillLoginCredentials('admin@technologies-services.sn')">⚡ Admin</button>
-          </div>
-        </div>
-
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
           <button type="button" class="btn-secondary" onclick="AUTH.continueAsGuest()">Mode Invité</button>
           <button type="submit" id="btn-auth-submit" class="btn-primary" style="background: linear-gradient(135deg, #72C100, #4B7A00); border: none; padding: 10px 24px; font-weight: 800; box-shadow: 0 4px 14px rgba(114, 193, 0, 0.3);">Se Connecter</button>
@@ -2725,7 +2604,7 @@
       </form>
     </div>
 
-    <!-- Contenu Onglet 3: Inscription -->
+    <!-- Contenu Onglet 2: Inscription -->
     <div id="auth-tab-content-register" style="padding: 22px; display: none;">
       <form onsubmit="AUTH.handleRegisterForm(event)">
         <div class="form-group" style="margin-bottom: 14px;">
@@ -2845,12 +2724,12 @@
 </script>
 
 <!-- Application, Auth & Sync Scripts -->
-<script src="js/utils.js?v=3.9"></script>
-<script src="js/data.js?v=3.9"></script>
-<script src="js/supabase-config.js?v=3.9"></script>
-<script src="js/supabase-sync.js?v=3.9"></script>
-<script src="js/auth.js?v=3.9"></script>
-<script src="js/charts.js?v=3.9"></script>
-<script src="js/app.js?v=3.9"></script>
+<script src="js/utils.js?v=3.9.1"></script>
+<script src="js/data.js?v=3.9.1"></script>
+<script src="js/supabase-config.js?v=3.9.1"></script>
+<script src="js/supabase-sync.js?v=3.9.1"></script>
+<script src="js/auth.js?v=3.9.1"></script>
+<script src="js/charts.js?v=3.9.1"></script>
+<script src="js/app.js?v=3.9.1"></script>
 </body>
 </html>

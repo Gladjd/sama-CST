@@ -4,10 +4,10 @@
 // ==============================================================================
 
 window.AUTH = {
-  // Profils de démonstration préconfigurés Technologies Services
-  DEMO_PROFILES: {
-    superviseur: {
-      id: 'usr-superviseur',
+  // Référentiel des profils d'équipe Technologies Services
+  KNOWN_MEMBERS: {
+    'g.moukouiri@technologies-services.sn': {
+      id: 'usr-gmoukouiri',
       nom: 'Glad MOUKOUIRI',
       initials: 'GM',
       email: 'g.moukouiri@technologies-services.sn',
@@ -15,13 +15,10 @@ window.AUTH = {
       roleLabel: 'Superviseur Technologies Services',
       pole: 'DIRECTION & SUPERVISION CST',
       telephone: '+221 77 100 20 30',
-      badgeColor: '#72C100',
-      badgeClass: 'green',
-      icon: '👑',
-      description: 'Supervision globale, validation des devis FRB & pilotage des KPIs'
+      badgeColor: '#72C100'
     },
-    biomed: {
-      id: 'usr-biomed',
+    'o.fall@technologies-services.sn': {
+      id: 'usr-ofall',
       nom: 'Ousmane Fall',
       initials: 'OF',
       email: 'o.fall@technologies-services.sn',
@@ -29,13 +26,10 @@ window.AUTH = {
       roleLabel: 'Ingénieur Biomédical Senior',
       pole: 'BIOMED',
       telephone: '+221 77 123 45 67',
-      badgeColor: '#2E5090',
-      badgeClass: 'blue',
-      icon: '🩺',
-      description: 'Prise en charge des respirateurs, moniteurs & autoclaves'
+      badgeColor: '#2E5090'
     },
-    imagerie: {
-      id: 'usr-imagerie',
+    'm.diakhate@technologies-services.sn': {
+      id: 'usr-mdiakhate',
       nom: 'Moussa Diakhaté',
       initials: 'MD',
       email: 'm.diakhate@technologies-services.sn',
@@ -43,12 +37,9 @@ window.AUTH = {
       roleLabel: 'Ingénieur Imagerie & Bloc',
       pole: 'IMAG-CHIRG',
       telephone: '+221 77 345 67 89',
-      badgeColor: '#8B5CF6',
-      badgeClass: 'purple',
-      icon: '🔬',
-      description: 'Scanners, IRM, tables radiologiques & colonnes de cœlioscopie'
+      badgeColor: '#8B5CF6'
     },
-    admin: {
+    'admin@technologies-services.sn': {
       id: 'usr-admin',
       nom: 'Administration TS',
       initials: 'AD',
@@ -57,13 +48,10 @@ window.AUTH = {
       roleLabel: 'Administrateur GMAO & Système',
       pole: 'SUPPORT & INFRASTRUCTURE',
       telephone: '+221 33 800 00 00',
-      badgeColor: '#F59E0B',
-      badgeClass: 'amber',
-      icon: '⚡',
-      description: 'Gestion des référentiels, exports de données & configuration'
+      badgeColor: '#F59E0B'
     },
-    client: {
-      id: 'usr-client',
+    'contact@hpd.sn': {
+      id: 'usr-client-hpd',
       nom: 'Dr. Cheikh Tidiane Diop',
       initials: 'CD',
       email: 'contact@hpd.sn',
@@ -71,10 +59,7 @@ window.AUTH = {
       roleLabel: 'Client Référent (Hôpital Principal)',
       pole: 'CLIENT PARTENAIRE',
       telephone: '+221 33 839 50 50',
-      badgeColor: '#0EA5E9',
-      badgeClass: 'cyan',
-      icon: '🏥',
-      description: 'Suivi des équipements hospitaliers & demandes d\'intervention'
+      badgeColor: '#0EA5E9'
     }
   },
 
@@ -83,7 +68,7 @@ window.AUTH = {
 
   // Initialisation de la session
   async init() {
-    // 1. Récupération de la session stockée UNIQUEMENT si l'utilisateur s'est déjà connecté sur CE navigateur
+    // 1. Récupération de la session stockée UNIQUEMENT si l'utilisateur s'est connecté sur CE navigateur
     const savedUser = localStorage.getItem('sama_current_user');
     if (savedUser) {
       try {
@@ -93,11 +78,11 @@ window.AUTH = {
         localStorage.removeItem('sama_current_user');
       }
     } else {
-      // ⚠️ Nouveau visiteur / collègue : Session nulle par défaut ! Ne JAMAIS forcer Glad MOUKOUIRI.
+      // ⚠️ Nouveau visiteur : Session nulle par défaut (aucun auto-login forcé)
       this.currentUser = null;
     }
 
-    // 2. Écoute de la session Supabase Auth si le client est prêt
+    // 2. Écoute de la session Supabase Auth si le client est disponible
     if (window.supabaseSync && window.supabaseSync.client) {
       this.bindSupabaseAuth(window.supabaseSync.client);
     }
@@ -106,13 +91,12 @@ window.AUTH = {
     this.updateUserUI();
     this.bindClickOutside();
 
-    // 4. Si aucun utilisateur n'est connecté à l'ouverture, afficher le portail d'accueil après un court délai
+    // 4. Si aucun utilisateur n'est connecté à l'ouverture, proposer la connexion
     if (!this.currentUser) {
       setTimeout(() => {
-        // N'ouvre la modale que si elle n'est pas déjà ouverte
         const modal = document.getElementById('modal-auth-login');
         if (modal && !modal.classList.contains('active')) {
-          this.openLoginModal('demo');
+          this.openLoginModal('login');
         }
       }, 350);
     }
@@ -214,7 +198,6 @@ window.AUTH = {
       const popEmail = document.getElementById('pop-user-email');
       const popRole = document.getElementById('pop-user-role');
       const popAvatar = document.getElementById('pop-user-avatar');
-      const popPole = document.getElementById('pop-user-pole');
 
       if (popName) popName.textContent = this.currentUser.nom;
       if (popEmail) popEmail.textContent = this.currentUser.email;
@@ -223,7 +206,6 @@ window.AUTH = {
         popAvatar.textContent = this.currentUser.initials;
         popAvatar.style.background = this.currentUser.badgeColor || '#72C100';
       }
-      if (popPole) popPole.textContent = this.currentUser.pole;
     } else {
       // Visiteur non connecté
       if (avatarEl) {
@@ -261,23 +243,6 @@ window.AUTH = {
         popAvatar.style.background = '#475569';
       }
     }
-
-    // Surligner le profil actif dans la liste des démos si ouvert
-    this.highlightActiveDemoCard();
-  },
-
-  // Surligne la carte démo correspondant au profil actuellement actif
-  highlightActiveDemoCard() {
-    const currentEmail = this.currentUser ? this.currentUser.email.toLowerCase() : '';
-    document.querySelectorAll('.auth-demo-card').forEach(card => {
-      const cardKey = card.getAttribute('data-profile-key');
-      const profile = this.DEMO_PROFILES[cardKey];
-      if (profile && profile.email.toLowerCase() === currentEmail) {
-        card.classList.add('active-profile');
-      } else {
-        card.classList.remove('active-profile');
-      }
-    });
   },
 
   // Ouvre / Ferme le menu contextuel utilisateur dans la barre latérale
@@ -317,27 +282,6 @@ window.AUTH = {
     });
   },
 
-  // Bascule rapide de profil en 1 clic (Superviseur Glad MOUKOUIRI, Biomed, Admin, Client)
-  switchDemoProfile(profileKey) {
-    const profile = this.DEMO_PROFILES[profileKey];
-    if (!profile) return;
-
-    this.currentUser = { 
-      ...profile,
-      isAuthenticated: true,
-      lastLogin: new Date().toISOString()
-    };
-
-    this.saveCurrentSession();
-    this.updateUserUI();
-    this.closeUserMenu();
-    this.closeLoginModal();
-
-    if (window.APP && typeof window.APP.showToast === 'function') {
-      window.APP.showToast(`Connecté avec succès : ${profile.nom} (${profile.roleLabel})`, 'success');
-    }
-  },
-
   // Poursuivre la navigation en mode visiteur/invité
   continueAsGuest() {
     this.closeLoginModal();
@@ -347,11 +291,13 @@ window.AUTH = {
     }
   },
 
-  // Connexion via formulaire (Email / Mot de passe avec Supabase Auth)
+  // Connexion via formulaire (Email / Mot de passe avec Supabase Auth & Local)
   async handleLoginForm(e) {
     e.preventDefault();
-    const email = document.getElementById('auth-login-email')?.value?.trim();
-    const password = document.getElementById('auth-login-password')?.value;
+    const emailInput = document.getElementById('auth-login-email');
+    const passwordInput = document.getElementById('auth-login-password');
+    const email = emailInput?.value?.trim();
+    const password = passwordInput?.value;
 
     if (!email || !password) {
       if (window.APP) window.APP.showToast('Veuillez saisir votre email et mot de passe.', 'error');
@@ -366,7 +312,7 @@ window.AUTH = {
     }
 
     try {
-      // 1. Si Supabase est connecté, on tente la connexion Supabase Auth
+      // 1. Si Supabase Auth est connecté, tenter la connexion Supabase
       if (window.supabaseSync && window.supabaseSync.client) {
         try {
           const { data, error } = await window.supabaseSync.client.auth.signInWithPassword({ email, password });
@@ -381,14 +327,44 @@ window.AUTH = {
         }
       }
 
-      // 2. Fallback démo par email officiel
-      const demoKey = Object.keys(this.DEMO_PROFILES).find(k => this.DEMO_PROFILES[k].email.toLowerCase() === email.toLowerCase());
-      if (demoKey) {
-        this.switchDemoProfile(demoKey);
+      // 2. Vérification dans le référentiel des membres connus TS
+      const lowerEmail = email.toLowerCase();
+      const knownProfile = this.KNOWN_MEMBERS[lowerEmail];
+      if (knownProfile) {
+        this.currentUser = {
+          ...knownProfile,
+          isAuthenticated: true,
+          lastLogin: new Date().toISOString()
+        };
+        this.saveCurrentSession();
+        this.updateUserUI();
+        this.closeLoginModal();
+        if (window.APP) window.APP.showToast(`Bienvenue, ${this.currentUser.nom} (${this.currentUser.roleLabel})`, 'success');
         return;
       }
 
-      // 3. Création de session locale générique
+      // 3. Vérification dans les comptes enregistrés localement
+      let savedAccounts = [];
+      try {
+        savedAccounts = JSON.parse(localStorage.getItem('sama_registered_users') || '[]');
+      } catch (err) {
+        savedAccounts = [];
+      }
+      const existingUser = savedAccounts.find(u => u.email.toLowerCase() === lowerEmail);
+      if (existingUser) {
+        this.currentUser = {
+          ...existingUser,
+          isAuthenticated: true,
+          lastLogin: new Date().toISOString()
+        };
+        this.saveCurrentSession();
+        this.updateUserUI();
+        this.closeLoginModal();
+        if (window.APP) window.APP.showToast(`Bienvenue, ${this.currentUser.nom} !`, 'success');
+        return;
+      }
+
+      // 4. Création de session locale générique pour nouveaux collaborateurs
       const rawName = email.split('@')[0].replace(/[\._-]/g, ' ');
       const formattedName = rawName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
       const initials = formattedName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'TS';
@@ -422,7 +398,7 @@ window.AUTH = {
     }
   },
 
-  // Inscription d'un nouveau compte
+  // Inscription d'un nouveau compte (Formulaire Inscription)
   async handleRegisterForm(e) {
     e.preventDefault();
     const nom = document.getElementById('auth-reg-nom')?.value?.trim();
@@ -464,7 +440,7 @@ window.AUTH = {
         ? 'Superviseur Technologies Services' 
         : (role === 'admin' ? 'Administrateur GMAO' : (role === 'client' ? 'Client Référent' : 'Ingénieur / Technicien CST'));
 
-      this.currentUser = {
+      const newUser = {
         id: 'usr-' + Date.now(),
         nom: nom,
         initials: initials,
@@ -478,6 +454,17 @@ window.AUTH = {
         lastLogin: new Date().toISOString()
       };
 
+      // Sauvegarde dans la base locale d'utilisateurs
+      let savedAccounts = [];
+      try {
+        savedAccounts = JSON.parse(localStorage.getItem('sama_registered_users') || '[]');
+      } catch (err) {
+        savedAccounts = [];
+      }
+      savedAccounts.push(newUser);
+      localStorage.setItem('sama_registered_users', JSON.stringify(savedAccounts));
+
+      this.currentUser = newUser;
       this.saveCurrentSession();
       this.updateUserUI();
       this.closeLoginModal();
@@ -509,16 +496,6 @@ window.AUTH = {
     }
   },
 
-  // Remplir rapidement les identifiants de test dans le formulaire de connexion
-  fillLoginCredentials(email, pwd = 'password123') {
-    this.switchAuthTab('login');
-    const emailInput = document.getElementById('auth-login-email');
-    const pwdInput = document.getElementById('auth-login-password');
-    if (emailInput) emailInput.value = email;
-    if (pwdInput) pwdInput.value = pwd;
-    if (emailInput) emailInput.focus();
-  },
-
   // Déconnexion complète et propre
   async logout() {
     if (confirm('Voulez-vous vraiment fermer votre session Sama CST ?')) {
@@ -536,22 +513,21 @@ window.AUTH = {
 
       this.closeUserMenu();
       this.updateUserUI();
-      this.openLoginModal('demo');
+      this.openLoginModal('login');
 
       if (window.APP && typeof window.APP.showToast === 'function') {
-        window.APP.showToast('Session fermée. Vous pouvez vous reconnecter avec un autre compte.', 'info');
+        window.APP.showToast('Session fermée. Vous pouvez vous reconnecter avec un compte ou vous inscrire.', 'info');
       }
     }
   },
 
   // Modales d'authentification et de profil
-  openLoginModal(tab = 'demo') {
+  openLoginModal(tab = 'login') {
     this.closeUserMenu();
     const modal = document.getElementById('modal-auth-login');
     if (modal) {
       modal.classList.add('active');
       this.switchAuthTab(tab);
-      this.highlightActiveDemoCard();
     }
   },
 
@@ -561,34 +537,29 @@ window.AUTH = {
   },
 
   switchAuthTab(tabName) {
-    const tabDemo = document.getElementById('auth-tab-content-demo');
     const tabLogin = document.getElementById('auth-tab-content-login');
     const tabRegister = document.getElementById('auth-tab-content-register');
 
-    const btnDemo = document.getElementById('btn-tab-demo');
     const btnLogin = document.getElementById('btn-tab-login');
     const btnRegister = document.getElementById('btn-tab-register');
 
-    [tabDemo, tabLogin, tabRegister].forEach(el => el && (el.style.display = 'none'));
-    [btnDemo, btnLogin, btnRegister].forEach(el => el && el.classList.remove('active'));
+    [tabLogin, tabRegister].forEach(el => el && (el.style.display = 'none'));
+    [btnLogin, btnRegister].forEach(el => el && el.classList.remove('active'));
 
-    if (tabName === 'demo' && tabDemo) {
-      tabDemo.style.display = 'block';
-      if (btnDemo) btnDemo.classList.add('active');
-      this.highlightActiveDemoCard();
-    } else if (tabName === 'login' && tabLogin) {
-      tabLogin.style.display = 'block';
-      if (btnLogin) btnLogin.classList.add('active');
-    } else if (tabName === 'register' && tabRegister) {
+    if (tabName === 'register' && tabRegister) {
       tabRegister.style.display = 'block';
       if (btnRegister) btnRegister.classList.add('active');
+    } else {
+      // Default: login
+      if (tabLogin) tabLogin.style.display = 'block';
+      if (btnLogin) btnLogin.classList.add('active');
     }
   },
 
   openProfileModal() {
     this.closeUserMenu();
     if (!this.currentUser) {
-      this.openLoginModal('demo');
+      this.openLoginModal('login');
       return;
     }
 
