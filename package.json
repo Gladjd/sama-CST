@@ -1,6 +1,6 @@
 {
   "name": "sama-cst",
-  "version": "3.8.3",
+  "version": "3.9.0",
   "description": "Sama CST — Plateforme GMAO et Supervision Opérationnelle pour Technologies Services",
   "private": true,
   "scripts": {
