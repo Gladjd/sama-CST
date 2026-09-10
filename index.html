@@ -296,6 +296,58 @@
           </ul>
         </div>
 
+        <!-- Barre de Filtres Interconnectés & Temps Réel Supabase -->
+        <div class="dashboard-filter-bar">
+          <div class="dash-filters-left">
+            <div class="dash-filter-group">
+              <label for="dash-filter-entite">Pôle / Entité :</label>
+              <select id="dash-filter-entite" class="dash-filter-select" onchange="APP.setDashboardFilter('entite', this.value)">
+                <option value="all">🏢 Tous les Pôles</option>
+                <option value="BIOMED">Pôle BIOMED</option>
+                <option value="IMAG-CHIRG">Pôle IMAG-CHIRG</option>
+              </select>
+            </div>
+
+            <div class="dash-filter-group">
+              <label for="dash-filter-client">Client Partenaire :</label>
+              <select id="dash-filter-client" class="dash-filter-select" style="max-width: 250px;" onchange="APP.setDashboardFilter('client', this.value)">
+                <option value="all">🏥 Tous les Clients</option>
+              </select>
+            </div>
+
+            <div class="dash-filter-group">
+              <label for="dash-filter-statut">Statut Atelier :</label>
+              <select id="dash-filter-statut" class="dash-filter-select" onchange="APP.setDashboardFilter('statut', this.value)">
+                <option value="all">⚡ Tous les Statuts</option>
+                <option value="actifs">En Atelier (Actifs)</option>
+                <option value="pieces">Attente Pièces</option>
+                <option value="devis">Devis / FRB</option>
+                <option value="accord">Attente Accord Client</option>
+                <option value="banc">Banc d'Essai & Contrôle</option>
+                <option value="cloture">Clôturés / Restitués</option>
+              </select>
+            </div>
+
+            <div class="dash-filter-group">
+              <label for="dash-filter-period">Période :</label>
+              <select id="dash-filter-period" class="dash-filter-select" onchange="APP.setDashboardFilter('period', this.value)">
+                <option value="all">📅 Tout l'Historique</option>
+                <option value="month">Ce mois-ci</option>
+                <option value="quarter">3 derniers mois</option>
+                <option value="semester">6 derniers mois</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="dash-filters-right">
+            <span id="dash-filter-results-badge" class="dash-results-pill">2 883 équipements</span>
+            <button id="btn-dash-reset-filters" class="btn-dash-reset" onclick="APP.resetAllFilters()" title="Réinitialiser tous les filtres">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              <span>Réinitialiser</span>
+            </button>
+          </div>
+        </div>
+
         <!-- --------------------------------------------------------------
              PAGE 1 : SYNTHÈSE DIRECTION
              KPI cards + jauge dispo + histogramme MTTR + Top 5 durées + répartition marques
@@ -2724,12 +2776,12 @@
 </script>
 
 <!-- Application, Auth & Sync Scripts -->
-<script src="js/utils.js?v=3.9.1"></script>
-<script src="js/data.js?v=3.9.1"></script>
-<script src="js/supabase-config.js?v=3.9.1"></script>
-<script src="js/supabase-sync.js?v=3.9.1"></script>
-<script src="js/auth.js?v=3.9.1"></script>
-<script src="js/charts.js?v=3.9.1"></script>
-<script src="js/app.js?v=3.9.1"></script>
+<script src="js/utils.js?v=3.9.2"></script>
+<script src="js/data.js?v=3.9.2"></script>
+<script src="js/supabase-config.js?v=3.9.2"></script>
+<script src="js/supabase-sync.js?v=3.9.2"></script>
+<script src="js/auth.js?v=3.9.2"></script>
+<script src="js/charts.js?v=3.9.2"></script>
+<script src="js/app.js?v=3.9.2"></script>
 </body>
 </html>

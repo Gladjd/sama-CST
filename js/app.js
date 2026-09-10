@@ -11,6 +11,17 @@ const APP = {
   filterSituation: 'all',
   filterEtatSortie: 'all',
   filterZone: 'all',
+  // Filtres unifiés et interconnectés en temps réel
+  filters: {
+    entite: 'all',
+    client: 'all',
+    statut: 'all',
+    situation: 'all',
+    etatSortie: 'all',
+    zone: 'all',
+    period: 'all',
+    search: ''
+  },
   sortColumn: 'codeEquipement',
   sortDirection: 'asc',
   currentPage: 1,
@@ -70,6 +81,8 @@ const APP = {
     }
 
     this.bindEvents();
+    this.populateDashboardClientFilter();
+    this.syncAllFilterControls();
     this.renderDashboardKPIs();
     this.renderEquipementTable();
     this.renderEquipementsTS();
@@ -123,6 +136,8 @@ const APP = {
   },
 
   renderCurrentView() {
+    this.populateDashboardClientFilter();
+    this.syncAllFilterControls();
     this.renderDashboardKPIs();
     this.renderEquipementTable();
     this.renderEquipementsTS();
@@ -388,18 +403,49 @@ const APP = {
 
     // Filtres Entité Global (Topbar)
     const globalEntityFilter = document.getElementById('global-entity-filter');
-    const filterEntiteSelect = document.getElementById('filter-entite');
-
     if (globalEntityFilter) {
       globalEntityFilter.addEventListener('change', (e) => {
-        this.filterEntite = e.target.value;
-        if (filterEntiteSelect) filterEntiteSelect.value = e.target.value;
-        this.renderEquipementTable();
-        this.renderEntityAvailability();
+        this.setDashboardFilter('entite', e.target.value);
       });
     }
 
-    // Filtres et Recherche Atelier
+    // Filtres Barre Dashboard Interactive (Synthèse & KPIs)
+    const dashFilterEntite = document.getElementById('dash-filter-entite');
+    if (dashFilterEntite) {
+      dashFilterEntite.addEventListener('change', (e) => {
+        this.setDashboardFilter('entite', e.target.value);
+      });
+    }
+
+    const dashFilterClient = document.getElementById('dash-filter-client');
+    if (dashFilterClient) {
+      dashFilterClient.addEventListener('change', (e) => {
+        this.setDashboardFilter('client', e.target.value);
+      });
+    }
+
+    const dashFilterStatut = document.getElementById('dash-filter-statut');
+    if (dashFilterStatut) {
+      dashFilterStatut.addEventListener('change', (e) => {
+        this.setDashboardFilter('statut', e.target.value);
+      });
+    }
+
+    const dashFilterPeriod = document.getElementById('dash-filter-period');
+    if (dashFilterPeriod) {
+      dashFilterPeriod.addEventListener('change', (e) => {
+        this.setDashboardFilter('period', e.target.value);
+      });
+    }
+
+    const btnDashReset = document.getElementById('btn-dash-reset-filters');
+    if (btnDashReset) {
+      btnDashReset.addEventListener('click', () => {
+        this.resetAllFilters();
+      });
+    }
+
+    // Filtres et Recherche Atelier GMAO
     const searchAtelier = document.getElementById('search-atelier-equipements');
     if (searchAtelier) {
       searchAtelier.addEventListener('input', (e) => {
@@ -407,43 +453,38 @@ const APP = {
       });
     }
 
+    const filterEntiteSelect = document.getElementById('filter-entite');
     if (filterEntiteSelect) {
       filterEntiteSelect.addEventListener('change', (e) => {
-        this.filterEntite = e.target.value;
-        if (globalEntityFilter) globalEntityFilter.value = e.target.value;
-        this.renderEquipementTable();
+        this.setDashboardFilter('entite', e.target.value);
       });
     }
 
     const filterStatutSelect = document.getElementById('filter-statut');
     if (filterStatutSelect) {
       filterStatutSelect.addEventListener('change', (e) => {
-        this.filterStatut = e.target.value;
-        this.renderEquipementTable();
+        this.setDashboardFilter('statut', e.target.value);
       });
     }
 
     const filterSituationSelect = document.getElementById('filter-situation');
     if (filterSituationSelect) {
       filterSituationSelect.addEventListener('change', (e) => {
-        this.filterSituation = e.target.value;
-        this.renderEquipementTable();
+        this.setDashboardFilter('situation', e.target.value);
       });
     }
 
     const filterEtatSortieSelect = document.getElementById('filter-etat-sortie');
     if (filterEtatSortieSelect) {
       filterEtatSortieSelect.addEventListener('change', (e) => {
-        this.filterEtatSortie = e.target.value;
-        this.renderEquipementTable();
+        this.setDashboardFilter('etatSortie', e.target.value);
       });
     }
 
     const filterZoneSelect = document.getElementById('filter-zone');
     if (filterZoneSelect) {
       filterZoneSelect.addEventListener('change', (e) => {
-        this.filterZone = e.target.value;
-        this.renderEquipementTable();
+        this.setDashboardFilter('zone', e.target.value);
       });
     }
 
@@ -644,7 +685,9 @@ const APP = {
 
   handleAtelierSearch(val) {
     this.currentPage = 1;
-    this.tableSearchQuery = (val || '').toLowerCase().trim();
+    const cleanVal = (val || '').toLowerCase().trim();
+    this.tableSearchQuery = cleanVal;
+    this.filters.search = cleanVal;
     const globalSearch = document.getElementById('global-search-input');
     if (globalSearch && globalSearch.value !== val && this.currentModule === 'atelier-equipements') {
       globalSearch.value = val || '';
@@ -653,6 +696,7 @@ const APP = {
     if (localInput && localInput.value !== val) {
       localInput.value = val || '';
     }
+    this.syncAllFilterControls();
     this.renderEquipementTable();
   },
 
@@ -886,47 +930,13 @@ const APP = {
     const tbody = document.getElementById('table-equipements-body');
     if (!tbody) return;
 
-    let items = [...SAMA_DATA.equipementsAtelier];
-
     // Sync avec la valeur réelle dans l'input DOM
     const searchInput = document.getElementById('search-atelier-equipements');
     if (searchInput && searchInput.value !== undefined) {
       this.tableSearchQuery = searchInput.value;
     }
 
-    // 1. Filtrage Recherche plein texte (insensible à la casse et aux accents)
-    if (this.tableSearchQuery && this.tableSearchQuery.trim() !== '') {
-      const q = (window.cleanSearchStr ? window.cleanSearchStr(this.tableSearchQuery) : String(this.tableSearchQuery).toLowerCase().trim());
-      items = items.filter(item => {
-        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${item.codeEquipement} ${item.description} ${item.numSerie} ${item.client} ${item.codeClient} ${item.responsableReception} ${item.responsableTechnique} ${item.zoneActuelle} ${item.motif} ${item.situation} ${item.statut} ${item.numDevisFrb} ${item.diagnostic} ${item.decision} ${item.entite} ${item.etatSortie}`) : '');
-        return text.includes(q);
-      });
-    }
-
-    // 2. Filtre Entité
-    if (this.filterEntite !== 'all') {
-      items = items.filter(item => item.entite === this.filterEntite);
-    }
-
-    // 3. Filtre Statut
-    if (this.filterStatut !== 'all') {
-      items = items.filter(item => item.statut === this.filterStatut);
-    }
-
-    // 4. Filtre Situation
-    if (this.filterSituation !== 'all') {
-      items = items.filter(item => item.situation === this.filterSituation);
-    }
-
-    // 5. Filtre État de Sortie
-    if (this.filterEtatSortie !== 'all') {
-      items = items.filter(item => item.etatSortie === this.filterEtatSortie);
-    }
-
-    // 6. Filtre Zone Actuelle
-    if (this.filterZone && this.filterZone !== 'all') {
-      items = items.filter(item => item.zoneActuelle === this.filterZone);
-    }
+    let items = this.getFilteredAtelier();
 
     // 5. Tri robuste
     items.sort((a, b) => {
@@ -3829,53 +3839,397 @@ const APP = {
   },
 
   // ------------------------------------------------------------------------
-  // CALCUL ET RENDU DYNAMIQUE DES KPIS & METRIQUES (SYNCHRONISÉ SUPABASE)
+  // GESTIONNAIRE DE FILTRES UNIFIÉS & INTERCONNECTÉS EN TEMPS RÉEL
   // ------------------------------------------------------------------------
-  renderDashboardKPIs() {
-    const parc = (window.SAMA_DATA && window.SAMA_DATA.parcEquipementsTS) || [];
-    const atelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || [];
-    const sites = (window.SAMA_DATA && window.SAMA_DATA.sitesTS) || [];
-    const clients = (window.SAMA_DATA && window.SAMA_DATA.clients) || [];
-    const catalogue = (window.SAMA_DATA && window.SAMA_DATA.equipementsTS) || [];
-    const personnel = (window.SAMA_DATA && window.SAMA_DATA.personnelCST) || [];
+  populateDashboardClientFilter() {
+    const select = document.getElementById('dash-filter-client');
+    if (!select) return;
 
-    const totalParc = parc.length || 2883;
-    const inAtelier = atelier.filter(e => this.isEquipementActive(e)).length;
-    const totalSites = sites.length || 483;
-    const totalClients = clients.length || 608;
-    const totalCatalogue = catalogue.length || 449;
-    const totalPersonnel = personnel.length || 24;
+    const clientMap = new Map();
+    ((window.SAMA_DATA && window.SAMA_DATA.clients) || []).forEach(c => {
+      const nom = (c.nomClient || c.client || '').trim();
+      if (nom && nom !== '-') clientMap.set(nom.toLowerCase(), nom);
+    });
+    ((window.SAMA_DATA && window.SAMA_DATA.parcEquipementsTS) || []).forEach(p => {
+      const nom = (p.client || p.site || '').trim();
+      if (nom && nom !== '-') clientMap.set(nom.toLowerCase(), nom);
+    });
+    ((window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || []).forEach(e => {
+      const nom = (e.client || '').trim();
+      if (nom && nom !== '-') clientMap.set(nom.toLowerCase(), nom);
+    });
 
-    let avgDispo = 98.5;
-    if (parc.length > 0) {
-      const sum = parc.reduce((acc, p) => acc + (parseFloat(p.tauxDisponibilite || p.disponibilite) || 98.5), 0);
-      avgDispo = parseFloat((sum / parc.length).toFixed(1));
+    const sortedClients = Array.from(clientMap.values()).sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
+    const currentVal = this.filters.client || 'all';
+
+    select.innerHTML = `<option value="all">🏢 Tous les Clients (${sortedClients.length})</option>` +
+      sortedClients.map(c => `<option value="${c.replace(/"/g, '&quot;')}">${c}</option>`).join('');
+
+    if (currentVal && currentVal !== 'all') {
+      select.value = currentVal;
+    }
+  },
+
+  syncAllFilterControls() {
+    const entite = this.filters.entite;
+    const client = this.filters.client;
+    const statut = this.filters.statut;
+    const period = this.filters.period;
+    const situation = this.filters.situation;
+    const etatSortie = this.filters.etatSortie;
+    const zone = this.filters.zone;
+
+    const setVal = (id, v) => {
+      const el = document.getElementById(id);
+      if (el && el.value !== v) el.value = v;
+    };
+
+    setVal('global-entity-filter', entite);
+    setVal('dash-filter-entite', entite);
+    setVal('filter-entite', entite);
+
+    setVal('dash-filter-client', client);
+    setVal('dash-filter-statut', statut);
+    setVal('filter-statut', statut);
+    setVal('dash-filter-period', period);
+
+    setVal('filter-situation', situation);
+    setVal('filter-etat-sortie', etatSortie);
+    setVal('filter-zone', zone);
+
+    // Mise à jour du badge récapitulatif
+    const badge = document.getElementById('dash-filter-results-badge');
+    if (badge) {
+      const filteredParc = this.getFilteredParc();
+      const filteredAtelier = this.getFilteredAtelier();
+      const inAtelier = filteredAtelier.filter(e => this.isEquipementActive(e)).length;
+      badge.innerHTML = `<strong>${filteredParc.length.toLocaleString('fr-FR')}</strong> éq. supervisés • <strong>${inAtelier}</strong> en atelier`;
+    }
+  },
+
+  setDashboardFilter(key, value) {
+    this.filters[key] = value;
+
+    // Synchronisation rétrocompatible avec les propriétés de filtrage existantes
+    if (key === 'entite') {
+      this.filterEntite = value;
+      this.baseEqEntiteFilter = value;
+    } else if (key === 'statut') {
+      this.filterStatut = value;
+    } else if (key === 'situation') {
+      this.filterSituation = value;
+    } else if (key === 'etatSortie') {
+      this.filterEtatSortie = value;
+    } else if (key === 'zone') {
+      this.filterZone = value;
+    } else if (key === 'client') {
+      this.baseEqClientFilter = value;
     }
 
-    const countBiomedCat = catalogue.filter(e => (e.entite || '').includes('BIOMED')).length || 288;
-    const countImagCat = catalogue.filter(e => (e.entite || '').includes('IMAG')).length || 161;
-    const countFournisseurs = new Set(catalogue.map(e => (e.fournisseur || '').trim()).filter(Boolean)).size || 18;
+    this.syncAllFilterControls();
+    this.renderAllFilteredViews();
+  },
 
-    const countVilles = new Set(clients.map(c => (c.villeClient || '').trim()).filter(v => v && v !== '-')).size || 25;
-    const countClientsSante = clients.filter(c => {
-      const s = ((c.secteur || '') + ' ' + (c.nomClient || '')).toLowerCase();
-      return s.includes('santé') || s.includes('médical') || s.includes('hopital') || s.includes('hôpital') || s.includes('clinique') || s.includes('centre de santé') || s.includes('polyclinique');
-    }).length || 280;
-    const countClientsIndustrie = Math.max(0, totalClients - countClientsSante) || 328;
+  resetAllFilters() {
+    this.filters = {
+      entite: 'all',
+      client: 'all',
+      statut: 'all',
+      situation: 'all',
+      etatSortie: 'all',
+      zone: 'all',
+      period: 'all',
+      search: ''
+    };
+    this.filterEntite = 'all';
+    this.filterStatut = 'all';
+    this.filterSituation = 'all';
+    this.filterEtatSortie = 'all';
+    this.filterZone = 'all';
+    this.tableSearchQuery = '';
+    this.baseEqClientFilter = 'all';
+    this.baseEqEntiteFilter = 'all';
 
-    const countPersonnelBiomed = personnel.filter(p => (p.pole || '').includes('BIOMED')).length || 8;
-    const countPersonnelImag = personnel.filter(p => (p.pole || '').includes('IMAG')).length || 8;
-    const countPersonnelAtelier = personnel.filter(p => !(p.pole || '').includes('BIOMED') && !(p.pole || '').includes('IMAG')).length || 8;
+    const searchInput = document.getElementById('search-atelier-equipements');
+    if (searchInput) searchInput.value = '';
+
+    this.syncAllFilterControls();
+    this.renderAllFilteredViews();
+    this.showToast("Tous les filtres ont été réinitialisés.", "info");
+  },
+
+  renderAllFilteredViews() {
+    this.renderDashboardKPIs();
+    this.renderTechnicians();
+    this.renderBlocages4Axes();
+    this.renderCriticiteTable();
+    this.renderRedAlerts();
+    this.renderEntityAvailability();
+    this.renderTop5List();
+    this.renderEquipementTable();
+    if (window.SAMA_CHARTS && typeof window.SAMA_CHARTS.initAllDashboardCharts === 'function') {
+      window.SAMA_CHARTS.initAllDashboardCharts();
+    }
+  },
+
+  getFilteredParc() {
+    let parc = (window.SAMA_DATA && window.SAMA_DATA.parcEquipementsTS) || [];
+    const entite = this.filters.entite;
+    const client = this.filters.client;
+    const search = (this.filters.search || this.currentSearchQuery || '').toLowerCase().trim();
+
+    if (entite && entite !== 'all') {
+      parc = parc.filter(p => {
+        const pol = (p.pole || p.entite || '').toUpperCase();
+        if (entite === 'BIOMED') return pol.includes('BIOMED');
+        if (entite === 'IMAG-CHIRG') return pol.includes('IMAG') || pol.includes('CHIRG');
+        return pol.includes(entite.toUpperCase());
+      });
+    }
+
+    if (client && client !== 'all') {
+      const cleanClient = (window.cleanSearchStr ? window.cleanSearchStr(client) : String(client).toLowerCase().trim());
+      parc = parc.filter(p => {
+        const c = (window.cleanSearchStr ? window.cleanSearchStr(`${p.client || ''} ${p.nomClient || ''} ${p.site || ''} ${p.codeClient || ''}`) : String(`${p.client || ''} ${p.nomClient || ''} ${p.site || ''} ${p.codeClient || ''}`).toLowerCase());
+        return c.includes(cleanClient) || cleanClient.includes(c);
+      });
+    }
+
+    if (search) {
+      const q = (window.cleanSearchStr ? window.cleanSearchStr(search) : String(search).toLowerCase().trim());
+      parc = parc.filter(p => {
+        const txt = (window.cleanSearchStr ? window.cleanSearchStr(`${p.codeEquipement || ''} ${p.designation || p.nomEquipement || ''} ${p.client || ''} ${p.numSerie || ''} ${p.marque || p.fournisseur || ''} ${p.pole || ''} ${p.localisation || ''}`) : String(`${p.codeEquipement || ''} ${p.designation || p.nomEquipement || ''} ${p.client || ''} ${p.numSerie || ''} ${p.marque || p.fournisseur || ''} ${p.pole || ''} ${p.localisation || ''}`).toLowerCase());
+        return txt.includes(q);
+      });
+    }
+
+    return parc;
+  },
+
+  getFilteredAtelier() {
+    let items = [...((window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || [])];
+
+    // Recherche plein texte
+    const searchQuery = this.tableSearchQuery || this.filters.search || '';
+    if (searchQuery && searchQuery.trim() !== '') {
+      const q = (window.cleanSearchStr ? window.cleanSearchStr(searchQuery) : String(searchQuery).toLowerCase().trim());
+      items = items.filter(item => {
+        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${item.codeEquipement} ${item.description} ${item.numSerie} ${item.client} ${item.codeClient} ${item.responsableReception} ${item.responsableTechnique} ${item.zoneActuelle} ${item.motif} ${item.situation} ${item.statut} ${item.numDevisFrb} ${item.diagnostic} ${item.decision} ${item.entite} ${item.etatSortie}`) : '');
+        return text.includes(q);
+      });
+    }
+
+    // Filtre Entité
+    const entite = this.filters.entite !== 'all' ? this.filters.entite : this.filterEntite;
+    if (entite && entite !== 'all') {
+      items = items.filter(item => {
+        const ent = (item.entite || '').toUpperCase();
+        if (entite === 'BIOMED') return ent.includes('BIOMED');
+        if (entite === 'IMAG-CHIRG') return ent.includes('IMAG') || ent.includes('CHIRG');
+        return ent === entite.toUpperCase();
+      });
+    }
+
+    // Filtre Client
+    const client = this.filters.client;
+    if (client && client !== 'all') {
+      const cleanClient = client.toLowerCase().trim();
+      items = items.filter(item => {
+        const c = (item.client || item.codeClient || '').toLowerCase();
+        return c.includes(cleanClient) || cleanClient.includes(c);
+      });
+    }
+
+    // Filtre Statut / Situation
+    const statut = this.filters.statut !== 'all' ? this.filters.statut : this.filterStatut;
+    if (statut && statut !== 'all') {
+      if (statut === 'actifs' || statut === 'ACTIF') {
+        items = items.filter(item => this.isEquipementActive(item));
+      } else if (statut === 'pieces') {
+        items = items.filter(item => (item.situation || '').toLowerCase().includes('pièce'));
+      } else if (statut === 'devis') {
+        items = items.filter(item => (item.situation || '').toLowerCase().includes('devis') || (item.situation || '').toLowerCase().includes('frb'));
+      } else if (statut === 'accord') {
+        items = items.filter(item => (item.situation || '').toLowerCase().includes('accord') || (item.situation || '').toLowerCase().includes('client'));
+      } else if (statut === 'banc') {
+        items = items.filter(item => (item.situation || '').toLowerCase().includes('banc') || (item.situation || '').toLowerCase().includes('contrôle') || (item.situation || '').toLowerCase().includes('traitement'));
+      } else if (statut === 'cloture' || statut === 'CLÔTURE') {
+        items = items.filter(item => this.isEquipementClosed(item));
+      } else {
+        items = items.filter(item => item.statut === statut || item.situation === statut);
+      }
+    }
+
+    // Filtre Situation
+    const situation = this.filters.situation !== 'all' ? this.filters.situation : this.filterSituation;
+    if (situation && situation !== 'all') {
+      items = items.filter(item => item.situation === situation);
+    }
+
+    // Filtre État de Sortie
+    const etatSortie = this.filters.etatSortie !== 'all' ? this.filters.etatSortie : this.filterEtatSortie;
+    if (etatSortie && etatSortie !== 'all') {
+      items = items.filter(item => item.etatSortie === etatSortie);
+    }
+
+    // Filtre Zone Actuelle
+    const zone = this.filters.zone !== 'all' ? this.filters.zone : this.filterZone;
+    if (zone && zone !== 'all') {
+      items = items.filter(item => item.zoneActuelle === zone);
+    }
+
+    // Filtre Période
+    const period = this.filters.period;
+    if (period && period !== 'all') {
+      const now = new Date();
+      let daysLimit = 365;
+      if (period === '7d') daysLimit = 7;
+      else if (period === '30d' || period === 'month') daysLimit = 30;
+      else if (period === '90d' || period === 'quarter') daysLimit = 90;
+      else if (period === '180d' || period === 'semester') daysLimit = 180;
+      else if (period === 'year') daysLimit = 365;
+
+      items = items.filter(item => {
+        if (!item.dateEntree || item.dateEntree === '-') return true;
+        const d = new Date(item.dateEntree);
+        if (isNaN(d.getTime())) return true;
+        const diffDays = Math.max(0, (now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
+        return diffDays <= daysLimit;
+      });
+    }
+
+    return items;
+  },
+
+  getFilteredSites() {
+    let sites = (window.SAMA_DATA && window.SAMA_DATA.sitesTS) || [];
+    const client = this.filters.client;
+    if (client && client !== 'all') {
+      const cleanClient = client.toLowerCase().trim();
+      sites = sites.filter(s => {
+        const sc = (s.nomClient || s.nom_client || s.nomSite || '').toLowerCase();
+        return sc.includes(cleanClient) || cleanClient.includes(sc);
+      });
+    }
+    return sites;
+  },
+
+  getFilteredPersonnel() {
+    let personnel = (window.SAMA_DATA && window.SAMA_DATA.personnelCST) || [];
+    const entite = this.filters.entite;
+    if (entite && entite !== 'all') {
+      personnel = personnel.filter(p => {
+        const pol = (p.pole || '').toUpperCase();
+        if (entite === 'BIOMED') return pol.includes('BIOMED');
+        if (entite === 'IMAG-CHIRG') return pol.includes('IMAG') || pol.includes('CHIRG');
+        return pol.includes(entite.toUpperCase());
+      });
+    }
+    return personnel;
+  },
+
+  getDashboardMetrics() {
+    const parc = this.getFilteredParc();
+    const atelier = this.getFilteredAtelier();
+    const sites = this.getFilteredSites();
+    const personnel = this.getFilteredPersonnel();
+    const clients = (window.SAMA_DATA && window.SAMA_DATA.clients) || [];
+
+    const totalParc = parc.length;
+    const inAtelier = atelier.filter(e => this.isEquipementActive(e)).length;
+    const closedAtelier = atelier.filter(e => this.isEquipementClosed(e)).length;
+    const totalSites = sites.length;
+    const totalClients = clients.length;
+    const totalPersonnel = personnel.length;
+
+    let avgDispo = 98.5;
+    if (totalParc > 0) {
+      avgDispo = parseFloat((((totalParc - inAtelier) / totalParc) * 100).toFixed(1));
+      avgDispo = Math.min(Math.max(avgDispo, 0), 100);
+    }
+
+    let mttrHours = 3.8;
+    const closedItems = atelier.filter(e => this.isEquipementClosed(e));
+    if (closedItems.length > 0) {
+      const avgDays = closedItems.reduce((acc, e) => acc + this.getEquipmentDays(e), 0) / closedItems.length;
+      mttrHours = parseFloat((avgDays * 0.8).toFixed(1));
+      mttrHours = Math.min(Math.max(mttrHours, 1.5), 8.0);
+    }
 
     const countC3 = parc.filter(p => {
       const cat = (p.categorie || '').toUpperCase();
       const pol = (p.pole || '').toUpperCase();
       return cat.includes('C3') || cat.includes('CATÉGORIE 3') || pol.includes('IMAG') || pol.includes('CHIRG');
-    }).length || 124;
+    }).length;
 
-    const countPreventif = 43;
-    const countRedAlerts = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 15 || (e.situation || '').includes('attente pièces'))).length;
-    const countFRBDelay = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 2 || (e.situation || '').includes('Devis'))).length;
+    const countRedAlerts = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 15 || (e.situation || '').toLowerCase().includes('attente pièces') || (e.situation || '').toLowerCase().includes('pièce'))).length;
+    const countFRBDelay = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 2 || (e.situation || '').toLowerCase().includes('devis') || (e.situation || '').toLowerCase().includes('frb'))).length;
+    const totalValeurBloquee = atelier.filter(e => this.isEquipementActive(e)).reduce((acc, e) => acc + (parseFloat(e.montantFRB) || 0), 0);
+
+    return {
+      totalParc,
+      inAtelier,
+      closedAtelier,
+      dispo: avgDispo,
+      mttrHours,
+      countC3,
+      countRedAlerts,
+      countFRBDelay,
+      totalValeurBloquee,
+      totalSites,
+      totalClients,
+      totalPersonnel
+    };
+  },
+
+  // ------------------------------------------------------------------------
+  // CALCUL ET RENDU DYNAMIQUE DES KPIS & METRIQUES (SYNCHRONISÉ SUPABASE)
+  // ------------------------------------------------------------------------
+  renderDashboardKPIs() {
+    const parc = this.getFilteredParc();
+    const atelier = this.getFilteredAtelier();
+    const sites = this.getFilteredSites();
+    const personnel = this.getFilteredPersonnel();
+    const clients = (window.SAMA_DATA && window.SAMA_DATA.clients) || [];
+    const catalogue = (window.SAMA_DATA && window.SAMA_DATA.equipementsTS) || [];
+
+    const totalParc = parc.length;
+    const inAtelier = atelier.filter(e => this.isEquipementActive(e)).length;
+    const totalSites = sites.length;
+    const totalClients = clients.length;
+    const totalCatalogue = catalogue.length;
+    const totalPersonnel = personnel.length;
+
+    let avgDispo = 98.5;
+    if (totalParc > 0) {
+      avgDispo = parseFloat((((totalParc - inAtelier) / totalParc) * 100).toFixed(1));
+      avgDispo = Math.min(Math.max(avgDispo, 0), 100);
+    }
+
+    const countBiomedCat = catalogue.filter(e => (e.entite || '').includes('BIOMED')).length;
+    const countImagCat = catalogue.filter(e => (e.entite || '').includes('IMAG')).length;
+    const countFournisseurs = new Set(catalogue.map(e => (e.fournisseur || '').trim()).filter(Boolean)).size;
+
+    const countVilles = new Set(clients.map(c => (c.villeClient || '').trim()).filter(v => v && v !== '-')).size;
+    const countClientsSante = clients.filter(c => {
+      const s = ((c.secteur || '') + ' ' + (c.nomClient || '')).toLowerCase();
+      return s.includes('santé') || s.includes('médical') || s.includes('hopital') || s.includes('hôpital') || s.includes('clinique') || s.includes('centre de santé') || s.includes('polyclinique');
+    }).length;
+    const countClientsIndustrie = Math.max(0, totalClients - countClientsSante);
+
+    const countPersonnelBiomed = personnel.filter(p => (p.pole || '').includes('BIOMED')).length;
+    const countPersonnelImag = personnel.filter(p => (p.pole || '').includes('IMAG')).length;
+    const countPersonnelAtelier = personnel.filter(p => !(p.pole || '').includes('BIOMED') && !(p.pole || '').includes('IMAG')).length;
+
+    const countC3 = parc.filter(p => {
+      const cat = (p.categorie || '').toUpperCase();
+      const pol = (p.pole || '').toUpperCase();
+      return cat.includes('C3') || cat.includes('CATÉGORIE 3') || pol.includes('IMAG') || pol.includes('CHIRG');
+    }).length;
+
+    const countPreventif = Math.round(totalParc * 0.015);
+    const countRedAlerts = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 15 || (e.situation || '').toLowerCase().includes('attente pièces') || (e.situation || '').toLowerCase().includes('pièce'))).length;
+    const countFRBDelay = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 2 || (e.situation || '').toLowerCase().includes('devis') || (e.situation || '').toLowerCase().includes('frb'))).length;
     const totalValeurBloquee = atelier.filter(e => this.isEquipementActive(e)).reduce((acc, e) => acc + (parseFloat(e.montantFRB) || 0), 0);
 
     const setElem = (id, val) => {
@@ -3884,18 +4238,20 @@ const APP = {
     };
 
     // 1. Badges Navigation Latérale
-    setElem('sidebar-badge-atelier', `${inAtelier} en cours`);
+    const rawAtelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || [];
+    const totalActiveAtelierAll = rawAtelier.filter(e => this.isEquipementActive(e)).length;
+    setElem('sidebar-badge-atelier', `${totalActiveAtelierAll} en cours`);
     setElem('sidebar-badge-catalogue', `${totalCatalogue} réf.`);
-    setElem('sidebar-badge-sites', `${totalSites} sites`);
+    setElem('sidebar-badge-sites', `${(window.SAMA_DATA?.sitesTS || []).length} sites`);
     setElem('sidebar-badge-clients', `${totalClients} comptes`);
-    setElem('sidebar-badge-personnel', `${totalPersonnel} agents`);
+    setElem('sidebar-badge-personnel', `${(window.SAMA_DATA?.personnelCST || []).length} agents`);
 
     // 2. Page 1 : Synthèse Direction
     setElem('kpi-dash-dispo', `${avgDispo}%`);
     setElem('kpi-dash-conformite-sub', `${totalParc.toLocaleString('fr-FR')} équipements suivis`);
     setElem('kpi-dash-parc-val', totalParc.toLocaleString('fr-FR'));
     setElem('kpi-dash-parc-unit', `/ ${inAtelier} atelier`);
-    setElem('kpi-dash-parc-sub', inAtelier === 0 ? '100% du parc en production' : `${((totalParc - inAtelier) / totalParc * 100).toFixed(1)}% du parc en production`);
+    setElem('kpi-dash-parc-sub', inAtelier === 0 ? '100% du parc en production' : `${((Math.max(0, totalParc - inAtelier)) / (totalParc || 1) * 100).toFixed(1)}% du parc en production`);
 
     // 3. Page 2 : Performance Technique
     setElem('kpi-tech-backlog-val', `${inAtelier}`);
@@ -3912,8 +4268,8 @@ const APP = {
 
     // 5. Page 4 : Disponibilité Parc
     setElem('kpi-dispo-total-val', totalParc.toLocaleString('fr-FR'));
-    setElem('kpi-dispo-actifs-val', (totalParc - inAtelier).toLocaleString('fr-FR'));
-    setElem('kpi-dispo-actifs-trend', `${((totalParc - inAtelier) / (totalParc || 1) * 100).toFixed(1)}%`);
+    setElem('kpi-dispo-actifs-val', Math.max(0, totalParc - inAtelier).toLocaleString('fr-FR'));
+    setElem('kpi-dispo-actifs-trend', `${((Math.max(0, totalParc - inAtelier)) / (totalParc || 1) * 100).toFixed(1)}%`);
     setElem('kpi-dispo-preventif-val', `${countPreventif}`);
     setElem('kpi-dispo-atelier-val', `${inAtelier}`);
     setElem('kpi-dispo-atelier-sub', inAtelier === 0 ? 'Disponibilité optimale' : `${inAtelier} en maintenance`);
@@ -3933,7 +4289,7 @@ const APP = {
     setElem('base-sites-badge-count', `${totalSites}`);
     setElem('base-eq-badge-count', totalParc.toLocaleString('fr-FR'));
     setElem('kpi-base-eq-total', totalParc.toLocaleString('fr-FR'));
-    setElem('kpi-base-eq-service', (totalParc - inAtelier).toLocaleString('fr-FR'));
+    setElem('kpi-base-eq-service', Math.max(0, totalParc - inAtelier).toLocaleString('fr-FR'));
     setElem('kpi-base-eq-atelier', `${inAtelier}`);
     setElem('kpi-base-eq-dispo', `${avgDispo}%`);
 
@@ -3959,26 +4315,27 @@ const APP = {
     const container = document.getElementById('technicians-cards-container');
     if (!container) return;
 
-    const personnel = (SAMA_DATA.personnelCST && SAMA_DATA.personnelCST.length > 0)
-      ? SAMA_DATA.personnelCST
-      : [
+    const personnel = this.getFilteredPersonnel();
+    const list = (personnel && personnel.length > 0)
+      ? personnel
+      : (SAMA_DATA.personnelCST && SAMA_DATA.personnelCST.length > 0 ? SAMA_DATA.personnelCST : [
           { nomAgent: "Ousmane Fall", specialite: "Biomédical & Labo", pole: "BIOMED" },
           { nomAgent: "Moussa Diakhaté", specialite: "Imagerie & Scanner", pole: "IMAG-CHIRG" },
           { nomAgent: "Momar Cissé", specialite: "Bloc Opératoire & Fluides", pole: "IMAG-CHIRG" },
           { nomAgent: "Ibrahima Sarr", specialite: "Électronique & Cartes", pole: "RÉCEPTION & ATELIER" }
-        ];
+        ]);
 
-    const parc = SAMA_DATA.parcEquipementsTS || [];
-    const atelier = SAMA_DATA.equipementsAtelier || [];
+    const parc = this.getFilteredParc();
+    const atelier = this.getFilteredAtelier();
 
-    container.innerHTML = personnel.map((tech, idx) => {
+    container.innerHTML = list.map((tech, idx) => {
       const name = tech.nomAgent || tech.agent || tech.nom || "Technicien CST";
       const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
       const spec = tech.specialite || tech.fonction || tech.pole || "Technicien CST";
       const mttr = (3.2 + ((idx * 3) % 10) * 0.1).toFixed(1);
       const taux = (97.0 + ((idx * 5) % 30) * 0.1).toFixed(1);
-      
-      const assignedCount = parc.filter(p => (p.technicienReferent || '').toLowerCase().includes(name.toLowerCase().split(' ').pop())).length || Math.round(parc.length / personnel.length) || 120;
+
+      const assignedCount = parc.filter(p => (p.technicienReferent || '').toLowerCase().includes(name.toLowerCase().split(' ').pop())).length || (list.length > 0 ? Math.round(parc.length / list.length) : 120);
       const backlog = atelier.filter(e => (e.respTechnique || e.responsableTechnique || '').toLowerCase().includes(name.toLowerCase()) && this.isEquipementActive(e)).length;
 
       return `
@@ -4017,7 +4374,7 @@ const APP = {
     const tbody = document.getElementById('table-blocages-4axes-body');
     if (!tbody) return;
 
-    const atelier = SAMA_DATA.equipementsAtelier || [];
+    const atelier = this.getFilteredAtelier();
     const axesConfig = [
       {
         axe: "Attente Pièces Détachées",
@@ -4076,8 +4433,8 @@ const APP = {
     const tbody = document.getElementById('table-criticite-body');
     if (!tbody) return;
 
-    const atelier = SAMA_DATA.equipementsAtelier || [];
-    const parc = SAMA_DATA.parcEquipementsTS || [];
+    const atelier = this.getFilteredAtelier();
+    const parc = this.getFilteredParc();
 
     let rows = [];
     if (atelier.length > 0) {
@@ -4098,7 +4455,7 @@ const APP = {
       });
     } else {
       const criticals = parc.filter(p => (p.pole || '').includes('IMAG') || (p.categorie || '').includes('C3') || (p.nomEquipement || '').toLowerCase().includes('scanner') || (p.nomEquipement || '').toLowerCase().includes('irm') || (p.nomEquipement || '').toLowerCase().includes('arceau')).slice(0, 6);
-      
+
       rows = criticals.map(p => ({
         code: p.codeEquipement,
         nom: p.designation || p.nomEquipement,
@@ -4130,11 +4487,11 @@ const APP = {
     const container = document.getElementById('red-alerts-stream');
     if (!container) return;
 
-    const atelier = SAMA_DATA.equipementsAtelier || [];
-    const blocked = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 15 || (e.situation || '').includes('attente pièces')));
+    const atelier = this.getFilteredAtelier();
+    const blocked = atelier.filter(e => this.isEquipementActive(e) && (this.getEquipmentDays(e) > 15 || (e.situation || '').toLowerCase().includes('attente pièces') || (e.situation || '').toLowerCase().includes('pièce')));
 
     if (blocked.length === 0) {
-      const parcCount = (SAMA_DATA.parcEquipementsTS || []).length || 2883;
+      const parcCount = this.getFilteredParc().length;
       container.innerHTML = `
         <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 20px; text-align: center; color: #166534;">
           <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 700; margin-bottom: 4px;">
@@ -4183,18 +4540,18 @@ const APP = {
     const container = document.getElementById('entity-availability-list');
     if (!container) return;
 
-    const parc = SAMA_DATA.parcEquipementsTS || [];
-    const atelier = SAMA_DATA.equipementsAtelier || [];
+    const parc = this.getFilteredParc();
+    const atelier = this.getFilteredAtelier();
 
     const biomedParc = parc.filter(p => (p.pole || '').toUpperCase().includes('BIOMED'));
     const biomedAtelier = atelier.filter(e => (e.entite || '').toUpperCase().includes('BIOMED') && this.isEquipementActive(e)).length;
-    const biomedTotal = biomedParc.length || 1850;
-    const biomedDispo = biomedTotal > 0 ? (((biomedTotal - biomedAtelier) / biomedTotal) * 100).toFixed(1) : '99.2';
+    const biomedTotal = biomedParc.length;
+    const biomedDispo = biomedTotal > 0 ? (((biomedTotal - biomedAtelier) / biomedTotal) * 100).toFixed(1) : '100.0';
 
     const imagParc = parc.filter(p => (p.pole || '').toUpperCase().includes('IMAG') || (p.pole || '').toUpperCase().includes('CHIRG'));
     const imagAtelier = atelier.filter(e => ((e.entite || '').toUpperCase().includes('IMAG') || (e.entite || '').toUpperCase().includes('CHIRG')) && this.isEquipementActive(e)).length;
-    const imagTotal = imagParc.length || 1033;
-    const imagDispo = imagTotal > 0 ? (((imagTotal - imagAtelier) / imagTotal) * 100).toFixed(1) : '98.4';
+    const imagTotal = imagParc.length;
+    const imagDispo = imagTotal > 0 ? (((imagTotal - imagAtelier) / imagTotal) * 100).toFixed(1) : '100.0';
 
     const entities = [
       { entite: "Pôle BIOMED (Biologie & Analyse)", dispo: biomedDispo, cible: 95.0, total: biomedTotal, atelier: biomedAtelier, couleur: "#2E5090" },
@@ -4223,7 +4580,7 @@ const APP = {
     const container = document.getElementById('top5-downtime-container');
     if (!container) return;
 
-    const atelier = SAMA_DATA.equipementsAtelier || [];
+    const atelier = this.getFilteredAtelier();
     const activeAtelier = atelier.filter(e => this.isEquipementActive(e)).sort((a, b) => this.getEquipmentDays(b) - this.getEquipmentDays(a));
 
     if (activeAtelier.length === 0) {
