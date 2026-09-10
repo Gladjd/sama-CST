@@ -2311,7 +2311,7 @@ const APP = {
 
     // 1. Remplissage dynamique du filtre client (si pas encore rempli)
     if (clientSelect && (!clientSelect.options || clientSelect.options.length <= 1)) {
-      const clientsList = [...new Set(rawItems.map(e => e.client))].filter(Boolean).sort();
+      const clientsList = (SAMA_DATA.clients || []).map(c => (c.nomClient || c.client || '').trim()).filter(Boolean).sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
       clientsList.forEach(c => {
         const opt = document.createElement('option');
         opt.value = c;
@@ -3845,24 +3845,17 @@ const APP = {
     const select = document.getElementById('dash-filter-client');
     if (!select) return;
 
+    const clients = (window.SAMA_DATA && window.SAMA_DATA.clients) || [];
     const clientMap = new Map();
-    ((window.SAMA_DATA && window.SAMA_DATA.clients) || []).forEach(c => {
+    clients.forEach(c => {
       const nom = (c.nomClient || c.client || '').trim();
-      if (nom && nom !== '-') clientMap.set(nom.toLowerCase(), nom);
-    });
-    ((window.SAMA_DATA && window.SAMA_DATA.parcEquipementsTS) || []).forEach(p => {
-      const nom = (p.client || p.site || '').trim();
-      if (nom && nom !== '-') clientMap.set(nom.toLowerCase(), nom);
-    });
-    ((window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || []).forEach(e => {
-      const nom = (e.client || '').trim();
-      if (nom && nom !== '-') clientMap.set(nom.toLowerCase(), nom);
+      if (nom && nom !== '-') clientMap.set(nom, nom);
     });
 
     const sortedClients = Array.from(clientMap.values()).sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
     const currentVal = this.filters.client || 'all';
 
-    select.innerHTML = `<option value="all">🏢 Tous les Clients (${sortedClients.length})</option>` +
+    select.innerHTML = `<option value="all">🏢 Tous les Clients (${clients.length})</option>` +
       sortedClients.map(c => `<option value="${c.replace(/"/g, '&quot;')}">${c}</option>`).join('');
 
     if (currentVal && currentVal !== 'all') {
@@ -4616,41 +4609,28 @@ const APP = {
 
     // 1. Clients
     if (clientSelect) {
+      const clients = (SAMA_DATA.clients || []);
       const clientMap = new Map();
 
-      // Clients from clients table
-      (SAMA_DATA.clients || []).forEach(c => {
+      // Clients from official clients table (608 clients)
+      clients.forEach(c => {
         const nom = (c.nomClient || c.client || '').trim();
         if (nom && nom !== '-') {
-          clientMap.set(nom.toLowerCase(), nom);
-        }
-      });
-
-      // Clients from sites table
-      (SAMA_DATA.sitesTS || []).forEach(s => {
-        const nom = (s.nomClient || s.nom_client || '').trim();
-        if (nom && nom !== '-') {
-          clientMap.set(nom.toLowerCase(), nom);
-        }
-      });
-
-      // Clients from parc table
-      (SAMA_DATA.parcEquipementsTS || []).forEach(p => {
-        const nom = (p.client || p.site || '').trim();
-        if (nom && nom !== '-') {
-          clientMap.set(nom.toLowerCase(), nom);
+          clientMap.set(nom, nom);
         }
       });
 
       // If selectedClient exists, ensure it is added
       if (selectedClient && selectedClient.trim() !== '') {
         const trimClient = selectedClient.trim();
-        clientMap.set(trimClient.toLowerCase(), trimClient);
+        if (!clientMap.has(trimClient)) {
+          clientMap.set(trimClient, trimClient);
+        }
       }
 
       const sortedClients = Array.from(clientMap.values()).sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
 
-      clientSelect.innerHTML = `<option value="">-- Sélectionner un client (${sortedClients.length} disponibles) --</option>` +
+      clientSelect.innerHTML = `<option value="">-- Sélectionner un client (${clients.length} disponibles) --</option>` +
         sortedClients.map(c => `<option value="${c.replace(/"/g, '&quot;')}">${c}</option>`).join('');
 
       if (selectedClient && selectedClient.trim() !== '') {
