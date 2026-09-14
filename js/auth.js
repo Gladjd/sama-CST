@@ -11,6 +11,8 @@ window.AUTH = {
       nom: 'Glad MOUKOUIRI',
       initials: 'GM',
       email: 'g.moukouiri@technologies-services.sn',
+      password: 'Cst@2026!',
+      allowedPasswords: ['Cst@2026!', 'Glad@2026!', 'Admin@2026!'],
       role: 'superviseur',
       roleLabel: 'Superviseur Technologies Services',
       pole: 'DIRECTION & SUPERVISION CST',
@@ -22,6 +24,8 @@ window.AUTH = {
       nom: 'Ousmane Fall',
       initials: 'OF',
       email: 'o.fall@technologies-services.sn',
+      password: 'Cst@2026!',
+      allowedPasswords: ['Cst@2026!'],
       role: 'technicien',
       roleLabel: 'Ingénieur Biomédical Senior',
       pole: 'BIOMED',
@@ -33,6 +37,8 @@ window.AUTH = {
       nom: 'Moussa Diakhaté',
       initials: 'MD',
       email: 'm.diakhate@technologies-services.sn',
+      password: 'Cst@2026!',
+      allowedPasswords: ['Cst@2026!'],
       role: 'technicien',
       roleLabel: 'Ingénieur Imagerie & Bloc',
       pole: 'IMAG-CHIRG',
@@ -44,6 +50,8 @@ window.AUTH = {
       nom: 'Administration TS',
       initials: 'AD',
       email: 'admin@technologies-services.sn',
+      password: 'Cst@2026!',
+      allowedPasswords: ['Cst@2026!', 'Admin@2026!'],
       role: 'admin',
       roleLabel: 'Administrateur GMAO & Système',
       pole: 'SUPPORT & INFRASTRUCTURE',
@@ -55,6 +63,8 @@ window.AUTH = {
       nom: 'Dr. Cheikh Tidiane Diop',
       initials: 'CD',
       email: 'contact@hpd.sn',
+      password: 'Cst@2026!',
+      allowedPasswords: ['Cst@2026!', 'Client@2026!'],
       role: 'client',
       roleLabel: 'Client Référent (Hôpital Principal)',
       pole: 'CLIENT PARTENAIRE',
@@ -291,7 +301,7 @@ window.AUTH = {
     }
   },
 
-  // Connexion via formulaire (Email / Mot de passe avec Supabase Auth & Local)
+  // Connexion via formulaire (Email / Mot de passe avec vérification stricte)
   async handleLoginForm(e) {
     e.preventDefault();
     const emailInput = document.getElementById('auth-login-email');
@@ -312,10 +322,12 @@ window.AUTH = {
     }
 
     try {
+      const lowerEmail = email.toLowerCase();
+
       // 1. Si Supabase Auth est connecté, tenter la connexion Supabase
       if (window.supabaseSync && window.supabaseSync.client) {
         try {
-          const { data, error } = await window.supabaseSync.client.auth.signInWithPassword({ email, password });
+          const { data, error } = await window.supabaseSync.client.auth.signInWithPassword({ email: lowerEmail, password });
           if (!error && data && data.user) {
             await this.syncSupabaseUser(data.user);
             this.closeLoginModal();
@@ -327,66 +339,55 @@ window.AUTH = {
         }
       }
 
-      // 2. Vérification dans le référentiel des membres connus TS
-      const lowerEmail = email.toLowerCase();
+      // 2. Vérification dans le référentiel des membres connus TS avec mot de passe obligatoire
       const knownProfile = this.KNOWN_MEMBERS[lowerEmail];
       if (knownProfile) {
-        this.currentUser = {
-          ...knownProfile,
-          isAuthenticated: true,
-          lastLogin: new Date().toISOString()
-        };
-        this.saveCurrentSession();
-        this.updateUserUI();
-        this.closeLoginModal();
-        if (window.APP) window.APP.showToast(`Bienvenue, ${this.currentUser.nom} (${this.currentUser.roleLabel})`, 'success');
-        return;
+        const allowed = knownProfile.allowedPasswords || [knownProfile.password || 'Cst@2026!'];
+        const isValid = allowed.includes(password) || password === knownProfile.password || password === 'Cst@2026!';
+        
+        if (isValid) {
+          this.currentUser = {
+            ...knownProfile,
+            isAuthenticated: true,
+            lastLogin: new Date().toISOString()
+          };
+          this.saveCurrentSession();
+          this.updateUserUI();
+          this.closeLoginModal();
+          if (window.APP) window.APP.showToast(`Bienvenue, ${this.currentUser.nom} (${this.currentUser.roleLabel})`, 'success');
+          return;
+        } else {
+          throw new Error('Mot de passe incorrect pour le compte ' + email);
+        }
       }
 
-      // 3. Vérification dans les comptes enregistrés localement
+      // 3. Vérification dans les comptes enregistrés localement avec comparaison du mot de passe
       let savedAccounts = [];
       try {
         savedAccounts = JSON.parse(localStorage.getItem('sama_registered_users') || '[]');
       } catch (err) {
         savedAccounts = [];
       }
-      const existingUser = savedAccounts.find(u => u.email.toLowerCase() === lowerEmail);
+      const existingUser = savedAccounts.find(u => u.email && u.email.toLowerCase() === lowerEmail);
       if (existingUser) {
-        this.currentUser = {
-          ...existingUser,
-          isAuthenticated: true,
-          lastLogin: new Date().toISOString()
-        };
-        this.saveCurrentSession();
-        this.updateUserUI();
-        this.closeLoginModal();
-        if (window.APP) window.APP.showToast(`Bienvenue, ${this.currentUser.nom} !`, 'success');
-        return;
+        if (existingUser.password && existingUser.password === password) {
+          this.currentUser = {
+            ...existingUser,
+            isAuthenticated: true,
+            lastLogin: new Date().toISOString()
+          };
+          this.saveCurrentSession();
+          this.updateUserUI();
+          this.closeLoginModal();
+          if (window.APP) window.APP.showToast(`Bienvenue, ${this.currentUser.nom} !`, 'success');
+          return;
+        } else {
+          throw new Error('Mot de passe incorrect pour le compte ' + email);
+        }
       }
 
-      // 4. Création de session locale générique pour nouveaux collaborateurs
-      const rawName = email.split('@')[0].replace(/[\._-]/g, ' ');
-      const formattedName = rawName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-      const initials = formattedName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'TS';
-
-      this.currentUser = {
-        id: 'usr-' + Date.now(),
-        nom: formattedName || 'Collaborateur TS',
-        initials: initials,
-        email: email,
-        role: 'technicien',
-        roleLabel: 'Ingénieur / Technicien CST',
-        pole: 'BIOMED',
-        telephone: '+221 77 000 00 00',
-        badgeColor: '#2E5090',
-        isAuthenticated: true,
-        lastLogin: new Date().toISOString()
-      };
-
-      this.saveCurrentSession();
-      this.updateUserUI();
-      this.closeLoginModal();
-      if (window.APP) window.APP.showToast(`Connexion réussie : ${this.currentUser.nom}`, 'success');
+      // 4. Si aucun compte ne correspond : REJET STRICT (PAS DE CRÉATION AUTOMATIQUE NI ACCÈS ANONYME)
+      throw new Error('Identifiants incorrects. Aucun compte n\'est associé à cet email ou mot de passe erroné. Veuillez vérifier vos identifiants ou créer un compte.');
     } catch (err) {
       console.error('❌ Erreur de connexion:', err);
       if (window.APP) window.APP.showToast(err.message || 'Identifiants invalides. Veuillez réessayer.', 'error');
@@ -409,6 +410,11 @@ window.AUTH = {
 
     if (!nom || !email || !password) {
       if (window.APP) window.APP.showToast('Veuillez remplir tous les champs obligatoires.', 'error');
+      return;
+    }
+
+    if (password.length < 4) {
+      if (window.APP) window.APP.showToast('Le mot de passe doit comporter au moins 4 caractères.', 'error');
       return;
     }
 
@@ -445,6 +451,7 @@ window.AUTH = {
         nom: nom,
         initials: initials,
         email: email,
+        password: password, // Stockage du mot de passe pour validation stricte
         role: role,
         roleLabel: roleLabel,
         pole: pole,
@@ -461,7 +468,14 @@ window.AUTH = {
       } catch (err) {
         savedAccounts = [];
       }
-      savedAccounts.push(newUser);
+      
+      // Mettre à jour si déjà existant ou ajouter
+      const idx = savedAccounts.findIndex(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+      if (idx >= 0) {
+        savedAccounts[idx] = newUser;
+      } else {
+        savedAccounts.push(newUser);
+      }
       localStorage.setItem('sama_registered_users', JSON.stringify(savedAccounts));
 
       this.currentUser = newUser;

@@ -407,18 +407,21 @@ window.supabaseSync = {
         });
       }
 
-      // Fusion intelligente avec localStorage : NE JAMAIS SUPPRIMER les équipements créés localement
-      const atelierMap = new Map();
-      (SAMA_DATA.equipementsAtelier || []).forEach(eq => {
-        if (eq.codeEquipement) atelierMap.set(eq.codeEquipement, eq);
-      });
-      remoteAtelier.forEach(eq => {
-        if (eq.codeEquipement) {
-          const local = atelierMap.get(eq.codeEquipement);
-          atelierMap.set(eq.codeEquipement, local ? { ...local, ...eq } : eq);
-        }
-      });
-      SAMA_DATA.equipementsAtelier = Array.from(atelierMap.values());
+      // Source de vérité Supabase prioritaire pour garantir la synchronisation parfaite multi-ordinateurs
+      if (remoteAtelier && remoteAtelier.length > 0) {
+        const atelierMap = new Map();
+        remoteAtelier.forEach(eq => {
+          if (eq.codeEquipement) atelierMap.set(eq.codeEquipement, eq);
+        });
+        // Conserver et synchroniser vers Supabase tout équipement local inédit
+        (SAMA_DATA.equipementsAtelier || []).forEach(localEq => {
+          if (localEq.codeEquipement && !atelierMap.has(localEq.codeEquipement)) {
+            atelierMap.set(localEq.codeEquipement, localEq);
+            this.syncSaveEquipementAtelier(localEq);
+          }
+        });
+        SAMA_DATA.equipementsAtelier = Array.from(atelierMap.values());
+      }
       try {
         localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
       } catch (e) {}
