@@ -91073,6 +91073,188 @@ const SAMA_DATA = {
         "statut": "En devis"
       }
     ]
+  },
+  {
+    "codeEquipement": "EQ-AT-0006",
+    "ficheDeVie": "FV-EQ-AT-0006",
+    "description": "Générateur d'Hémodialyse 5008S CorDiax",
+    "designation": "Générateur d'Hémodialyse 5008S CorDiax",
+    "numeroSerie": "SN-FMC-2023-9120",
+    "numSerie": "SN-FMC-2023-9120",
+    "client": "Centre National d'Hémodialyse Le Dantec",
+    "client_nom": "Centre National d'Hémodialyse Le Dantec",
+    "dateEntree": "2026-08-22",
+    "dateSortie": "-",
+    "responsableReception": "Glad MOUKOUIRI",
+    "respReception": "Glad MOUKOUIRI",
+    "responsableTechnique": "Ousmane Fall",
+    "respTechnique": "Ousmane Fall",
+    "zoneActuelle": "Paillasse 1 (Biomed)",
+    "motif": "Défaut débitmètre d'ultrafiltration & alarme conductivité dialysat",
+    "motifPanne": "Défaut débitmètre d'ultrafiltration & alarme conductivité dialysat",
+    "situation": "Attente pièces",
+    "statut": "DEPENDANT",
+    "etatSortie": "Non fonctionnel",
+    "nombreJoursAtelier": 23,
+    "joursAtelier": 23,
+    "dureeAtelier": "23 j",
+    "numDevisFRB": "FRB-2026-0840",
+    "montantFRB": 2150000,
+    "coutEstime": "2 150 000 FCFA",
+    "dateEmissionFRB": "2026-08-25",
+    "dateFRB": "2026-08-25",
+    "delaisFRB": "24h 00m",
+    "dateAccordClient": "2026-08-27",
+    "dateCommandePieces": "2026-08-29",
+    "dateReceptionPieces": "",
+    "diagnosticReception": "Cellule de conductivité encrassée et bloc pompe UF à recalibrer.",
+    "actionsDecision": "Remplacement cellule conductivité + kit de maintenance 5000h Fresenius.",
+    "entite": "BIOMED",
+    "pole": "BIOMED",
+    "fournisseur": "Fresenius Medical Care",
+    "modele": "5008S CorDiax",
+    "priorite": "Haute",
+    "datePriseEnCharge": "2026-08-22 08:30",
+    "delaisPriseEnCharge": "0h 30m",
+    "timeline": [
+      {
+        "event": "Réception & Enregistrement atelier",
+        "titre": "Réception & Enregistrement atelier",
+        "date": "2026-08-22 08:30",
+        "responsable": "Glad MOUKOUIRI",
+        "statut": "done",
+        "observation": "Réception atelier",
+        "resultat": "OK",
+        "badgeColor": "green"
+      },
+      {
+        "event": "Diagnostic débitmètre & conductivité",
+        "titre": "Diagnostic débitmètre & conductivité",
+        "date": "2026-08-24 10:00",
+        "responsable": "Ousmane Fall",
+        "statut": "done",
+        "observation": "Cellule conductivité HS",
+        "resultat": "Devis établi",
+        "badgeColor": "green"
+      },
+      {
+        "event": "Commande pièces Fresenius",
+        "titre": "Commande pièces Fresenius",
+        "date": "2026-08-29 09:00",
+        "responsable": "Glad MOUKOUIRI",
+        "statut": "in-progress",
+        "observation": "En transit",
+        "resultat": "Attente livraison",
+        "badgeColor": "amber"
+      }
+    ],
+    "pieces": [
+      {
+        "reference": "FMC-COND-5008",
+        "designation": "Cellule de mesure conductivité Fresenius",
+        "quantite": 1,
+        "prixUnitaire": 1350000,
+        "statut": "Commandée"
+      },
+      {
+        "reference": "FMC-KIT-5000H",
+        "designation": "Kit maintenance préventive 5000h 5008S",
+        "quantite": 1,
+        "prixUnitaire": 800000,
+        "statut": "Commandée"
+      }
+    ]
+  },
+  {
+    "codeEquipement": "EQ-AT-0007",
+    "ficheDeVie": "FV-EQ-AT-0007",
+    "description": "Autoclave de Stérilisation Vapeur 150L Tuttnauer 3870EAP",
+    "designation": "Autoclave de Stérilisation Vapeur 150L Tuttnauer 3870EAP",
+    "numeroSerie": "SN-TUT-2022-3841",
+    "numSerie": "SN-TUT-2022-3841",
+    "client": "Hôpital Militaire de Ouakam",
+    "client_nom": "Hôpital Militaire de Ouakam",
+    "dateEntree": "2026-09-04",
+    "dateSortie": "-",
+    "responsableReception": "Glad MOUKOUIRI",
+    "respReception": "Glad MOUKOUIRI",
+    "responsableTechnique": "Momar Cissé",
+    "respTechnique": "Momar Cissé",
+    "zoneActuelle": "Banc d'essai & Contrôle",
+    "motif": "Perte de pression au cycle 134°C & défaut joint de porte",
+    "motifPanne": "Perte de pression au cycle 134°C & défaut joint de porte",
+    "situation": "Contrôle banc d'essai",
+    "statut": "DEPENDANT",
+    "etatSortie": "Non fonctionnel",
+    "nombreJoursAtelier": 10,
+    "joursAtelier": 10,
+    "dureeAtelier": "10 j",
+    "numDevisFRB": "FRB-2026-0910",
+    "montantFRB": 780000,
+    "coutEstime": "780 000 FCFA",
+    "dateEmissionFRB": "2026-09-05",
+    "dateFRB": "2026-09-05",
+    "delaisFRB": "24h 00m",
+    "dateAccordClient": "2026-09-06",
+    "dateCommandePieces": "2026-09-07",
+    "dateReceptionPieces": "2026-09-10",
+    "diagnosticReception": "Joint de porte autoclave cuit + électrovanne de purge bloquée en position ouverte.",
+    "actionsDecision": "Remplacement joint de porte silicone + électrovanne vapeur, cycle Bowie-Dick de validation en cours.",
+    "entite": "BIOMED",
+    "pole": "BIOMED",
+    "fournisseur": "Tuttnauer",
+    "modele": "3870EAP",
+    "priorite": "Haute",
+    "datePriseEnCharge": "2026-09-04 09:00",
+    "delaisPriseEnCharge": "0h 30m",
+    "timeline": [
+      {
+        "event": "Réception & Enregistrement atelier",
+        "titre": "Réception & Enregistrement atelier",
+        "date": "2026-09-04 09:00",
+        "responsable": "Glad MOUKOUIRI",
+        "statut": "done",
+        "observation": "Autoclave réceptionné",
+        "resultat": "OK",
+        "badgeColor": "green"
+      },
+      {
+        "event": "Remplacement joint de porte & électrovanne",
+        "titre": "Remplacement joint de porte & électrovanne",
+        "date": "2026-09-11 10:00",
+        "responsable": "Momar Cissé",
+        "statut": "done",
+        "observation": "Pièces montées",
+        "resultat": "Étanchéité rétablie",
+        "badgeColor": "green"
+      },
+      {
+        "event": "Cycle de stérilisation test 134°C & Test Bowie-Dick",
+        "titre": "Cycle de stérilisation test 134°C & Test Bowie-Dick",
+        "date": "2026-09-12 14:00",
+        "responsable": "Momar Cissé",
+        "statut": "in-progress",
+        "observation": "Test bactériologique en cours",
+        "resultat": "En attente virage indicateur",
+        "badgeColor": "amber"
+      }
+    ],
+    "pieces": [
+      {
+        "reference": "TUT-GSK-3870",
+        "designation": "Joint de porte silicone Tuttnauer 3870",
+        "quantite": 1,
+        "prixUnitaire": 320000,
+        "statut": "Livrée"
+      },
+      {
+        "reference": "TUT-VAL-PURGE",
+        "designation": "Électrovanne purge vapeur 230V",
+        "quantite": 1,
+        "prixUnitaire": 460000,
+        "statut": "Livrée"
+      }
+    ]
   }
 ],
 

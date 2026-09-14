@@ -960,6 +960,11 @@ const APP = {
           </td>
         </tr>
       `;
+      const allAtelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || [];
+      const countEl = document.getElementById('table-records-count');
+      if (countEl) countEl.textContent = `0 sur ${allAtelier.length} équipement(s)`;
+      const footerSpan = document.getElementById('table-footer-pagination-info') || document.querySelector('#module-atelier-equipements .table-footer span');
+      if (footerSpan) footerSpan.textContent = `Affichage de 0 sur ${allAtelier.length} équipements atelier`;
       return;
     }
 
@@ -1077,9 +1082,29 @@ const APP = {
       `;
     }).join('');
 
-    // Mise à jour du compteur
+    // Mise à jour du compteur et du pied de page
+    const allAtelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || [];
+    const totalAll = allAtelier.length;
+    const inAtelierFiltered = items.filter(e => this.isEquipementActive(e)).length;
+    const closedAtelierFiltered = items.filter(e => this.isEquipementClosed(e)).length;
+
     const countEl = document.getElementById('table-records-count');
-    if (countEl) countEl.textContent = `${items.length} équipement(s) répertorié(s)`;
+    if (countEl) {
+      if (items.length === totalAll) {
+        countEl.textContent = `${totalAll} équipement(s) répertorié(s) (${inAtelierFiltered} en cours, ${closedAtelierFiltered} clôturés)`;
+      } else {
+        countEl.textContent = `${items.length} sur ${totalAll} équipement(s) (${inAtelierFiltered} en cours, ${closedAtelierFiltered} clôturés)`;
+      }
+    }
+
+    const footerSpan = document.getElementById('table-footer-pagination-info') || document.querySelector('#module-atelier-equipements .table-footer span');
+    if (footerSpan) {
+      if (items.length === 0) {
+        footerSpan.textContent = `Affichage de 0 sur ${totalAll} équipements atelier`;
+      } else {
+        footerSpan.textContent = `Affichage de 1 à ${items.length} sur ${totalAll} équipements atelier (${inAtelierFiltered} en cours, ${closedAtelierFiltered} clôturés)`;
+      }
+    }
   },
 
   // Calcul du nombre de jours entre deux dates ISO (YYYY-MM-DD)
@@ -3896,7 +3921,8 @@ const APP = {
       const filteredParc = this.getFilteredParc();
       const filteredAtelier = this.getFilteredAtelier();
       const inAtelier = filteredAtelier.filter(e => this.isEquipementActive(e)).length;
-      badge.innerHTML = `<strong>${filteredParc.length.toLocaleString('fr-FR')}</strong> éq. supervisés • <strong>${inAtelier}</strong> en atelier`;
+      const closedAtelier = filteredAtelier.length - inAtelier;
+      badge.innerHTML = `<strong>${filteredParc.length.toLocaleString('fr-FR')}</strong> éq. supervisés • <strong>${filteredAtelier.length}</strong> atelier (<strong>${inAtelier}</strong> actifs, <strong>${closedAtelier}</strong> clôturés)`;
     }
   },
 
@@ -4007,7 +4033,7 @@ const APP = {
     if (searchQuery && searchQuery.trim() !== '') {
       const q = (window.cleanSearchStr ? window.cleanSearchStr(searchQuery) : String(searchQuery).toLowerCase().trim());
       items = items.filter(item => {
-        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${item.codeEquipement} ${item.description} ${item.numSerie} ${item.client} ${item.codeClient} ${item.responsableReception} ${item.responsableTechnique} ${item.zoneActuelle} ${item.motif} ${item.situation} ${item.statut} ${item.numDevisFrb} ${item.diagnostic} ${item.decision} ${item.entite} ${item.etatSortie}`) : '');
+        const text = (window.cleanSearchStr ? window.cleanSearchStr(`${item.codeEquipement || ''} ${item.description || ''} ${item.designation || ''} ${item.numSerie || ''} ${item.numeroSerie || ''} ${item.client || ''} ${item.client_nom || ''} ${item.codeClient || ''} ${item.responsableReception || ''} ${item.respReception || ''} ${item.responsableTechnique || ''} ${item.respTechnique || ''} ${item.zoneActuelle || ''} ${item.motif || ''} ${item.motifPanne || ''} ${item.situation || ''} ${item.statut || ''} ${item.numDevisFRB || ''} ${item.numDevisFrb || ''} ${item.diagnostic || ''} ${item.diagnosticReception || ''} ${item.decision || ''} ${item.actionsDecision || ''} ${item.entite || ''} ${item.pole || ''} ${item.fournisseur || ''} ${item.modele || ''} ${item.etatSortie || ''}`) : String(`${item.codeEquipement || ''} ${item.description || ''} ${item.designation || ''} ${item.numSerie || ''} ${item.client || ''}`).toLowerCase());
         return text.includes(q);
       });
     }
@@ -4233,7 +4259,14 @@ const APP = {
     // 1. Badges Navigation Latérale
     const rawAtelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || [];
     const totalActiveAtelierAll = rawAtelier.filter(e => this.isEquipementActive(e)).length;
-    setElem('sidebar-badge-atelier', `${totalActiveAtelierAll} en cours`);
+    const totalClosedAtelierAll = rawAtelier.filter(e => this.isEquipementClosed(e)).length;
+    const totalAtelierAll = rawAtelier.length;
+
+    const sidebarBadgeAtelier = document.getElementById('sidebar-badge-atelier');
+    if (sidebarBadgeAtelier) {
+      sidebarBadgeAtelier.textContent = `${totalAtelierAll} (${totalActiveAtelierAll} en cours)`;
+      sidebarBadgeAtelier.title = `${totalAtelierAll} équipements enregistrés à l'atelier : ${totalActiveAtelierAll} en cours d'intervention, ${totalClosedAtelierAll} clôturés`;
+    }
     setElem('sidebar-badge-catalogue', `${totalCatalogue} réf.`);
     setElem('sidebar-badge-sites', `${(window.SAMA_DATA?.sitesTS || []).length} sites`);
     setElem('sidebar-badge-clients', `${totalClients} comptes`);
@@ -4243,19 +4276,19 @@ const APP = {
     setElem('kpi-dash-dispo', `${avgDispo}%`);
     setElem('kpi-dash-conformite-sub', `${totalParc.toLocaleString('fr-FR')} équipements suivis`);
     setElem('kpi-dash-parc-val', totalParc.toLocaleString('fr-FR'));
-    setElem('kpi-dash-parc-unit', `/ ${inAtelier} atelier`);
-    setElem('kpi-dash-parc-sub', inAtelier === 0 ? '100% du parc en production' : `${((Math.max(0, totalParc - inAtelier)) / (totalParc || 1) * 100).toFixed(1)}% du parc en production`);
+    setElem('kpi-dash-parc-unit', `/ ${inAtelier} actifs (${atelier.length} total)`);
+    setElem('kpi-dash-parc-sub', inAtelier === 0 ? '100% du parc en production' : `${((Math.max(0, totalParc - inAtelier)) / (totalParc || 1) * 100).toFixed(1)}% du parc en prod • ${inAtelier} en cours / ${atelier.length} enreg.`);
 
     // 3. Page 2 : Performance Technique
     setElem('kpi-tech-backlog-val', `${inAtelier}`);
-    setElem('kpi-tech-backlog-unit', inAtelier > 1 ? 'ordres en cours' : 'ordre en cours');
-    setElem('kpi-tech-backlog-sub', inAtelier === 0 ? 'Fluidité atelier optimale' : `${inAtelier} intervention(s) en traitement`);
+    setElem('kpi-tech-backlog-unit', `actifs / ${atelier.length} total`);
+    setElem('kpi-tech-backlog-sub', inAtelier === 0 ? 'Fluidité atelier optimale' : `${inAtelier} dossier(s) actif(s) en cours (${atelier.length - inAtelier} clôturé(s))`);
 
     // 4. Page 3 : Risques & Dépendances
     setElem('kpi-risk-spof-val', `${countC3}`);
     setElem('kpi-risk-alertes-val', `${countRedAlerts}`);
     setElem('kpi-risk-alertes-unit', countRedAlerts > 1 ? 'Alertes Rouges' : 'Alerte Rouge');
-    setElem('kpi-risk-alertes-sub', countRedAlerts === 0 ? 'Tous les délais sous contrôle' : `${countRedAlerts} blocage(s) critique(s)`);
+    setElem('kpi-risk-alertes-sub', countRedAlerts === 0 ? 'Tous les délais sous contrôle' : `${countRedAlerts} blocage(s) critique(s) sur ${inAtelier} actif(s)`);
     setElem('kpi-risk-frb-val', `${countFRBDelay}`);
     setElem('kpi-risk-valeur-val', `${totalValeurBloquee.toLocaleString('fr-FR')}`);
 
@@ -4265,11 +4298,14 @@ const APP = {
     setElem('kpi-dispo-actifs-trend', `${((Math.max(0, totalParc - inAtelier)) / (totalParc || 1) * 100).toFixed(1)}%`);
     setElem('kpi-dispo-preventif-val', `${countPreventif}`);
     setElem('kpi-dispo-atelier-val', `${inAtelier}`);
-    setElem('kpi-dispo-atelier-sub', inAtelier === 0 ? 'Disponibilité optimale' : `${inAtelier} en maintenance`);
+    setElem('kpi-dispo-atelier-unit', `actifs (${atelier.length} total)`);
+    setElem('kpi-dispo-atelier-sub', inAtelier === 0 ? 'Disponibilité optimale' : `${inAtelier} immobilisé(s) en cours (${atelier.length - inAtelier} clôturé(s))`);
     setElem('kpi-dispo-parc-badge', `${totalParc.toLocaleString('fr-FR')} Total`);
 
     // 6. Module 2 : GMAO Atelier
-    setElem('table-records-count', `${atelier.length} équipement(s)`);
+    const inAtelierFiltered = atelier.filter(e => this.isEquipementActive(e)).length;
+    const closedAtelierFiltered = atelier.filter(e => this.isEquipementClosed(e)).length;
+    setElem('table-records-count', `${atelier.length} équipement(s) répertorié(s) (${inAtelierFiltered} en cours, ${closedAtelierFiltered} clôturés)`);
 
     // 7. Module 2.5 : Catalogue Équipements TS
     setElem('ts-kpi-total', `${totalCatalogue}`);
@@ -4284,6 +4320,7 @@ const APP = {
     setElem('kpi-base-eq-total', totalParc.toLocaleString('fr-FR'));
     setElem('kpi-base-eq-service', Math.max(0, totalParc - inAtelier).toLocaleString('fr-FR'));
     setElem('kpi-base-eq-atelier', `${inAtelier}`);
+    setElem('kpi-base-eq-atelier-sub', `${inAtelier} actif(s) / ${atelier.length} total atelier`);
     setElem('kpi-base-eq-dispo', `${avgDispo}%`);
 
     // 9. Module 3.5 : Clients

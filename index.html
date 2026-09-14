@@ -86,7 +86,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
               </span>
               <span>Équipements Atelier</span>
-              <span class="nav-badge danger" id="sidebar-badge-atelier">0 en cours</span>
+              <span class="nav-badge danger" id="sidebar-badge-atelier" title="17 équipements enregistrés : 13 en cours d'intervention, 4 clôturés">17 (13 en cours)</span>
             </a>
           </li>
           <li class="nav-item">
@@ -318,13 +318,13 @@
             <div class="dash-filter-group">
               <label for="dash-filter-statut">Statut Atelier :</label>
               <select id="dash-filter-statut" class="dash-filter-select" onchange="APP.setDashboardFilter('statut', this.value)">
-                <option value="all">⚡ Tous les Statuts</option>
-                <option value="actifs">En Atelier (Actifs)</option>
-                <option value="pieces">Attente Pièces</option>
-                <option value="devis">Devis / FRB</option>
-                <option value="accord">Attente Accord Client</option>
-                <option value="banc">Banc d'Essai & Contrôle</option>
-                <option value="cloture">Clôturés / Restitués</option>
+                <option value="all">⚡ Tous les Statuts (17 total)</option>
+                <option value="actifs" selected>🔴 En Atelier — Actifs (13)</option>
+                <option value="pieces">📦 Attente Pièces</option>
+                <option value="devis">📄 Devis / FRB</option>
+                <option value="accord">🤝 Attente Accord Client</option>
+                <option value="banc">🔬 Banc d'Essai & Contrôle</option>
+                <option value="cloture">🟢 Clôturés / Restitués (4)</option>
               </select>
             </div>
 
@@ -407,9 +407,9 @@
               </div>
               <div class="kpi-value-row">
                 <span class="kpi-value" id="kpi-dash-parc-val">2 883</span>
-                <span class="kpi-unit" id="kpi-dash-parc-unit" style="color: #ef4444; font-weight: 700;">/ 0 atelier</span>
+                <span class="kpi-unit" id="kpi-dash-parc-unit" style="color: #ef4444; font-weight: 700;">/ 13 actifs (17 total)</span>
               </div>
-              <span class="kpi-subtitle" id="kpi-dash-parc-sub">100% du parc en production</span>
+              <span class="kpi-subtitle" id="kpi-dash-parc-sub">13 en cours d'intervention (4 clôturés)</span>
             </div>
           </div>
 
@@ -522,10 +522,10 @@
                 <div class="kpi-icon-wrap amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value" id="kpi-tech-backlog-val">0</span>
-                <span class="kpi-unit" id="kpi-tech-backlog-unit">ordre en cours</span>
+                <span class="kpi-value" id="kpi-tech-backlog-val">13</span>
+                <span class="kpi-unit" id="kpi-tech-backlog-unit">actifs / 17 total</span>
               </div>
-              <span class="kpi-subtitle" id="kpi-tech-backlog-sub">Fluidité atelier optimale</span>
+              <span class="kpi-subtitle" id="kpi-tech-backlog-sub">13 dossiers actifs en cours (4 clôturés)</span>
             </div>
           </div>
 
@@ -749,10 +749,10 @@
                 <div class="kpi-icon-wrap danger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
               </div>
               <div class="kpi-value-row">
-                <span class="kpi-value" id="kpi-dispo-atelier-val">0</span>
-                <span class="kpi-unit" id="kpi-dispo-atelier-unit">en atelier</span>
+                <span class="kpi-value" id="kpi-dispo-atelier-val">13</span>
+                <span class="kpi-unit" id="kpi-dispo-atelier-unit">actifs (17 total)</span>
               </div>
-              <span class="kpi-subtitle" id="kpi-dispo-atelier-sub">Disponibilité optimale</span>
+              <span class="kpi-subtitle" id="kpi-dispo-atelier-sub">13 immobilisés en cours (4 clôturés)</span>
             </div>
           </div>
 
@@ -811,9 +811,9 @@
 
             <!-- Filtre Statut -->
             <select class="filter-select" id="filter-statut">
-              <option value="all">⚡ Tous les Statuts</option>
-              <option value="DEPENDANT">DEPENDANT</option>
-              <option value="CLÔTURE">CLÔTURE</option>
+              <option value="all">⚡ Tous les Statuts (17)</option>
+              <option value="DEPENDANT">DEPENDANT — En cours (13)</option>
+              <option value="CLÔTURE">CLÔTURE — Restitués (4)</option>
             </select>
 
             <!-- Filtre Situation -->
@@ -856,7 +856,7 @@
           </div>
 
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span id="table-records-count" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">10 équipement(s)</span>
+            <span id="table-records-count" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">17 équipement(s) répertorié(s) (13 en cours, 4 clôturés)</span>
             <button class="btn-secondary" id="btn-export-csv">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               <span>Exporter CSV</span>
@@ -905,7 +905,7 @@
 
           <!-- Table Footer -->
           <div class="table-footer">
-            <span>Affichage de 1 à 10 sur 10 équipements atelier</span>
+            <span id="table-footer-pagination-info">Affichage de 1 à 17 sur 17 équipements atelier (13 en cours, 4 clôturés)</span>
             <div class="pagination-controls">
               <button class="page-btn" disabled>«</button>
               <button class="page-btn active">1</button>
@@ -1147,8 +1147,8 @@
               </div>
               <div class="kpi-content">
                 <div class="kpi-lbl">En Atelier CST (Maintenance)</div>
-                <div class="kpi-val" style="color: #DC2626;" id="kpi-base-eq-atelier">9</div>
-                <div class="kpi-sub">Pris en charge ou en révision</div>
+                <div class="kpi-val" style="color: #DC2626;" id="kpi-base-eq-atelier">13</div>
+                <div class="kpi-sub" id="kpi-base-eq-atelier-sub">13 actifs / 17 total atelier</div>
               </div>
             </div>
 
@@ -2779,12 +2779,12 @@
 </script>
 
 <!-- Application, Auth & Sync Scripts -->
-<script src="js/utils.js?v=3.9.3"></script>
-<script src="js/data.js?v=3.9.3"></script>
-<script src="js/supabase-config.js?v=3.9.3"></script>
-<script src="js/supabase-sync.js?v=3.9.3"></script>
-<script src="js/auth.js?v=3.9.3"></script>
-<script src="js/charts.js?v=3.9.3"></script>
-<script src="js/app.js?v=3.9.3"></script>
+<script src="js/utils.js?v=3.9.4"></script>
+<script src="js/data.js?v=3.9.4"></script>
+<script src="js/supabase-config.js?v=3.9.4"></script>
+<script src="js/supabase-sync.js?v=3.9.4"></script>
+<script src="js/auth.js?v=3.9.4"></script>
+<script src="js/charts.js?v=3.9.4"></script>
+<script src="js/app.js?v=3.9.4"></script>
 </body>
 </html>
