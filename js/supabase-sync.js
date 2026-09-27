@@ -307,7 +307,7 @@ window.supabaseSync = {
         }
       }
 
-      // 6. Équipements Atelier & Interventions (Non-destructif, fusion intelligente avec LocalStorage)
+      // 6. Équipements Atelier & Interventions (Supabase = Seule Source de Vérité)
       const atelierData = await this.fetchAllTableRows('equipements_atelier', 'created_at', false);
       const etapesData = await this.fetchAllTableRows('interventions_etapes', 'ordre', true);
       const piecesData = await this.fetchAllTableRows('pieces_rechange');
@@ -407,26 +407,13 @@ window.supabaseSync = {
         });
       }
 
-      // Source de vérité Supabase prioritaire pour garantir la synchronisation parfaite multi-ordinateurs
-      if (remoteAtelier && remoteAtelier.length > 0) {
-        const atelierMap = new Map();
-        remoteAtelier.forEach(eq => {
-          if (eq.codeEquipement) atelierMap.set(eq.codeEquipement, eq);
-        });
-        // Conserver et synchroniser vers Supabase tout équipement local inédit
-        (SAMA_DATA.equipementsAtelier || []).forEach(localEq => {
-          if (localEq.codeEquipement && !atelierMap.has(localEq.codeEquipement)) {
-            atelierMap.set(localEq.codeEquipement, localEq);
-            this.syncSaveEquipementAtelier(localEq);
-          }
-        });
-        SAMA_DATA.equipementsAtelier = Array.from(atelierMap.values());
-      }
+      // Supabase est la SEULE et UNIQUE source de vérité (aucun fallback mock si base vide)
+      SAMA_DATA.equipementsAtelier = remoteAtelier;
       try {
         localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
       } catch (e) {}
 
-      console.log('🔄 Données SAMA_DATA synchronisées avec Supabase ! Total Parc:', SAMA_DATA.parcEquipementsTS.length);
+      console.log('🔄 Données SAMA_DATA synchronisées avec Supabase ! Total Atelier:', SAMA_DATA.equipementsAtelier.length);
       if (window.APP && typeof window.APP.renderCurrentView === 'function') {
         window.APP.renderCurrentView();
       }
@@ -465,76 +452,127 @@ window.supabaseSync = {
     }
   },
 
+  // Helper pour formater proprement les dates en ISO UTC ou null
+  formatIsoDate(val, defaultTime = '08:00:00Z') {
+    if (!val || val === '-' || String(val).trim() === '') return null;
+    const s = String(val).trim();
+    if (s.includes('T')) {
+      try {
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) return d.toISOString();
+      } catch (e) {}
+    }
+    // Format YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+      return `${s}T${defaultTime}`;
+    }
+    // Format DD/MM/YYYY
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) {
+      const parts = s.split('/');
+      return `${parts[2]}-${parts[1]}-${parts[0]}T${defaultTime}`;
+    }
+    try {
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) return d.toISOString();
+    } catch (e) {}
+    return null;
+  },
+
   // --- CRUD SYNCHRONISATION ---
 
   // Sauvegarde / Ajout d'un équipement atelier
   async syncSaveEquipementAtelier(eq) {
-    if (!this.isConnected || !this.client) return;
+    if (!this.isConnected || !this.client) {
+      console.warn('⚠️ Supabase non connecté : sauvegarde en mode local');
+      return { success: true, localOnly: true };
+    }
 
     try {
-      const dateEntree = eq.dateEntree ? (String(eq.dateEntree).includes('T') ? eq.dateEntree : `${eq.dateEntree}T08:00:00Z`) : new Date().toISOString();
-      const hasDateSortie = eq.dateSortie && eq.dateSortie !== '-' && String(eq.dateSortie).trim() !== '';
-      const dateSortie = hasDateSortie ? (String(eq.dateSortie).includes('T') ? eq.dateSortie : `${eq.dateSortie}T17:00:00Z`) : null;
-      const nbJours = hasDateSortie ? (typeof eq.nombreJoursAtelier === 'number' ? eq.nombreJoursAtelier : parseInt(eq.nombreJoursAtelier || 0, 10)) : (parseInt(eq.dureeAtelier || 0, 10) || 0);
+      const codeEquipement = String(eq.codeEquipement || eq.code_equipement || '').trim();
+      if (!codeEquipement) {
+        throw new Error("Le code équipement est obligatoire pour l'enregistrement.");
+      }
 
+      const dateEntreeIso = this.formatIsoDate(eq.dateEntree, '08:00:00Z') || new Date().toISOString();
+      const hasDateSortie = Boolean(eq.dateSortie && eq.dateSortie !== '-' && String(eq.dateSortie).trim() !== '');
+      const dateSortieIso = hasDateSortie ? this.formatIsoDate(eq.dateSortie, '17:00:00Z') : null;
+
+      let nbJours = 0;
+      if (hasDateSortie && typeof eq.nombreJoursAtelier === 'number') {
+        nbJours = eq.nombreJoursAtelier;
+      } else if (hasDateSortie && eq.nombreJoursAtelier && eq.nombreJoursAtelier !== '-') {
+        nbJours = parseInt(eq.nombreJoursAtelier, 10) || 0;
+      } else if (!hasDateSortie && eq.dureeAtelier) {
+        nbJours = parseInt(String(eq.dureeAtelier).replace(/[^0-9]/g, ''), 10) || 0;
+      }
+
+      // Mapping 100% conforme aux 25 colonnes exactes de la table equipements_atelier
       const row = {
-        code_equipement: eq.codeEquipement,
-        fiche_de_vie: eq.ficheDeVie || `FV-${eq.codeEquipement}`,
-        description: eq.description || eq.designation || '',
-        designation: eq.description || eq.designation || '',
-        numero_serie: eq.numSerie || eq.numeroSerie || 'N/A',
-        num_serie: eq.numSerie || eq.numeroSerie || 'N/A',
-        client: eq.client || eq.client_nom || '',
-        client_nom: eq.client || eq.client_nom || '',
-        date_entree: dateEntree,
-        date_sortie: dateSortie,
-        resp_reception: eq.responsableReception || eq.respReception || 'Glad MOUKOUIRI',
-        resp_technique: eq.responsableTechnique || eq.respTechnique || 'Ousmane Fall',
-        technicien_responsable: eq.responsableTechnique || eq.respTechnique || 'Ousmane Fall',
-        zone_actuelle: eq.zoneActuelle || 'Zone réception',
-        motif_panne: eq.motif || eq.motifPanne || 'Révision atelier',
-        anomalie_signalee: eq.motif || eq.motifPanne || 'Révision atelier',
-        situation: eq.situation || (hasDateSortie ? 'Clôturé' : 'En traitement'),
-        statut: hasDateSortie ? 'CLÔTURE' : (eq.statut || 'DEPENDANT'),
-        etat_sortie: eq.etatSortie || (hasDateSortie ? 'Fonctionnel' : 'Non fonctionnel'),
+        code_equipement: codeEquipement,
+        fiche_de_vie: String(eq.ficheDeVie || eq.fiche_de_vie || `FV-${codeEquipement}`).trim(),
+        description: String(eq.description || eq.designation || 'Équipement Atelier').trim(),
+        numero_serie: String(eq.numSerie || eq.numeroSerie || eq.numero_serie || 'N/A').trim(),
+        client: String(eq.client || eq.client_nom || 'Client TS').trim(),
+        date_entree: dateEntreeIso,
+        date_sortie: dateSortieIso,
+        resp_reception: String(eq.responsableReception || eq.respReception || eq.resp_reception || 'Glad MOUKOUIRI').trim(),
+        resp_technique: String(eq.responsableTechnique || eq.respTechnique || eq.resp_technique || 'Ousmane Fall').trim(),
+        zone_actuelle: String(eq.zoneActuelle || eq.zone_actuelle || 'Zone réception').trim(),
+        motif_panne: String(eq.motif || eq.motifPanne || eq.motif_panne || 'Révision atelier').trim(),
+        situation: String(eq.situation || (hasDateSortie ? 'Clôturé' : 'En traitement')).trim(),
+        statut: String(hasDateSortie ? 'CLÔTURE' : (eq.statut || 'DEPENDANT')).trim(),
+        etat_sortie: String(eq.etatSortie || eq.etat_sortie || (hasDateSortie ? 'Fonctionnel' : 'Non fonctionnel')).trim(),
         jours_atelier: isNaN(nbJours) ? 0 : nbJours,
-        num_devis_frb: eq.numDevisFRB || null,
-        montant_frb: parseFloat(String(eq.montantFRB || eq.coutEstime || '0').replace(/[^0-9.]/g, '')) || 0,
-        date_emission_frb: eq.dateEmissionFRB || (eq.dateFRB && eq.dateFRB !== '-' ? `${eq.dateFRB}T09:00:00Z` : null),
-        date_accord_client: eq.dateAccordClient || null,
-        date_commande_pieces: eq.dateCommandePieces || null,
-        date_reception_pieces: eq.dateReceptionPieces || null,
-        diagnostic_reception: eq.diagnosticReception || eq.motif || null,
-        actions_decision: eq.actionsDecision || null,
-        entite: eq.entite || 'BIOMED',
-        pole: eq.entite || 'BIOMED',
-        priorite: eq.priorite || 'Moyenne',
+        num_devis_frb: eq.numDevisFRB || eq.num_devis_frb || null,
+        montant_frb: parseFloat(String(eq.montantFRB || eq.montant_frb || eq.coutEstime || '0').replace(/[^0-9.]/g, '')) || 0,
+        date_emission_frb: this.formatIsoDate(eq.dateEmissionFRB || eq.date_emission_frb || (eq.dateFRB !== '-' ? eq.dateFRB : null), '09:00:00Z'),
+        date_accord_client: this.formatIsoDate(eq.dateAccordClient || eq.date_accord_client, '09:00:00Z'),
+        date_commande_pieces: this.formatIsoDate(eq.dateCommandePieces || eq.date_commande_pieces, '09:00:00Z'),
+        date_reception_pieces: this.formatIsoDate(eq.dateReceptionPieces || eq.date_reception_pieces, '09:00:00Z'),
+        diagnostic_reception: eq.diagnosticReception || eq.diagnostic_reception || eq.motif || null,
+        actions_decision: eq.actionsDecision || eq.actions_decision || null,
+        entite: String(eq.entite || eq.pole || 'BIOMED').trim(),
+        priorite: String(eq.priorite || 'Moyenne').trim(),
         updated_at: new Date().toISOString()
       };
 
+      console.log('📤 Envoi Supabase equipements_atelier.upsert:', row);
       const { data, error } = await this.client.from('equipements_atelier').upsert(row, { onConflict: 'code_equipement' });
-      if (error) throw error;
+      
+      if (error) {
+        console.error('❌ Erreur Supabase equipements_atelier.upsert:', error.message, error.details, error.hint);
+        throw error;
+      }
 
       // Update local storage backup
       try {
         localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
       } catch (e) {}
 
-      console.log('✅ Équipement Atelier sauvegardé dans Supabase:', eq.codeEquipement);
+      console.log('✅ Équipement Atelier sauvegardé avec succès dans Supabase:', codeEquipement);
+      return { success: true, data };
     } catch (err) {
-      console.error('❌ Erreur syncSaveEquipementAtelier:', err);
+      console.error('❌ Exception syncSaveEquipementAtelier:', err);
+      return { 
+        success: false, 
+        error: err,
+        message: err?.message || err?.details || String(err)
+      };
     }
   },
 
   // Suppression d'un équipement atelier
   async syncDeleteEquipementAtelier(codeEquipement) {
-    if (!this.isConnected || !this.client) return;
+    if (!this.isConnected || !this.client) return { success: true, localOnly: true };
 
     try {
       await this.client.from('interventions_etapes').delete().eq('code_equipement', codeEquipement);
       await this.client.from('pieces_rechange').delete().eq('code_equipement', codeEquipement);
       const { error } = await this.client.from('equipements_atelier').delete().eq('code_equipement', codeEquipement);
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Erreur Supabase delete equipements_atelier:', error.message);
+        throw error;
+      }
 
       // Update local storage backup
       try {
@@ -542,14 +580,16 @@ window.supabaseSync = {
       } catch (e) {}
 
       console.log('🗑️ Équipement Atelier supprimé de Supabase:', codeEquipement);
+      return { success: true };
     } catch (err) {
       console.error('❌ Erreur syncDeleteEquipementAtelier:', err);
+      return { success: false, error: err, message: err?.message || String(err) };
     }
   },
 
   // Remplacement complet des pièces de rechange d'un équipement
   async syncReplaceAllPieces(codeEquipement, pieces) {
-    if (!this.isConnected || !this.client) return;
+    if (!this.isConnected || !this.client) return { success: true, localOnly: true };
 
     try {
       await this.client.from('pieces_rechange').delete().eq('code_equipement', codeEquipement);
@@ -566,37 +606,43 @@ window.supabaseSync = {
         if (error) throw error;
       }
       console.log('✅ Pièces de rechange synchronisées dans Supabase pour', codeEquipement);
+      return { success: true };
     } catch (err) {
       console.error('❌ Erreur syncReplaceAllPieces:', err);
+      return { success: false, error: err, message: err?.message || String(err) };
     }
   },
 
   // Ajout / Modification d'une étape de Fiche de Vie
   async syncSaveTimelineStep(codeEquipement, step, orderIdx = 0) {
-    if (!this.isConnected || !this.client) return;
+    if (!this.isConnected || !this.client) return { success: true, localOnly: true };
 
     try {
-      const { error } = await this.client.from('interventions_etapes').insert({
+      const dateEtapeIso = this.formatIsoDate(step.date, '08:00:00Z') || new Date().toISOString();
+      const stepRow = {
         code_equipement: codeEquipement,
         titre: step.titre || step.event || 'Étape intervention',
-        date_etape: step.date ? (String(step.date).includes('T') ? step.date : `${step.date.replace(' ', 'T')}:00Z`) : new Date().toISOString(),
-        responsable: step.responsable || 'Glad MOUKOUIRI',
-        statut: step.statut || 'done',
+        date_etape: dateEtapeIso,
+        responsable: step.responsable || step.agent || 'Glad MOUKOUIRI',
+        statut: step.statut || step.status || 'done',
         observation: step.observation || step.resultat || '',
-        resultat_obtenu: step.resultatObtenu || step.resultat || step.observation || '',
-        ordre: orderIdx
-      });
+        resultat_obtenu: step.resultatObtenu || step.resultat_obtenu || step.resultat || step.observation || '',
+        ordre: parseInt(orderIdx, 10) || 0
+      };
 
+      const { data, error } = await this.client.from('interventions_etapes').insert(stepRow);
       if (error) throw error;
-      console.log('✅ Étape intervention synchronisée dans Supabase:', step.titre || step.event);
+      console.log('✅ Étape intervention synchronisée dans Supabase:', stepRow.titre);
+      return { success: true, data };
     } catch (err) {
       console.error('❌ Erreur syncSaveTimelineStep:', err);
+      return { success: false, error: err, message: err?.message || String(err) };
     }
   },
 
   // Mise à jour complète des étapes d'un équipement
   async syncReplaceAllTimelineSteps(codeEquipement, steps) {
-    if (!this.isConnected || !this.client) return;
+    if (!this.isConnected || !this.client) return { success: true, localOnly: true };
 
     try {
       // 1. Supprimer les anciennes étapes
@@ -607,19 +653,21 @@ window.supabaseSync = {
         const rows = steps.map((s, idx) => ({
           code_equipement: codeEquipement,
           titre: s.titre || s.event || 'Étape intervention',
-          date_etape: s.date ? (String(s.date).includes('T') ? s.date : `${s.date.replace(' ', 'T')}:00Z`) : new Date().toISOString(),
-          responsable: s.responsable || 'Glad MOUKOUIRI',
-          statut: s.statut || 'done',
+          date_etape: this.formatIsoDate(s.date, '08:00:00Z') || new Date().toISOString(),
+          responsable: s.responsable || s.agent || 'Glad MOUKOUIRI',
+          statut: s.statut || s.status || 'done',
           observation: s.observation || s.resultat || '',
-          resultat_obtenu: s.resultatObtenu || s.resultat || s.observation || '',
+          resultat_obtenu: s.resultatObtenu || s.resultat_obtenu || s.resultat || s.observation || '',
           ordre: idx
         }));
         const { error } = await this.client.from('interventions_etapes').insert(rows);
         if (error) throw error;
       }
       console.log('✅ Étapes Fiche de vie mises à jour dans Supabase pour', codeEquipement);
+      return { success: true };
     } catch (err) {
       console.error('❌ Erreur syncReplaceAllTimelineSteps:', err);
+      return { success: false, error: err, message: err?.message || String(err) };
     }
   },
 

@@ -70,9 +70,9 @@ const APP = {
     // 0. Restauration locale instantanée des équipements d'atelier
     try {
       const savedAtelier = localStorage.getItem('sama_cst_equipements_atelier');
-      if (savedAtelier) {
+      if (savedAtelier !== null) {
         const parsed = JSON.parse(savedAtelier);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           SAMA_DATA.equipementsAtelier = parsed;
         }
       }
@@ -952,15 +952,24 @@ const APP = {
 
     // Rendu HTML
     if (items.length === 0) {
+      const allAtelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || [];
+      const isDbEmpty = allAtelier.length === 0;
+
       tbody.innerHTML = `
         <tr>
-          <td colspan="23" style="text-align: center; padding: 40px; color: #64748B;">
-            <div style="font-size: 16px; font-weight: 600;">Aucun équipement trouvé</div>
-            <div style="font-size: 12px; margin-top: 4px;">Essayez de réinitialiser vos critères de recherche ou filtres.</div>
+          <td colspan="23" style="text-align: center; padding: 48px 20px; color: #64748B;">
+            <div style="font-size: 32px; margin-bottom: 8px;">${isDbEmpty ? '📦' : '🔍'}</div>
+            <div style="font-size: 16px; font-weight: 700; color: #1E293B; margin-bottom: 4px;">
+              ${isDbEmpty ? 'Aucun équipement actuellement en atelier' : 'Aucun équipement ne correspond à vos filtres'}
+            </div>
+            <div style="font-size: 13px; color: #64748B; max-width: 500px; margin: 0 auto;">
+              ${isDbEmpty 
+                ? 'La base de données ne contient aucun équipement en cours. Cliquez sur <strong>« Nouvel Équipement Atelier »</strong> pour enregistrer une entrée.' 
+                : 'Essayez de réinitialiser vos critères de recherche ou vos filtres par entité/statut.'}
+            </div>
           </td>
         </tr>
       `;
-      const allAtelier = (window.SAMA_DATA && window.SAMA_DATA.equipementsAtelier) || [];
       const countEl = document.getElementById('table-records-count');
       if (countEl) countEl.textContent = `0 sur ${allAtelier.length} équipement(s)`;
       const footerSpan = document.getElementById('table-footer-pagination-info') || document.querySelector('#module-atelier-equipements .table-footer span');
@@ -1732,7 +1741,7 @@ const APP = {
     }
   },
 
-  saveFicheDeVie(e) {
+  async saveFicheDeVie(e) {
     if (e) e.preventDefault();
     const eq = SAMA_DATA.equipementsAtelier.find(item => item.codeEquipement === this.currentFvCode);
     if (!eq) {
@@ -1772,10 +1781,14 @@ const APP = {
     const dureeAtelier = !hasDateSortie ? `${this.calculateDaysFromToday(dateEntree)} j` : '-';
     const statut = hasDateSortie ? 'CLÔTURE' : (formStatut || 'DEPENDANT');
 
+    // Sauvegarde préalable de l'état
+    const prevEqState = { ...eq };
+
     // Mise à jour de l'objet équipement
     eq.description = desc;
     eq.client = client;
     eq.numSerie = serial;
+    eq.numeroSerie = serial;
     eq.fournisseur = fournisseur;
     eq.modele = modele;
     eq.entite = entite;
@@ -1786,8 +1799,11 @@ const APP = {
     eq.etatSortie = etatSortie;
     eq.zoneActuelle = zone;
     eq.responsableTechnique = tech;
+    eq.respTechnique = tech;
     eq.responsableReception = reception;
+    eq.respReception = reception;
     eq.nombreJoursAtelier = nbJours;
+    eq.joursAtelier = typeof nbJours === 'number' ? nbJours : (parseInt(dureeAtelier, 10) || 0);
     eq.dureeAtelier = dureeAtelier;
     eq.datePriseEnCharge = datePec;
     eq.delaisPriseEnCharge = delaisPec;
@@ -1795,8 +1811,36 @@ const APP = {
     eq.delaisFRB = delaisFrb;
     eq.coutEstime = cout;
     eq.motif = motif;
+    eq.motifPanne = motif;
     eq.timeline = [...this.editingFvTimeline];
     eq.pieces = [...this.editingFvPieces];
+
+    // Synchronisation Supabase avec gestion d'erreurs
+    if (window.supabaseSync && window.supabaseSync.isConnected && typeof window.supabaseSync.syncSaveEquipementAtelier === 'function') {
+      try {
+        const result = await window.supabaseSync.syncSaveEquipementAtelier(eq);
+        if (result && !result.success) {
+          console.error("❌ Échec de la mise à jour Supabase:", result.error);
+          this.showToast(`Erreur Supabase: ${result.message || 'Mise à jour impossible'}`, "error");
+          Object.assign(eq, prevEqState);
+          return;
+        }
+        await window.supabaseSync.syncReplaceAllTimelineSteps(eq.codeEquipement, eq.timeline);
+        if (typeof window.supabaseSync.syncReplaceAllPieces === 'function') {
+          await window.supabaseSync.syncReplaceAllPieces(eq.codeEquipement, eq.pieces);
+        }
+      } catch (syncErr) {
+        console.error("❌ Exception lors de la synchronisation Supabase:", syncErr);
+        this.showToast(`Erreur Supabase: ${syncErr.message || syncErr}`, "error");
+        Object.assign(eq, prevEqState);
+        return;
+      }
+    }
+
+    // Sauvegarde locale instantanée
+    try {
+      localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
+    } catch (err) {}
 
     // Re-rendre le tableau et actualiser les composants dépendants
     this.renderEquipementTable();
@@ -1809,19 +1853,6 @@ const APP = {
     this.renderTechnicians();
     if (window.SAMA_CHARTS && typeof window.SAMA_CHARTS.initAllDashboardCharts === 'function') {
       window.SAMA_CHARTS.initAllDashboardCharts();
-    }
-
-    // Synchronisation Supabase & Sauvegarde locale
-    try {
-      localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
-    } catch (err) {}
-
-    if (window.supabaseSync && typeof window.supabaseSync.syncSaveEquipementAtelier === 'function') {
-      window.supabaseSync.syncSaveEquipementAtelier(eq);
-      window.supabaseSync.syncReplaceAllTimelineSteps(eq.codeEquipement, eq.timeline);
-      if (typeof window.supabaseSync.syncReplaceAllPieces === 'function') {
-        window.supabaseSync.syncReplaceAllPieces(eq.codeEquipement, eq.pieces);
-      }
     }
 
     // Rebasculer en mode consultation
@@ -3831,13 +3862,24 @@ const APP = {
     return 0;
   },
 
-  deleteEquipementAtelier(codeEquipement) {
+  async deleteEquipementAtelier(codeEquipement) {
     const idx = (SAMA_DATA.equipementsAtelier || []).findIndex(e => e.codeEquipement === codeEquipement);
     if (idx === -1) return;
     const eq = SAMA_DATA.equipementsAtelier[idx];
     if (confirm(`Confirmez-vous la suppression définitive du dossier d'atelier pour l'équipement "${eq.codeEquipement} (${eq.description})"?`)) {
-      if (window.supabaseSync && typeof window.supabaseSync.syncDeleteEquipementAtelier === 'function') {
-        window.supabaseSync.syncDeleteEquipementAtelier(codeEquipement);
+      if (window.supabaseSync && window.supabaseSync.isConnected && typeof window.supabaseSync.syncDeleteEquipementAtelier === 'function') {
+        try {
+          const res = await window.supabaseSync.syncDeleteEquipementAtelier(codeEquipement);
+          if (res && !res.success) {
+            console.error("❌ Échec de la suppression Supabase:", res.error);
+            this.showToast(`Erreur Supabase: ${res.message || 'Suppression impossible'}`, "error");
+            return;
+          }
+        } catch (err) {
+          console.error("❌ Exception lors de la suppression Supabase:", err);
+          this.showToast(`Erreur Supabase: ${err.message || err}`, "error");
+          return;
+        }
       }
       SAMA_DATA.equipementsAtelier.splice(idx, 1);
       try {
@@ -5220,16 +5262,16 @@ const APP = {
     if (overlay && overlay.getAttribute('data-mobile-menu') !== 'true') overlay.classList.remove('active');
   },
 
-  saveNewEquipment(e) {
+  async saveNewEquipment(e) {
     if (e) e.preventDefault();
     const code = document.getElementById('form-code')?.value?.trim();
     const desc = document.getElementById('form-desc')?.value?.trim();
-    const client = document.getElementById('form-client')?.value;
+    const client = document.getElementById('form-client')?.value?.trim();
     const serial = document.getElementById('form-serial')?.value?.trim() || "N/A";
     const respReception = document.getElementById('form-resp-reception')?.value || "Glad MOUKOUIRI";
     const tech = document.getElementById('form-tech')?.value || "Ousmane Fall";
     const zone = document.getElementById('form-zone')?.value || "Zone réception";
-    const motif = document.getElementById('form-motif')?.value?.trim();
+    const motif = document.getElementById('form-motif')?.value?.trim() || "Entrée atelier pour révision";
     const entite = document.getElementById('form-entite')?.value || "BIOMED";
     const dateEntree = document.getElementById('form-date-entree')?.value || new Date().toISOString().split('T')[0];
     const dateSortieVal = document.getElementById('form-date-sortie')?.value;
@@ -5253,19 +5295,25 @@ const APP = {
 
     const newEquip = {
       codeEquipement: code,
+      ficheDeVie: `FV-${code}`,
       description: desc,
       numSerie: serial,
+      numeroSerie: serial,
       client: client,
       dateEntree: dateEntree,
       dateSortie: dateSortie,
       responsableReception: respReception,
+      respReception: respReception,
       responsableTechnique: tech,
+      respTechnique: tech,
       zoneActuelle: zone,
-      motif: motif || "Entrée atelier pour révision",
+      motif: motif,
+      motifPanne: motif,
       situation: situation,
       statut: statut,
       etatSortie: etatSortie,
       nombreJoursAtelier: nbJours,
+      joursAtelier: typeof nbJours === 'number' ? nbJours : (parseInt(dureeAtelier, 10) || 0),
       dureeAtelier: dureeAtelier,
       entite: entite,
       fournisseur: fournisseur,
@@ -5276,25 +5324,54 @@ const APP = {
       delaisFRB: "En attente",
       criticite: "B (Majeur)",
       coutEstime: "0 FCFA",
+      montantFRB: 0,
       timeline: [
-        { date: new Date().toISOString().replace('T', ' ').substring(0, 16), event: "Réception & Enregistrement atelier", agent: respReception, status: "done" }
+        { 
+          date: new Date().toISOString().replace('T', ' ').substring(0, 16), 
+          event: "Réception & Enregistrement atelier", 
+          titre: "Réception & Enregistrement atelier",
+          agent: respReception, 
+          responsable: respReception, 
+          status: "done",
+          statut: "done",
+          observation: "Réception initiale et prise en charge atelier",
+          resultatObtenu: "Réception initiale et prise en charge atelier"
+        }
       ],
       pieces: []
     };
 
-    SAMA_DATA.equipementsAtelier.unshift(newEquip);
+    // Synchronisation Supabase avec gestion explicite des erreurs
+    if (window.supabaseSync && window.supabaseSync.isConnected && typeof window.supabaseSync.syncSaveEquipementAtelier === 'function') {
+      try {
+        const result = await window.supabaseSync.syncSaveEquipementAtelier(newEquip);
+        if (result && !result.success) {
+          console.error("❌ Échec de l'insertion Supabase:", result.error);
+          this.showToast(`Erreur Supabase: ${result.message || 'Impossible d\'enregistrer l\'équipement'}`, "error");
+          return;
+        }
+        await window.supabaseSync.syncSaveTimelineStep(newEquip.codeEquipement, newEquip.timeline[0], 0);
+      } catch (syncErr) {
+        console.error("❌ Exception synchronisation Supabase:", syncErr);
+        this.showToast(`Erreur Supabase: ${syncErr.message || syncErr}`, "error");
+        return;
+      }
+    }
+
+    // Mise à jour de l'état local (remplacement si existant ou insertion au début)
+    const existingIdx = SAMA_DATA.equipementsAtelier.findIndex(e => e.codeEquipement === code);
+    if (existingIdx >= 0) {
+      SAMA_DATA.equipementsAtelier[existingIdx] = newEquip;
+    } else {
+      SAMA_DATA.equipementsAtelier.unshift(newEquip);
+    }
 
     // Sauvegarde locale instantanée
     try {
       localStorage.setItem('sama_cst_equipements_atelier', JSON.stringify(SAMA_DATA.equipementsAtelier));
     } catch (err) {}
 
-    // Synchronisation Supabase
-    if (window.supabaseSync && typeof window.supabaseSync.syncSaveEquipementAtelier === 'function') {
-      window.supabaseSync.syncSaveEquipementAtelier(newEquip);
-      window.supabaseSync.syncSaveTimelineStep(newEquip.codeEquipement, newEquip.timeline[0], 0);
-    }
-
+    // Synchronisation immédiate de l'interface
     this.renderEquipementTable();
     this.renderDashboardKPIs();
     this.renderCriticiteTable();
@@ -5308,7 +5385,7 @@ const APP = {
     }
 
     this.closeNewEquipmentModal();
-    this.showToast(`Équipement ${code} enregistré (${statut}) !`, "success");
+    this.showToast(`Équipement ${code} enregistré avec succès (${statut}) !`, "success");
   },
 
   exportTableToCSV() {

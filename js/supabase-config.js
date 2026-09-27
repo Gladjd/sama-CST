@@ -30,6 +30,6 @@ window.SUPABASE_CONFIG = {
   
   // Vérifie si la configuration est prête
   isConfigured() {
-    return Boolean(this.url && this.anonKey && this.url.startsWith('https://') && this.anonKey.length > 20);
+    return Boolean(this.url && this.anonKey && (this.url.startsWith('https://') || this.url.startsWith('http://')) && this.anonKey.length > 20);
   }
 };
